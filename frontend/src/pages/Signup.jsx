@@ -127,21 +127,17 @@ const Signup = () => {
                     placeholder="Create a password"
                     required
                     value={formData.password}
-                    onChange={handleChange}
-                    className="pr-10"
-                  />
+                    onChange={handleChange} />
 
-                  {showPassword ? (
+                  {showPassword ? 
                     <EyeOff
                       onClick={() => setShowPassword(false)}
-                      className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                    />
-                  ) : (
+                      className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"/>: 
                     <Eye
                       onClick={() => setShowPassword(true)}
                       className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                     />
-                  )}
+                  }
                 </div>
               </div>
             </div>
@@ -161,7 +157,7 @@ const Signup = () => {
           <p className="text-gray-700 text-sm">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to={"/login"}
               className="hover:underline cursor-pointer text-pink-800"
             >
               Login
