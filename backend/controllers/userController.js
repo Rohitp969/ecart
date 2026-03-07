@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { verifyEmail } from "../emaiVerify/verifyEmail.js";
 import { Session } from "../models/sessionModel.js";
 import { sendOTPMail } from "../emailVerify/sendOtpMail.js";
+import cloudinary from "../utils/cloudinary.js";
 
 
 export const register = async(req, res)=>{
@@ -363,6 +364,77 @@ export const getUserById = async(req, res)=>{
         }) 
   } catch (error) {
      return res.status(500).json({
+             success:false,
+            message: error.message
+        }) 
+  }
+}
+
+
+export const updateUser = async (req, res) => {
+  try {
+    const userIdToUpdate = req.params.id  //the ID of the user want to updateUser
+    const isLoggedInUser = req.user       //from isAuthenticated middleware
+    const { firstName, lastName, address, phoneNo, city, zipCode, role } = req.body
+
+    if(isLoggedInUser._id.toString() !== userIdToUpdate && isLoggedInUser.role !== 'admin')
+    {
+        return res.status(403).json({
+             success:false,
+            message: "You are not allowed to update this profile"
+        }) 
+    }
+
+    let user = await User.findById(userIdToUpdate);
+    if(!user){
+        return res.status(500).json({
+             success:false,
+            message: "User not found"
+        }) 
+    }
+
+    let profilePicUrl = user.profilePic;
+    let profilePicPublicId = user.profilePicPublicId
+
+    //if a new file is uploaded 
+    if(req.file){
+      if(profilePicPublicId){
+        await cloudinary.uploader.destroy(profilePicPublicId)
+      }
+      const uploadResult = await new Promise((resolve, reject)=>{
+        const Stream = cloudinary.uploader.upload_stream(
+          {folder:"profiles"},
+          (error, result) =>{
+            if (error) reject(error)
+              else resolve(result)
+          }
+        )
+        Stream.end(req.file.buffer)
+      })
+      profilePicUrl = uploadResult.secure_url;
+      profilePicPublicId = uploadResult.public_id
+    }
+    //update file
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.address = address || user.address;
+    user.city = city || user.city;
+    user.zipCode = zipCode || user.zipCode;
+    user.phoneNo = phoneNo || user.phoneNo;
+    user.role = role;
+    user.profilePic = profilePicUrl;
+    user.profilePicPublicId = profilePicPublicId
+
+    const updateUser = await user.save()
+
+      return res.status(200).json({
+             success:true,
+            message: "Profile Updated Successfully",
+            user:updateUser
+        })
+
+  } catch (error) {
+      return res.status(500).json({
              success:false,
             message: error.message
         }) 
