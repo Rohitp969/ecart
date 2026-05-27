@@ -13,16 +13,21 @@ import Footer from './components/Footer';
 import Profile from './pages/Profile';
 import Products from './pages/Products';
 import Cart from './pages/Cart';
-import Dashboard from './pages/dashboard';
+import Dashboard from './pages/Dashboard';
 import AddProduct from './pages/admin/AddProduct';
 import AdminSales from './pages/admin/AdminSales';
 import AdminProduct from './pages/admin/AdminProduct';
 import AdminOrders from './pages/admin/AdminOrders';
 import ShowUserOrders from './pages/admin/ShowUserOrders';
 import UserInfo from './pages/admin/UserInfo';
-import AdminUser from './pages/admin/AdminUser';
 import ProtectedRoute from './components/ProtectedRoute';
 import SingleProduct from './pages/SingleProduct';
+import AdminUsers from './pages/admin/AdminUsers';
+import AddressForm from './pages/AddressForm';
+import OrderSuccess from './pages/OrderSuccess';
+import ForgotPassword from './pages/ForgotPassword';
+import VerifyOtp from './pages/VerifyOtp';
+import ResetPassword from './pages/ResetPassword';
 
 
 const router = createBrowserRouter([
@@ -62,6 +67,29 @@ const router = createBrowserRouter([
     path:'/cart',
     element:<ProtectedRoute><Navbar/><Cart/></ProtectedRoute>
   },
+    {
+    path:'/address',
+    element:<ProtectedRoute><AddressForm/></ProtectedRoute>
+  },
+   {
+    path:'/order-success',
+    element:<ProtectedRoute><OrderSuccess/></ProtectedRoute>
+  },
+
+  {
+      path:"/forgot-password",
+      element:<ForgotPassword/>
+      },
+      {
+      path:"/verify-otp",
+      element:<VerifyOtp />
+      },
+      {
+      path:"/reset-password",
+      element:<ResetPassword />
+    },
+
+
      {
     path:'/dashboard',
     element: <ProtectedRoute adminOnly={true}><Navbar/><Dashboard/></ProtectedRoute> ,
@@ -88,12 +116,15 @@ const router = createBrowserRouter([
       },
       {
         path:'users',
-        element:<AdminUser/>
+        element:<AdminUsers/>
       },
       {
         path:'users/:id',
         element:<UserInfo/>
-      }
+      },
+
+      
+
     ]
   }
 ])

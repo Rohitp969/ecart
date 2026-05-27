@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 const Sidebar = () => {
   return (
     <div className='hidden fixed md:block border-r bg-pink-50 border-pink-200 x-10 w-[300px] p-10 space-y-2 h-screen'>
-        <div className='text-center pt-10 px-3 space-y-2'>
+        <div className='text-center pt-12 px-5 space-y-2'>
             <NavLink to='/dashboard/sales' className={({isActive})=>`text-xl ${isActive ? "bg-pink-600 text-gray-200":"bg-transparent"} 
             flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}> <LayoutDashboard/><span>Dashbord</span></NavLink>
 

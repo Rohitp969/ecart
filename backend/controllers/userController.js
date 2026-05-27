@@ -5,6 +5,7 @@ import { verifyEmail } from "../emaiVerify/verifyEmail.js";
 import { Session } from "../models/sessionModel.js";
 import { sendOTPMail } from "../emailVerify/sendOtpMail.js";
 import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 
 
 export const register = async(req, res)=>{
@@ -319,7 +320,7 @@ export const changePasssword = async(req, res)=>{
     const hashedPassword =await bcrypt.hash(newPassword, 10)
     user.password = hashedPassword
     await user.save()
-     return res.status(400).json({
+     return res.status(200).json({
              success:true,
             message:"password change successfully "
         })  
@@ -414,6 +415,7 @@ export const updateUser = async (req, res) => {
       profilePicUrl = uploadResult.secure_url;
       profilePicPublicId = uploadResult.public_id
     }
+
     //update file
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
@@ -434,6 +436,7 @@ export const updateUser = async (req, res) => {
         })
 
   } catch (error) {
+    console.log(error);
       return res.status(500).json({
              success:false,
             message: error.message

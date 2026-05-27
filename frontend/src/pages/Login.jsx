@@ -93,7 +93,7 @@ const Login = () => {
                 />
               </div>
 
-              <div className="grid gap-2">
+              {/* <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
 
                 <div className="relative">
@@ -117,7 +117,48 @@ const Login = () => {
                   )}
                 </div>
               </div>
-            </div>
+            */}
+
+
+<div className="grid gap-2">
+  <Label htmlFor="password">Password</Label>
+
+  <div className="relative">
+    <Input
+      id="password"
+      name="password"
+      type={showPassword ? "text" : "password"}
+      placeholder="Enter a password"
+      value={formData.password}
+      onChange={handleChange}
+      required
+    />
+
+    {showPassword ? (
+      <EyeOff
+        onClick={() => setShowPassword(false)}
+        className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+      />
+    ) : (
+      <Eye
+        onClick={() => setShowPassword(true)}
+        className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+      />
+    )}
+  </div>
+
+  <div className="flex justify-end mt-2">
+    <Link
+      to="/forgot-password"
+      className="text-sm text-pink-600 hover:underline"
+    >
+      Forgot Password?
+    </Link>
+  </div>
+</div>
+
+
+           </div> 
           </form>
         </CardContent>
 

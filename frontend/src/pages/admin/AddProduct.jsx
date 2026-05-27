@@ -6,15 +6,16 @@ import ImageUpload from '@/components/ImageUpload'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { setProducts } from '@/redux/productSlice'
-import Products from '../Products'
 import { Loader2 } from 'lucide-react'
+import store from '@/redux/store'
 
 const AddProduct = () => {
   const accessToken = localStorage.getItem("accessToken")
   const dispatch = useDispatch()
+  const {products} = useSelector(store=>store.product)
   const [loading, setLoading] = useState(false)
   const [productData, setProductData] = useState({
     productName: "",
@@ -47,7 +48,7 @@ const AddProduct = () => {
       return;
     }
     productData.productImg.forEach((img)=>{
-      formData.append("files", img)
+      formData.append("file", img)
     })
     try {
       setLoading(true)
@@ -57,7 +58,7 @@ const AddProduct = () => {
         }
       })
       if(res.data.success){
-        dispatch(setProducts([...Products, res.data.product]))
+        dispatch(setProducts([...products, res.data.product]))
         toast.success(res.data.message)
       }
     } catch (error) {
@@ -124,13 +125,16 @@ const AddProduct = () => {
             onChange={handleChange}
              placeholder="Enter brief description of product"/>
           </div>
-          <ImageUpload productData/>
+           <ImageUpload 
+            productData={productData}
+            setProductData={setProductData}
+            />
         </div>
         <CardFooter className="flex-col gap-2">
           <Button 
           disabled={loading} 
-          onClick={submitHandler} 
-          className="w-full bg-pink-600 cursor-pointer" 
+          onClick={submitHandler } 
+          className="w-full mt-5 bg-pink-600 cursor-pointer" 
           type="submit">
             {
               loading ? <span className='flex gap-1 items-center'><Loader2 className='animate-spin'/>Please wait</span>

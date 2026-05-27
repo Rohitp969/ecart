@@ -18,12 +18,7 @@ export const addProduct = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
 
-      console.log("TOTAL FILES 👉", req.files.length);
-
       for (let file of req.files) {
-
-        // 👇 YE LINE IMPORTANT HAI
-        console.log("FILE SIZE 👉", file.size, "bytes");
 
         const fileUri = getDataUri(file);
 

@@ -1,12 +1,16 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar'
-import AddProduct from './admin/AddProduct'
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   return (
     <div className='flex'>
       <Sidebar/>
-      <AddProduct/>
+
+       {/* Right side content */}
+      <div className="flex-1 p-5"> 
+        <Outlet />
+       </div>
     </div>
   )
 }
