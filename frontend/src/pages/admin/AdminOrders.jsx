@@ -10,7 +10,7 @@ const AdminOrders = () => {
     const fetchOrders = async () =>{
     const accessToken = localStorage.getItem("accessToken")
         try {
-         const {data} = await axios.get('${import.meta.env.VITE_API_URL}/api/v1/orders/all', {
+         const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/all`, {
           headers:{
             Authorization:`Bearer ${accessToken}`
           }
