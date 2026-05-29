@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(cors({
-  origin: "https://ecart-lac.vercel.app",
+  origin: "https://ecart-silk-six.vercel.app",
   credentials: true
 }));
 
