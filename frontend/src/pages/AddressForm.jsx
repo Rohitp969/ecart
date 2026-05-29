@@ -387,7 +387,7 @@ const AddressForm = () => {
                 </div>
               ))}
 
-              <Separator />
+              <Separator/>
 
               <div className="flex justify-between text-sm">
                 <span>Subtotal ({cart.items.length} item{cart.items.length !== 1 ? 's' : ''})</span>
