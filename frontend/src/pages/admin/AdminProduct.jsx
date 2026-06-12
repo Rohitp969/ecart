@@ -45,22 +45,27 @@ const AdminProduct = () => {
   const { products } = useSelector((store) => store.product);
   const [editProduct, setEditProduct] = useState(null);
   const [open, setOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("")
-  const [sortOrder, setSortOrder] = useState("")
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
   const accessToken = localStorage.getItem("accessToken");
   const dispatch = useDispatch();
 
-  let filteredProducts = products.filter((product)=>
-  product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  product.category.toLowerCase().includes(searchTerm.toLowerCase())
- )
+  let filteredProducts = products.filter(
+    (product) =>
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
- if(sortOrder === 'lowToHigh'){
-  filteredProducts = [...filteredProducts].sort((a,b)=> a.productPrice - b.productPrice)
- }
-  if(sortOrder === 'highToLow'){
-  filteredProducts = [...filteredProducts].sort((a,b)=> b.productPrice - a.productPrice)
+  if (sortOrder === "lowToHigh") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => a.productPrice - b.productPrice,
+    );
+  }
+  if (sortOrder === "highToLow") {
+    filteredProducts = [...filteredProducts].sort(
+      (a, b) => b.productPrice - a.productPrice,
+    );
   }
 
   const handleChange = (e) => {
@@ -124,7 +129,8 @@ const AdminProduct = () => {
       const remainingProducts = products.filter(
         (product) => product._id !== productId,
       );
-      const res = await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/product/delete/${productId}`,
+      const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/v1/product/delete/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -140,9 +146,20 @@ const AdminProduct = () => {
     }
   };
   return (
-    <div className="pl-[350px] py-20 pr-20 flex flex-col gap-3 min-h-screen bg-gray-100">
-      <div className="flex justify-between">
-        <div className="relative bg-white rounded-lg">
+    // <div className="pl-[350px] py-20 pr-20 flex flex-col gap-3 min-h-screen bg-gray-100">
+    <div className="w-full p-4 md:p-6 lg:p-16 flex flex-col gap-4 min-h-screen bg-gray-100">
+      {/* <div className="flex justify-between"> */}
+      <div className="flex flex-col md:flex-row gap-4 justify-between">
+        {/* <div className="relative bg-white rounded-lg"> */}
+        <div className="relative bg-white rounded-lg w-full md:w-auto">
+          {/* <Input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Product..."
+            className="w-[400px] items-center"
+          /> */}
+
           <Input
             type="text"
             value={searchTerm}
@@ -152,7 +169,7 @@ const AdminProduct = () => {
           />
           <Search className="absolute right-3 top-1.5 text-gray-500" />
         </div>
-        <Select onValueChange={(value)=>setSortOrder(value)}>
+        <Select onValueChange={(value) => setSortOrder(value)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by Price" />
           </SelectTrigger>
@@ -167,21 +184,27 @@ const AdminProduct = () => {
       {filteredProducts.map((product, index) => {
         return (
           <Card key={index} className="px-4">
-            <div className="flex items-center justify-between">
-              <div className="flex gap-2 items-center">
+            {/* <div className="flex items-center justify-between"> */}
+            <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
+              {/* <div className="flex gap-2 items-center"> */}
+              <div className="flex flex-col sm:flex-row gap-3 items-center">
                 <img
                   src={product.productImg[0].url}
                   alt=""
-                  className="w-25 h-25"
+                  // className="w-25 h-25"
+                  className="w-20 h-20 md:w-24 md:h-24 object-cover"
                 />
-                <h1 className="font-bold w-96 text-gray-700">
+                {/* <h1 className="font-bold w-96 text-gray-700"> */}
+                <h1 className="font-bold text-gray-700 text-center sm:text-left max-w-md break-words">
                   {product.productName}
                 </h1>
               </div>
-              <h1 className="font-semibold text-gray-800">
+              {/* <h1 className="font-semibold text-gray-800"> */}
+              <h1 className="font-semibold text-gray-800 text-center lg:text-left">
                 ₹{product.productPrice}
               </h1>
-              <div className="flex gap-3">
+              {/* <div className="flex gap-3"> */}
+              <div className="flex justify-center lg:justify-end gap-4">
                 <Dialog open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <Edit
@@ -191,7 +214,8 @@ const AdminProduct = () => {
                       className="text-green-500 cursor-pointer"
                     />
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[625px] max-h-[740px] overflow-scroll">
+                  {/* <DialogContent className="sm:max-w-[625px] max-h-[740px] overflow-scroll"> */}
+                  <DialogContent className="w-[95vw] sm:max-w-[625px] max-h-[85vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle>Edit Product</DialogTitle>
                       <DialogDescription>
@@ -221,7 +245,8 @@ const AdminProduct = () => {
                           required
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
+                      {/* <div className="grid grid-cols-2 gap-4"> */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="grid gap-2">
                           <Label>brand</Label>
                           <Input
@@ -239,7 +264,7 @@ const AdminProduct = () => {
                             type="text"
                             value={editProduct?.category}
                             onChange={handleChange}
-                            name="Category"
+                            name="category"
                             placeholder="Ex-mobiles"
                             required
                           />
@@ -288,11 +313,14 @@ const AdminProduct = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={()=>deleteProductHandler(product._id)}>Continue</AlertDialogAction>
+                      <AlertDialogAction
+                        onClick={() => deleteProductHandler(product._id)}
+                      >
+                        Continue
+                      </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
-
               </div>
             </div>
           </Card>

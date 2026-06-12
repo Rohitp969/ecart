@@ -81,7 +81,8 @@ const Products = () => {
 
   return (
     <div className='pt-20 pb-10'>
-      <div className='max-w-7xl mx-auto flex gap-7'>
+      {/* <div className='max-w-7xl mx-auto flex gap-7'> */}
+      <div className='max-w-7xl mx-auto flex flex-col lg:flex-row gap-7 px-4'>
         {/* sidebar */}
         <FilterSidebar 
         search={search} 
@@ -95,9 +96,11 @@ const Products = () => {
         setPriceRange={setPriceRange} />
         {/* Main product section  */}
    <div className='flex flex-col flex-1'>
-     <div className='flex justify-end mb-4'>
+     {/* <div className='flex justify-end mb-4'> */}
+     <div className='flex justify-center lg:justify-end mb-4'>
       <Select onValueChange={(value)=>setSortorder(value)}>
-      <SelectTrigger className="w-full max-w-48">
+      {/* <SelectTrigger className="w-full max-w-48"> */}
+      <SelectTrigger className="w-full sm:w-48">
         <SelectValue placeholder="Sort by Price" />
       </SelectTrigger>
       <SelectContent>
@@ -109,7 +112,8 @@ const Products = () => {
     </Select>
     </div>
     {/* product grid */}
-    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7'>
+    {/* <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7'> */}
+    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5'>
       {
         products.map((product)=>{
           return <ProductCard key={product._id} product={product} loading={loading}/>

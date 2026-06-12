@@ -70,7 +70,8 @@ const AddProduct = () => {
   }
 
   return (
-    <div className='pl-[350px] py-10 pr-20 mx-auto px-4 bg-gray-100'>
+    // <div className='pl-[350px] py-10 pr-20 mx-auto px-4 bg-gray-100'>
+    <div className='py-5 px-4 md:px-8 lg:px-12 bg-gray-100 min-h-screen'>
      <Card className='w-full my-20'>
        <CardHeader>
         <CardTitle>Add Product</CardTitle>
@@ -96,7 +97,8 @@ const AddProduct = () => {
             placeholder="" 
             required/>
           </div>
-          <div className='grid grid-cols-2 gap-4'>
+          {/* <div className='grid grid-cols-2 gap-4'> */}
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div className='grid gap-2'>
             <Label>Brand</Label>
             <Input type='text' 

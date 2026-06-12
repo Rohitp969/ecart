@@ -131,7 +131,8 @@ const UserInfo = () => {
               onSubmit={handleSubmit}
               className="flex-1 space-y-4 shadow-lg p-6 rounded-lg bg-white"
             >
-              <div className="grid grid-cols-2 gap-4">
+              {/* <div className="grid grid-cols-2 gap-4"> */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>First Name</Label>
                   <Input
@@ -188,7 +189,8 @@ const UserInfo = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* <div className="grid grid-cols-2 gap-4"> */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>City</Label>
                   <Input

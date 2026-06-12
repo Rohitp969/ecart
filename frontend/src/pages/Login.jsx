@@ -163,7 +163,7 @@ const Login = () => {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-pink-600 hover:bg-pink-500"
+              className="w-full bg-pink-600 hover:bg-pink-500 cursor-pointer"
             >
               {loading ? (
                 <>

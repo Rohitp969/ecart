@@ -151,7 +151,8 @@ const AdminSales = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
    
-      <div className="pl-[280px] py-8 pr-8 m-15">
+      {/* <div className="pl-[280px] py-8 pr-8 m-15"> */}
+      <div className="w-full p-4 md:p-6 lg:p-16">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
@@ -160,7 +161,8 @@ const AdminSales = () => {
 
         {/* Time Range Filter */}
         <div className="mb-6 flex justify-end">
-          <div className="inline-flex rounded-lg bg-white shadow-sm border border-gray-200 p-1">
+          {/* <div className="inline-flex rounded-lg bg-white shadow-sm border border-gray-200 p-1"> */}
+          <div className="flex flex-wrap rounded-lg bg-white shadow-sm border border-gray-200 p-1 gap-1">
             {[7, 30, 90].map((days) => (
               <button
                 key={days}
@@ -207,11 +209,13 @@ const AdminSales = () => {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        {/* <div className="grid gap-6 lg:grid-cols-2 mb-8"> */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 mb-8">
           {/* Sales Trend Chart */}
           <Card className="hover:shadow-xl transition-all duration-300">
             <CardHeader className="border-b border-gray-100">
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between"> */}
+              <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-pink-500" />
                   Sales Trend
@@ -221,7 +225,8 @@ const AdminSales = () => {
             </CardHeader>
             <CardContent className="p-6">
               {/* <div style={{ height: 350 }}> */}
-              <div className="h-[350px] w-full">
+              {/* <div className="h-[350px] w-full"> */}
+              <div className="h-[250px] md:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={stats.salesByDate}>
                     <defs>
@@ -296,7 +301,8 @@ const AdminSales = () => {
         </div>
 
         {/* Additional Charts Row */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        {/* <div className="grid gap-6 lg:grid-cols-2 mb-8"> */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 mb-8">
           {/* Top Products */}
           <Card className="hover:shadow-xl transition-all duration-300">
             <CardHeader className="border-b border-gray-100">
@@ -307,7 +313,7 @@ const AdminSales = () => {
             </CardHeader>
             <CardContent className="p-6">
               {/* <div style={{ height: 350 }}> */}
-              <div className="h-[350px] w-full">
+              <div className="h-[250px] md:h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={stats.topProducts || []} layout="vertical">
                     <XAxis type="number" tickFormatter={(value) => `$${value}`} />
