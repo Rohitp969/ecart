@@ -35,7 +35,7 @@ const ProductDesc = ({product}) => {
         <p>Quantity</p>
         <Input type='number' className="w-14" defaultValue={1}/>
       </div>
-      <Button onClick={()=>addToCart(product._id)} className='bg-pink-600 w-max'>Add to Cart</Button>
+      <Button onClick={()=>addToCart(product._id)} className='bg-pink-600 w-max cursor-pointer'>Add to Cart</Button>
     </div>
   )
 }

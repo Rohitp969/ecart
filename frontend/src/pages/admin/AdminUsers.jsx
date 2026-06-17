@@ -45,11 +45,9 @@ const AdminUsers = () => {
   console.log(users);
 
   return (
-    // <div className='pl-[350px] py-20 pr-20 mx-auto px-4'>
     <div className="w-full p-4 md:p-6 lg:p-16">
       <h1 className="font-bold text-2xl">User Management</h1>
       <p>View and manage registered users</p>
-      {/* <div className='flex relative w-[300px] mt-6'> */}
       <div className="relative w-full max-w-md mt-6">
         <Search className="absolute left-2 top-1 text-gray-600 w-5" />
         <Input
@@ -59,7 +57,6 @@ const AdminUsers = () => {
           placeholder="Search Users..."
         />
       </div>
-      {/* <div className='grid grid-cols-3 gap-7 mt-7'> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-7">
         {filteredUsers.map((user, index) => {
           return (
@@ -70,11 +67,6 @@ const AdminUsers = () => {
                   alt=""
                   className="rounded-full w-16 aspect-square object-cover border border-pink-600"
                 />
-                {/* <div>
-              <h1 className='font-semibold'>{user?.firstName} {user?.lastName}</h1>
-              <h3>{user?.email}</h3>
-              
-            </div> */}
                 <div className="flex-1 min-w-0">
                   <h1 className="font-semibold">
                     {user?.firstName} {user?.lastName}
@@ -85,9 +77,9 @@ const AdminUsers = () => {
                   </h3>
                 </div>
               </div>
-              {/* <div className='flex gap-3 mt-3'> */}
               <div className="flex flex-col sm:flex-row gap-3 mt-3">
                 <Button
+                className = "cursor-pointer"
                   onClick={() => navigate(`/dashboard/users/${user?._id}`)}
                   variant="outline"
                 >
@@ -95,6 +87,7 @@ const AdminUsers = () => {
                   Edit
                 </Button>
                 <Button
+                className = "cursor-pointer"
                   onClick={() =>
                     navigate(`/dashboard/users/orders/${user?._id}`)
                   }

@@ -9,6 +9,6 @@ router.post("/verify-payment", isAuthenticated, varifyPayment)
 router.get("/myorder", isAuthenticated, getMyOrder)
 router.get("/all", isAuthenticated, isAdmin, getAllOrdersAdmin)
 router.get("/user-order/:userId", isAuthenticated, isAdmin, getUserOrders)
-router.get("/sales", isAuthenticated, isAdmin, getSalesData)
+router.get("/sales",isAuthenticated, isAdmin, isAdmin, getSalesData)
 
 export default router

@@ -72,7 +72,7 @@ const AddProduct = () => {
   return (
     // <div className='pl-[350px] py-10 pr-20 mx-auto px-4 bg-gray-100'>
     <div className='py-5 px-4 md:px-8 lg:px-12 bg-gray-100 min-h-screen'>
-     <Card className='w-full my-20'>
+     <Card className='w-full my-15'>
        <CardHeader>
         <CardTitle>Add Product</CardTitle>
         <CardDescription>Enter Product details below</CardDescription>

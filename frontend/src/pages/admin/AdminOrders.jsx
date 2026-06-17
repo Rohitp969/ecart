@@ -32,7 +32,6 @@ const AdminOrders = () => {
   }
 
   return (
-    // <div className='pl-[350px] py-20 pr-20 mx-auto px-4'>
     <div className='w-full p-4 md:p-6 lg:p-16'>
       <h1 className='text-3xl font-bold mb-6'>Admin - All Orders</h1>
 

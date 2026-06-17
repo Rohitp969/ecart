@@ -100,7 +100,8 @@ const UserInfo = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
           <div className="flex justify-between gap-10">
-            <Button onClick={() => navigate(-1)}>
+            <Button
+            className = "cursor-pointer" onClick={() => navigate(-1)}>
               <ArrowLeft />
             </Button>
             <h1 className="font-bold mb-7 text-2xl text-gray-800">
@@ -188,8 +189,6 @@ const UserInfo = () => {
                   className="w-full border rounded-lg px-3 py-2 mt-1"
                 />
               </div>
-
-              {/* <div className="grid grid-cols-2 gap-4"> */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>City</Label>
@@ -218,18 +217,18 @@ const UserInfo = () => {
                <RadioGroup value={updateUser?.role || ""} onValueChange={(value)=>setUpdateUser({...updateUser, role:value})}
                 className="flex items-center">
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="user" id="user" />
-                  <Label htmlFor="user">User</Label>
+                  <RadioGroupItem className="cursor-pointer" value="user" id="user" />
+                  <Label className="cursor-pointer" htmlFor="user">User</Label>
                 </div>
                  <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="admin" id="admin" />
-                  <Label htmlFor="admin">Admin</Label>
+                  <RadioGroupItem className="cursor-pointer" value="admin" id="admin" />
+                  <Label className="cursor-pointer" htmlFor="admin">Admin</Label>
                 </div>
                </RadioGroup>
               </div>
               <Button
                 type="submit"
-                className="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white"
+                className="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white cursor-pointer"
               >
                 Update Profile
               </Button>

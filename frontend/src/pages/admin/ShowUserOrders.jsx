@@ -10,7 +10,7 @@ const ShowUserOrders = () => {
 
   const getUserOrders = async () => {
     const accessToken = localStorage.getItem("accessToken");
-    const res = await axios.get(`${import.meta.env.VITE_URL}/api/v1/orders/user-order/${params.userId}`,
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/user-order/${params.userId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -26,10 +26,10 @@ const ShowUserOrders = () => {
    }, [])
 
   return (
-     <div className="pl-[350px] py-20">
-     <OrderCart userOrder={userOrder}/>
-     </div>
-  )
+  <div className="w-full p-4 md:p-6 lg:p-8">
+    <OrderCart userOrder={userOrder} />
+  </div>
+)
 }
 
 export default ShowUserOrders
