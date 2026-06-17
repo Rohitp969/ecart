@@ -68,17 +68,12 @@ const UserInfo = () => {
       if (res.data.success) {
         toast.success(res.data.message);
         dispatch(setUser(res.data.user));
-        // localStorage.setItem("user", JSON.stringify(res.data.user));
       }
     } catch (error) {
       console.log(error);
       toast.error("Failed to Update profile");
     }
   };
-
-  // useEffect(()=>{
-  //   getUserDetails()
-  // }, [])
 
   const getUserDetails = async ()=>{
     try {
@@ -132,7 +127,6 @@ const UserInfo = () => {
               onSubmit={handleSubmit}
               className="flex-1 space-y-4 shadow-lg p-6 rounded-lg bg-white"
             >
-              {/* <div className="grid grid-cols-2 gap-4"> */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label>First Name</Label>

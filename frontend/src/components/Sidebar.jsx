@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
-    // <div className='block md:block border-r bg-pink-50 border-pink-200 x-10 w-[300px] p-10 space-y-2 h-screen'>
     <div className='w-full md:w-[300px] border-r bg-pink-50 border-pink-200 p-5 md:p-10 space-y-2'>
         <div className='text-center pt-12 px-5 space-y-2'>
             <NavLink to='/dashboard/sales' className={({isActive})=>`text-sm md:text-xl ${isActive ? "bg-pink-600 text-gray-200":"bg-transparent"} 

@@ -180,7 +180,6 @@ const AdminSales = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* <div className="pl-[280px] py-8 pr-8 m-15"> */}
       <div className="w-full p-4 md:p-6 lg:p-16">
         {/* Header */}
         <div className="mb-8">
@@ -326,7 +325,6 @@ const AdminSales = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              {/* <div style={{ height: 350 }}> */}
               <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -370,24 +368,6 @@ const AdminSales = () => {
                 Top Performing Products
               </CardTitle>
             </CardHeader>
-            {/* <CardContent className="p-6">
-              <div className="h-[250px] md:h-[350px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={stats.topProducts || []} layout="vertical">
-                    <XAxis type="number" tickFormatter={(value) => `$${value}`} />
-                    <YAxis type="category" dataKey="name" width={100} />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip formatter={(value) => `$${value}`} />
-                    <Bar dataKey="sales" fill="#4ECDC4" radius={[0, 4, 4, 0]}>
-                      {(stats.topProducts || []).map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent> */}
-
             <CardContent className="p-6">
               <div className="space-y-4">
                 {(stats.topProducts || []).map((product, index) => (
@@ -425,7 +405,6 @@ const AdminSales = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              {/* <div style={{ height: 350 }}> */}
               <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={stats.salesByDate}>
