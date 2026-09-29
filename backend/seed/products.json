@@ -2,7 +2,7 @@
   {
     "productName": "Essence Mascara Lash Princess",
     "productDesc": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-    "productPrice": 849,
+    "productPrice": 399,
     "category": "Beauty",
     "brand": "Essence",
     "rating": 2.6,
@@ -18,11 +18,11 @@
   {
     "productName": "Eyeshadow Palette with Mirror",
     "productDesc": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
-    "productPrice": 1699,
+    "productPrice": 499,
     "category": "Beauty",
     "brand": "Glamour Beauty",
     "rating": 2.9,
-    "discountPercentage": 18,
+    "discountPercentage": 30,
     "stock": 34,
     "productImg": [
       {
@@ -34,11 +34,11 @@
   {
     "productName": "Powder Canister",
     "productDesc": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
-    "productPrice": 1299,
+    "productPrice": 349,
     "category": "Beauty",
     "brand": "Velvet Touch",
     "rating": 4.6,
-    "discountPercentage": 10,
+    "discountPercentage": 20,
     "stock": 89,
     "productImg": [
       {
@@ -50,11 +50,11 @@
   {
     "productName": "Red Lipstick",
     "productDesc": "The Red Lipstick is a classic and bold choice for adding a pop of color to your lips. With a creamy and pigmented formula, it provides a vibrant and long-lasting finish.",
-    "productPrice": 1099,
+    "productPrice": 299,
     "category": "Beauty",
     "brand": "Chic Cosmetics",
     "rating": 4.4,
-    "discountPercentage": 12,
+    "discountPercentage": 25,
     "stock": 91,
     "productImg": [
       {
@@ -66,11 +66,11 @@
   {
     "productName": "Red Nail Polish",
     "productDesc": "The Red Nail Polish offers a rich and glossy red hue for vibrant and polished nails. With a quick-drying formula, it provides a salon-quality finish at home.",
-    "productPrice": 759,
+    "productPrice": 149,
     "category": "Beauty",
     "brand": "Nail Couture",
     "rating": 4.3,
-    "discountPercentage": 11,
+    "discountPercentage": 20,
     "stock": 79,
     "productImg": [
       {
@@ -82,11 +82,11 @@
   {
     "productName": "Calvin Klein CK One",
     "productDesc": "CK One by Calvin Klein is a classic unisex fragrance, known for its fresh and clean scent. It's a versatile fragrance suitable for everyday wear.",
-    "productPrice": 4199,
+    "productPrice": 2799,
     "category": "Beauty",
     "brand": "Calvin Klein",
     "rating": 4.4,
-    "discountPercentage": 2,
+    "discountPercentage": 30,
     "stock": 29,
     "productImg": [
       {
@@ -106,11 +106,11 @@
   {
     "productName": "Chanel Coco Noir Eau De",
     "productDesc": "Coco Noir by Chanel is an elegant and mysterious fragrance, featuring notes of grapefruit, rose, and sandalwood. Perfect for evening occasions.",
-    "productPrice": 10999,
+    "productPrice": 11999,
     "category": "Beauty",
     "brand": "Chanel",
     "rating": 4.3,
-    "discountPercentage": 17,
+    "discountPercentage": 5,
     "stock": 58,
     "productImg": [
       {
@@ -130,11 +130,11 @@
   {
     "productName": "Dior J'adore",
     "productDesc": "J'adore by Dior is a luxurious and floral fragrance, known for its blend of ylang-ylang, rose, and jasmine. It embodies femininity and sophistication.",
-    "productPrice": 7599,
+    "productPrice": 9999,
     "category": "Beauty",
     "brand": "Dior",
     "rating": 3.8,
-    "discountPercentage": 15,
+    "discountPercentage": 8,
     "stock": 98,
     "productImg": [
       {
@@ -154,11 +154,11 @@
   {
     "productName": "Dolce Shine Eau de",
     "productDesc": "Dolce Shine by Dolce & Gabbana is a vibrant and fruity fragrance, featuring notes of mango, jasmine, and blonde woods. It's a joyful and youthful scent.",
-    "productPrice": 5899,
+    "productPrice": 4999,
     "category": "Beauty",
     "brand": "Dolce & Gabbana",
     "rating": 4,
-    "discountPercentage": 1,
+    "discountPercentage": 20,
     "stock": 4,
     "productImg": [
       {
@@ -178,11 +178,11 @@
   {
     "productName": "Gucci Bloom Eau de",
     "productDesc": "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent.",
-    "productPrice": 6799,
+    "productPrice": 7999,
     "category": "Beauty",
     "brand": "Gucci",
     "rating": 2.7,
-    "discountPercentage": 14,
+    "discountPercentage": 10,
     "stock": 91,
     "productImg": [
       {
@@ -250,11 +250,11 @@
   {
     "productName": "Bedside Table African Cherry",
     "productDesc": "The Bedside Table in African Cherry is a stylish and functional addition to your bedroom, providing convenient storage space and a touch of elegance.",
-    "productPrice": 25499,
+    "productPrice": 6999,
     "category": "Home & Furniture",
     "brand": "Furniture Co.",
     "rating": 2.9,
-    "discountPercentage": 19,
+    "discountPercentage": 35,
     "stock": 64,
     "productImg": [
       {
@@ -298,11 +298,11 @@
   {
     "productName": "Wooden Bathroom Sink With Mirror",
     "productDesc": "The Wooden Bathroom Sink with Mirror is a unique and stylish addition to your bathroom, featuring a wooden sink countertop and a matching mirror.",
-    "productPrice": 67999,
+    "productPrice": 18999,
     "category": "Home & Furniture",
     "brand": "Bath Trends",
     "rating": 3.6,
-    "discountPercentage": 9,
+    "discountPercentage": 25,
     "stock": 7,
     "productImg": [
       {
@@ -322,11 +322,11 @@
   {
     "productName": "Apple",
     "productDesc": "Fresh and crisp apples, perfect for snacking or incorporating into various recipes.",
-    "productPrice": 169,
+    "productPrice": 199,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.2,
-    "discountPercentage": 13,
+    "discountPercentage": 10,
     "stock": 8,
     "productImg": [
       {
@@ -338,11 +338,11 @@
   {
     "productName": "Beef Steak",
     "productDesc": "High-quality beef steak, great for grilling or cooking to your preferred level of doneness.",
-    "productPrice": 1099,
+    "productPrice": 449,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.5,
-    "discountPercentage": 10,
+    "discountPercentage": 5,
     "stock": 86,
     "productImg": [
       {
@@ -354,7 +354,7 @@
   {
     "productName": "Cat Food",
     "productDesc": "Nutritious cat food formulated to meet the dietary needs of your feline friend.",
-    "productPrice": 759,
+    "productPrice": 549,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.1,
@@ -370,11 +370,11 @@
   {
     "productName": "Chicken Meat",
     "productDesc": "Fresh and tender chicken meat, suitable for various culinary preparations.",
-    "productPrice": 849,
+    "productPrice": 299,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.2,
-    "discountPercentage": 14,
+    "discountPercentage": 5,
     "stock": 97,
     "productImg": [
       {
@@ -390,11 +390,11 @@
   {
     "productName": "Cooking Oil",
     "productDesc": "Versatile cooking oil suitable for frying, sautéing, and various culinary applications.",
-    "productPrice": 419,
+    "productPrice": 169,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.8,
-    "discountPercentage": 9,
+    "discountPercentage": 10,
     "stock": 10,
     "productImg": [
       {
@@ -406,7 +406,7 @@
   {
     "productName": "Cucumber",
     "productDesc": "Crisp and hydrating cucumbers, ideal for salads, snacks, or as a refreshing side.",
-    "productPrice": 129,
+    "productPrice": 35,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.1,
@@ -422,7 +422,7 @@
   {
     "productName": "Dog Food",
     "productDesc": "Specially formulated dog food designed to provide essential nutrients for your canine companion.",
-    "productPrice": 929,
+    "productPrice": 399,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.6,
@@ -438,11 +438,11 @@
   {
     "productName": "Eggs",
     "productDesc": "Fresh eggs, a versatile ingredient for baking, cooking, or breakfast.",
-    "productPrice": 249,
+    "productPrice": 89,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 2.5,
-    "discountPercentage": 11,
+    "discountPercentage": 5,
     "stock": 9,
     "productImg": [
       {
@@ -454,11 +454,11 @@
   {
     "productName": "Fish Steak",
     "productDesc": "Quality fish steak, suitable for grilling, baking, or pan-searing.",
-    "productPrice": 1299,
+    "productPrice": 349,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.8,
-    "discountPercentage": 4,
+    "discountPercentage": 5,
     "stock": 74,
     "productImg": [
       {
@@ -470,7 +470,7 @@
   {
     "productName": "Green Bell Pepper",
     "productDesc": "Fresh and vibrant green bell pepper, perfect for adding color and flavor to your dishes.",
-    "productPrice": 109,
+    "productPrice": 39,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.3,
@@ -486,11 +486,11 @@
   {
     "productName": "Green Chili Pepper",
     "productDesc": "Spicy green chili pepper, ideal for adding heat to your favorite recipes.",
-    "productPrice": 79,
+    "productPrice": 19,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.7,
-    "discountPercentage": 1,
+    "discountPercentage": 0,
     "stock": 3,
     "productImg": [
       {
@@ -502,11 +502,11 @@
   {
     "productName": "Honey Jar",
     "productDesc": "Pure and natural honey in a convenient jar, perfect for sweetening beverages or drizzling over food.",
-    "productPrice": 589,
+    "productPrice": 249,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4,
-    "discountPercentage": 14,
+    "discountPercentage": 10,
     "stock": 34,
     "productImg": [
       {
@@ -518,11 +518,11 @@
   {
     "productName": "Ice Cream",
     "productDesc": "Creamy and delicious ice cream, available in various flavors for a delightful treat.",
-    "productPrice": 469,
+    "productPrice": 249,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.4,
-    "discountPercentage": 9,
+    "discountPercentage": 10,
     "stock": 27,
     "productImg": [
       {
@@ -546,11 +546,11 @@
   {
     "productName": "Juice",
     "productDesc": "Refreshing fruit juice, packed with vitamins and great for staying hydrated.",
-    "productPrice": 339,
+    "productPrice": 119,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.9,
-    "discountPercentage": 12,
+    "discountPercentage": 10,
     "stock": 50,
     "productImg": [
       {
@@ -562,11 +562,11 @@
   {
     "productName": "Kiwi",
     "productDesc": "Nutrient-rich kiwi, perfect for snacking or adding a tropical twist to your dishes.",
-    "productPrice": 209,
+    "productPrice": 99,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.9,
-    "discountPercentage": 15,
+    "discountPercentage": 10,
     "stock": 99,
     "productImg": [
       {
@@ -578,11 +578,11 @@
   {
     "productName": "Lemon",
     "productDesc": "Zesty and tangy lemons, versatile for cooking, baking, or making refreshing beverages.",
-    "productPrice": 69,
+    "productPrice": 35,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.5,
-    "discountPercentage": 10,
+    "discountPercentage": 0,
     "stock": 31,
     "productImg": [
       {
@@ -594,11 +594,11 @@
   {
     "productName": "Milk",
     "productDesc": "Fresh and nutritious milk, a staple for various recipes and daily consumption.",
-    "productPrice": 299,
+    "productPrice": 68,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 2.6,
-    "discountPercentage": 14,
+    "discountPercentage": 0,
     "stock": 27,
     "productImg": [
       {
@@ -610,11 +610,11 @@
   {
     "productName": "Mulberry",
     "productDesc": "Sweet and juicy mulberries, perfect for snacking or adding to desserts and cereals.",
-    "productPrice": 419,
+    "productPrice": 129,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 5,
-    "discountPercentage": 13,
+    "discountPercentage": 10,
     "stock": 99,
     "productImg": [
       {
@@ -626,11 +626,11 @@
   {
     "productName": "Nescafe Coffee",
     "productDesc": "Quality coffee from Nescafe, available in various blends for a rich and satisfying cup.",
-    "productPrice": 679,
+    "productPrice": 379,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.8,
-    "discountPercentage": 2,
+    "discountPercentage": 5,
     "stock": 57,
     "productImg": [
       {
@@ -642,11 +642,11 @@
   {
     "productName": "Potatoes",
     "productDesc": "Versatile and starchy potatoes, great for roasting, mashing, or as a side dish.",
-    "productPrice": 189,
+    "productPrice": 39,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.8,
-    "discountPercentage": 5,
+    "discountPercentage": 0,
     "stock": 13,
     "productImg": [
       {
@@ -658,11 +658,11 @@
   {
     "productName": "Protein Powder",
     "productDesc": "Nutrient-packed protein powder, ideal for supplementing your diet with essential proteins.",
-    "productPrice": 1699,
+    "productPrice": 2499,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.2,
-    "discountPercentage": 8,
+    "discountPercentage": 20,
     "stock": 80,
     "productImg": [
       {
@@ -674,11 +674,11 @@
   {
     "productName": "Red Onions",
     "productDesc": "Flavorful and aromatic red onions, perfect for adding depth to your savory dishes.",
-    "productPrice": 169,
+    "productPrice": 45,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.2,
-    "discountPercentage": 10,
+    "discountPercentage": 0,
     "stock": 82,
     "productImg": [
       {
@@ -690,11 +690,11 @@
   {
     "productName": "Rice",
     "productDesc": "High-quality rice, a staple for various cuisines and a versatile base for many dishes.",
-    "productPrice": 509,
+    "productPrice": 149,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.2,
-    "discountPercentage": 9,
+    "discountPercentage": 10,
     "stock": 59,
     "productImg": [
       {
@@ -706,11 +706,11 @@
   {
     "productName": "Soft Drinks",
     "productDesc": "Assorted soft drinks in various flavors, perfect for refreshing beverages.",
-    "productPrice": 169,
+    "productPrice": 95,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 4.8,
-    "discountPercentage": 17,
+    "discountPercentage": 5,
     "stock": 53,
     "productImg": [
       {
@@ -722,11 +722,11 @@
   {
     "productName": "Strawberry",
     "productDesc": "Sweet and succulent strawberries, great for snacking, desserts, or blending into smoothies.",
-    "productPrice": 339,
+    "productPrice": 99,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 3.1,
-    "discountPercentage": 1,
+    "discountPercentage": 10,
     "stock": 46,
     "productImg": [
       {
@@ -738,11 +738,11 @@
   {
     "productName": "Tissue Paper Box",
     "productDesc": "Convenient tissue paper box for everyday use, providing soft and absorbent tissues.",
-    "productPrice": 209,
+    "productPrice": 99,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 2.7,
-    "discountPercentage": 13,
+    "discountPercentage": 15,
     "stock": 86,
     "productImg": [
       {
@@ -758,11 +758,11 @@
   {
     "productName": "Water",
     "productDesc": "Pure and refreshing bottled water, essential for staying hydrated throughout the day.",
-    "productPrice": 79,
+    "productPrice": 20,
     "category": "Grocery",
     "brand": "Ekart Fresh",
     "rating": 5,
-    "discountPercentage": 15,
+    "discountPercentage": 0,
     "stock": 53,
     "productImg": [
       {
@@ -774,11 +774,11 @@
   {
     "productName": "Decoration Swing",
     "productDesc": "The Decoration Swing is a charming addition to your home decor. Crafted with intricate details, it adds a touch of elegance and whimsy to any room.",
-    "productPrice": 5099,
+    "productPrice": 1499,
     "category": "Home & Furniture",
     "brand": "Ekart Basics",
     "rating": 3.2,
-    "discountPercentage": 10,
+    "discountPercentage": 40,
     "stock": 47,
     "productImg": [
       {
@@ -798,11 +798,11 @@
   {
     "productName": "Family Tree Photo Frame",
     "productDesc": "The Family Tree Photo Frame is a sentimental and stylish way to display your cherished family memories. With multiple photo slots, it tells the story of your loved ones.",
-    "productPrice": 2499,
+    "productPrice": 799,
     "category": "Home & Furniture",
     "brand": "Ekart Basics",
     "rating": 4.5,
-    "discountPercentage": 15,
+    "discountPercentage": 45,
     "stock": 77,
     "productImg": [
       {
@@ -814,11 +814,11 @@
   {
     "productName": "House Showpiece Plant",
     "productDesc": "The House Showpiece Plant is an artificial plant that brings a touch of nature to your home without the need for maintenance. It adds greenery and style to any space.",
-    "productPrice": 3399,
+    "productPrice": 699,
     "category": "Home & Furniture",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 7,
+    "discountPercentage": 40,
     "stock": 28,
     "productImg": [
       {
@@ -838,11 +838,11 @@
   {
     "productName": "Plant Pot",
     "productDesc": "The Plant Pot is a stylish container for your favorite plants. With a sleek design, it complements your indoor or outdoor garden, adding a modern touch to your plant display.",
-    "productPrice": 1299,
+    "productPrice": 399,
     "category": "Home & Furniture",
     "brand": "Ekart Basics",
     "rating": 3,
-    "discountPercentage": 7,
+    "discountPercentage": 35,
     "stock": 59,
     "productImg": [
       {
@@ -866,11 +866,11 @@
   {
     "productName": "Table Lamp",
     "productDesc": "The Table Lamp is a functional and decorative lighting solution for your living space. With a modern design, it provides both ambient and task lighting, enhancing the atmosphere.",
-    "productPrice": 4199,
+    "productPrice": 1299,
     "category": "Home & Furniture",
     "brand": "Ekart Basics",
     "rating": 3.6,
-    "discountPercentage": 7,
+    "discountPercentage": 40,
     "stock": 9,
     "productImg": [
       {
@@ -882,11 +882,11 @@
   {
     "productName": "Bamboo Spatula",
     "productDesc": "The Bamboo Spatula is a versatile kitchen tool made from eco-friendly bamboo. Ideal for flipping, stirring, and serving various dishes.",
-    "productPrice": 679,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.3,
-    "discountPercentage": 3,
+    "discountPercentage": 25,
     "stock": 37,
     "productImg": [
       {
@@ -898,11 +898,11 @@
   {
     "productName": "Black Aluminium Cup",
     "productDesc": "The Black Aluminium Cup is a stylish and durable cup suitable for both hot and cold beverages. Its sleek black design adds a modern touch to your drinkware collection.",
-    "productPrice": 509,
+    "productPrice": 199,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.5,
-    "discountPercentage": 16,
+    "discountPercentage": 20,
     "stock": 75,
     "productImg": [
       {
@@ -918,11 +918,11 @@
   {
     "productName": "Black Whisk",
     "productDesc": "The Black Whisk is a kitchen essential for whisking and beating ingredients. Its ergonomic handle and sleek design make it a practical and stylish tool.",
-    "productPrice": 849,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.9,
-    "discountPercentage": 10,
+    "discountPercentage": 25,
     "stock": 73,
     "productImg": [
       {
@@ -934,11 +934,11 @@
   {
     "productName": "Boxed Blender",
     "productDesc": "The Boxed Blender is a powerful and compact blender perfect for smoothies, shakes, and more. Its convenient design and multiple functions make it a versatile kitchen appliance.",
-    "productPrice": 3399,
+    "productPrice": 2499,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.6,
-    "discountPercentage": 7,
+    "discountPercentage": 30,
     "stock": 9,
     "productImg": [
       {
@@ -962,11 +962,11 @@
   {
     "productName": "Carbon Steel Wok",
     "productDesc": "The Carbon Steel Wok is a versatile cooking pan suitable for stir-frying, sautéing, and deep frying. Its sturdy construction ensures even heat distribution for delicious meals.",
-    "productPrice": 2499,
+    "productPrice": 899,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.1,
-    "discountPercentage": 7,
+    "discountPercentage": 30,
     "stock": 40,
     "productImg": [
       {
@@ -978,11 +978,11 @@
   {
     "productName": "Chopping Board",
     "productDesc": "The Chopping Board is an essential kitchen accessory for food preparation. Made from durable material, it provides a safe and hygienic surface for cutting and chopping.",
-    "productPrice": 1099,
+    "productPrice": 299,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.7,
-    "discountPercentage": 8,
+    "discountPercentage": 25,
     "stock": 14,
     "productImg": [
       {
@@ -994,11 +994,11 @@
   {
     "productName": "Citrus Squeezer Yellow",
     "productDesc": "The Citrus Squeezer in Yellow is a handy tool for extracting juice from citrus fruits. Its vibrant color adds a cheerful touch to your kitchen gadgets.",
-    "productPrice": 759,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.6,
-    "discountPercentage": 12,
+    "discountPercentage": 25,
     "stock": 22,
     "productImg": [
       {
@@ -1010,11 +1010,11 @@
   {
     "productName": "Egg Slicer",
     "productDesc": "The Egg Slicer is a convenient tool for slicing boiled eggs evenly. It's perfect for salads, sandwiches, and other dishes where sliced eggs are desired.",
-    "productPrice": 589,
+    "productPrice": 129,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.1,
-    "discountPercentage": 15,
+    "discountPercentage": 20,
     "stock": 40,
     "productImg": [
       {
@@ -1026,11 +1026,11 @@
   {
     "productName": "Electric Stove",
     "productDesc": "The Electric Stove provides a portable and efficient cooking solution. Ideal for small kitchens or as an additional cooking surface for various culinary needs.",
-    "productPrice": 4199,
+    "productPrice": 2199,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.1,
-    "discountPercentage": 14,
+    "discountPercentage": 35,
     "stock": 21,
     "productImg": [
       {
@@ -1054,11 +1054,11 @@
   {
     "productName": "Fine Mesh Strainer",
     "productDesc": "The Fine Mesh Strainer is a versatile tool for straining liquids and sifting dry ingredients. Its fine mesh ensures efficient filtering for smooth cooking and baking.",
-    "productPrice": 849,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3,
-    "discountPercentage": 4,
+    "discountPercentage": 20,
     "stock": 85,
     "productImg": [
       {
@@ -1070,11 +1070,11 @@
   {
     "productName": "Fork",
     "productDesc": "The Fork is a classic utensil for various dining and serving purposes. Its durable and ergonomic design makes it a reliable choice for everyday use.",
-    "productPrice": 339,
+    "productPrice": 99,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.1,
-    "discountPercentage": 8,
+    "discountPercentage": 20,
     "stock": 7,
     "productImg": [
       {
@@ -1086,11 +1086,11 @@
   {
     "productName": "Glass",
     "productDesc": "The Glass is a versatile and elegant drinking vessel suitable for a variety of beverages. Its clear design allows you to enjoy the colors and textures of your drinks.",
-    "productPrice": 419,
+    "productPrice": 99,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4,
-    "discountPercentage": 8,
+    "discountPercentage": 20,
     "stock": 46,
     "productImg": [
       {
@@ -1102,11 +1102,11 @@
   {
     "productName": "Grater Black",
     "productDesc": "The Grater in Black is a handy kitchen tool for grating cheese, vegetables, and more. Its sleek design and sharp blades make food preparation efficient and easy.",
-    "productPrice": 929,
+    "productPrice": 199,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.2,
-    "discountPercentage": 4,
+    "discountPercentage": 20,
     "stock": 84,
     "productImg": [
       {
@@ -1118,11 +1118,11 @@
   {
     "productName": "Hand Blender",
     "productDesc": "The Hand Blender is a versatile kitchen appliance for blending, pureeing, and mixing. Its compact design and powerful motor make it a convenient tool for various recipes.",
-    "productPrice": 2999,
+    "productPrice": 1399,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.9,
-    "discountPercentage": 17,
+    "discountPercentage": 30,
     "stock": 84,
     "productImg": [
       {
@@ -1134,11 +1134,11 @@
   {
     "productName": "Ice Cube Tray",
     "productDesc": "The Ice Cube Tray is a practical accessory for making ice cubes in various shapes. Perfect for keeping your drinks cool and adding a fun element to your beverages.",
-    "productPrice": 509,
+    "productPrice": 99,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 1,
+    "discountPercentage": 20,
     "stock": 13,
     "productImg": [
       {
@@ -1150,11 +1150,11 @@
   {
     "productName": "Kitchen Sieve",
     "productDesc": "The Kitchen Sieve is a versatile tool for sifting and straining dry and wet ingredients. Its fine mesh design ensures smooth results in your cooking and baking.",
-    "productPrice": 679,
+    "productPrice": 129,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.1,
-    "discountPercentage": 19,
+    "discountPercentage": 20,
     "stock": 68,
     "productImg": [
       {
@@ -1166,11 +1166,11 @@
   {
     "productName": "Knife",
     "productDesc": "The Knife is an essential kitchen tool for chopping, slicing, and dicing. Its sharp blade and ergonomic handle make it a reliable choice for food preparation.",
-    "productPrice": 1299,
+    "productPrice": 299,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.3,
-    "discountPercentage": 19,
+    "discountPercentage": 25,
     "stock": 7,
     "productImg": [
       {
@@ -1182,11 +1182,11 @@
   {
     "productName": "Lunch Box",
     "productDesc": "The Lunch Box is a convenient and portable container for packing and carrying your meals. With compartments for different foods, it's perfect for on-the-go dining.",
-    "productPrice": 1099,
+    "productPrice": 449,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.9,
-    "discountPercentage": 10,
+    "discountPercentage": 30,
     "stock": 94,
     "productImg": [
       {
@@ -1198,11 +1198,11 @@
   {
     "productName": "Microwave Oven",
     "productDesc": "The Microwave Oven is a versatile kitchen appliance for quick and efficient cooking, reheating, and defrosting. Its compact size makes it suitable for various kitchen setups.",
-    "productPrice": 7599,
+    "productPrice": 6499,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.8,
-    "discountPercentage": 12,
+    "discountPercentage": 25,
     "stock": 59,
     "productImg": [
       {
@@ -1226,11 +1226,11 @@
   {
     "productName": "Mug Tree Stand",
     "productDesc": "The Mug Tree Stand is a stylish and space-saving solution for organizing your mugs. Keep your favorite mugs easily accessible and neatly displayed in your kitchen.",
-    "productPrice": 1399,
+    "productPrice": 399,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 2.6,
-    "discountPercentage": 9,
+    "discountPercentage": 30,
     "stock": 88,
     "productImg": [
       {
@@ -1246,11 +1246,11 @@
   {
     "productName": "Pan",
     "productDesc": "The Pan is a versatile and essential cookware item for frying, sautéing, and cooking various dishes. Its non-stick coating ensures easy food release and cleanup.",
-    "productPrice": 2099,
+    "productPrice": 699,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 2.8,
-    "discountPercentage": 3,
+    "discountPercentage": 35,
     "stock": 90,
     "productImg": [
       {
@@ -1262,11 +1262,11 @@
   {
     "productName": "Plate",
     "productDesc": "The Plate is a classic and essential dishware item for serving meals. Its durable and stylish design makes it suitable for everyday use or special occasions.",
-    "productPrice": 339,
+    "productPrice": 99,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.7,
-    "discountPercentage": 7,
+    "discountPercentage": 15,
     "stock": 66,
     "productImg": [
       {
@@ -1278,11 +1278,11 @@
   {
     "productName": "Red Tongs",
     "productDesc": "The Red Tongs are versatile kitchen tongs suitable for various cooking and serving tasks. Their vibrant color adds a pop of excitement to your kitchen utensils.",
-    "productPrice": 589,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.4,
-    "discountPercentage": 15,
+    "discountPercentage": 20,
     "stock": 82,
     "productImg": [
       {
@@ -1294,11 +1294,11 @@
   {
     "productName": "Silver Pot With Glass Cap",
     "productDesc": "The Silver Pot with Glass Cap is a stylish and functional cookware item for boiling, simmering, and preparing delicious meals. Its glass cap allows you to monitor cooking progress.",
-    "productPrice": 3399,
+    "productPrice": 999,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.2,
-    "discountPercentage": 6,
+    "discountPercentage": 30,
     "stock": 40,
     "productImg": [
       {
@@ -1310,11 +1310,11 @@
   {
     "productName": "Slotted Turner",
     "productDesc": "The Slotted Turner is a kitchen utensil designed for flipping and turning food items. Its slotted design allows excess liquid to drain, making it ideal for frying and sautéing.",
-    "productPrice": 759,
+    "productPrice": 129,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 3.4,
-    "discountPercentage": 13,
+    "discountPercentage": 20,
     "stock": 88,
     "productImg": [
       {
@@ -1326,11 +1326,11 @@
   {
     "productName": "Spice Rack",
     "productDesc": "The Spice Rack is a convenient organizer for your spices and seasonings. Keep your kitchen essentials within reach and neatly arranged with this stylish spice rack.",
-    "productPrice": 1699,
+    "productPrice": 599,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.9,
-    "discountPercentage": 12,
+    "discountPercentage": 30,
     "stock": 79,
     "productImg": [
       {
@@ -1342,11 +1342,11 @@
   {
     "productName": "Spoon",
     "productDesc": "The Spoon is a versatile kitchen utensil for stirring, serving, and tasting. Its ergonomic design and durable construction make it an essential tool for every kitchen.",
-    "productPrice": 419,
+    "productPrice": 79,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4,
-    "discountPercentage": 2,
+    "discountPercentage": 15,
     "stock": 59,
     "productImg": [
       {
@@ -1358,11 +1358,11 @@
   {
     "productName": "Tray",
     "productDesc": "The Tray is a functional and decorative item for serving snacks, appetizers, or drinks. Its stylish design makes it a versatile accessory for entertaining guests.",
-    "productPrice": 1399,
+    "productPrice": 299,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.6,
-    "discountPercentage": 7,
+    "discountPercentage": 25,
     "stock": 71,
     "productImg": [
       {
@@ -1374,11 +1374,11 @@
   {
     "productName": "Wooden Rolling Pin",
     "productDesc": "The Wooden Rolling Pin is a classic kitchen tool for rolling out dough for baking. Its smooth surface and sturdy handles make it easy to achieve uniform thickness.",
-    "productPrice": 999,
+    "productPrice": 149,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 2.9,
-    "discountPercentage": 10,
+    "discountPercentage": 20,
     "stock": 80,
     "productImg": [
       {
@@ -1390,11 +1390,11 @@
   {
     "productName": "Yellow Peeler",
     "productDesc": "The Yellow Peeler is a handy tool for peeling fruits and vegetables with ease. Its bright yellow color adds a cheerful touch to your kitchen gadgets.",
-    "productPrice": 509,
+    "productPrice": 99,
     "category": "Kitchen",
     "brand": "Ekart Basics",
     "rating": 4.2,
-    "discountPercentage": 12,
+    "discountPercentage": 20,
     "stock": 35,
     "productImg": [
       {
@@ -1406,11 +1406,11 @@
   {
     "productName": "Apple MacBook Pro 14 Inch Space Grey",
     "productDesc": "The MacBook Pro 14 Inch in Space Grey is a powerful and sleek laptop, featuring Apple's M1 Pro chip for exceptional performance and a stunning Retina display.",
-    "productPrice": 169999,
+    "productPrice": 154999,
     "category": "Laptops",
     "brand": "Apple",
     "rating": 3.7,
-    "discountPercentage": 5,
+    "discountPercentage": 9,
     "stock": 24,
     "productImg": [
       {
@@ -1430,11 +1430,11 @@
   {
     "productName": "Asus Zenbook Pro Dual Screen Laptop",
     "productDesc": "The Asus Zenbook Pro Dual Screen Laptop is a high-performance device with dual screens, providing productivity and versatility for creative professionals.",
-    "productPrice": 152999,
+    "productPrice": 139999,
     "category": "Laptops",
     "brand": "Asus",
     "rating": 4,
-    "discountPercentage": 11,
+    "discountPercentage": 12,
     "stock": 45,
     "productImg": [
       {
@@ -1454,11 +1454,11 @@
   {
     "productName": "Huawei Matebook X Pro",
     "productDesc": "The Huawei Matebook X Pro is a slim and stylish laptop with a high-resolution touchscreen display, offering a premium experience for users on the go.",
-    "productPrice": 118999,
+    "productPrice": 99999,
     "category": "Laptops",
     "brand": "Huawei",
     "rating": 5,
-    "discountPercentage": 9,
+    "discountPercentage": 15,
     "stock": 75,
     "productImg": [
       {
@@ -1478,11 +1478,11 @@
   {
     "productName": "Lenovo Yoga 920",
     "productDesc": "The Lenovo Yoga 920 is a 2-in-1 convertible laptop with a flexible hinge, allowing you to use it as a laptop or tablet, offering versatility and portability.",
-    "productPrice": 93499,
+    "productPrice": 44999,
     "category": "Laptops",
     "brand": "Lenovo",
     "rating": 2.9,
-    "discountPercentage": 7,
+    "discountPercentage": 25,
     "stock": 40,
     "productImg": [
       {
@@ -1502,11 +1502,11 @@
   {
     "productName": "New DELL XPS 13 9300 Laptop",
     "productDesc": "The New DELL XPS 13 9300 Laptop is a compact and powerful device, featuring a virtually borderless InfinityEdge display and high-end performance for various tasks.",
-    "productPrice": 127499,
+    "productPrice": 64999,
     "category": "Laptops",
     "brand": "Dell",
     "rating": 2.7,
-    "discountPercentage": 12,
+    "discountPercentage": 25,
     "stock": 74,
     "productImg": [
       {
@@ -1526,11 +1526,11 @@
   {
     "productName": "Blue & Black Check Shirt",
     "productDesc": "The Blue & Black Check Shirt is a stylish and comfortable men's shirt featuring a classic check pattern. Made from high-quality fabric, it's suitable for both casual and semi-formal occasions.",
-    "productPrice": 2499,
+    "productPrice": 599,
     "category": "Men's Fashion",
     "brand": "Fashion Trends",
     "rating": 3.6,
-    "discountPercentage": 15,
+    "discountPercentage": 60,
     "stock": 38,
     "productImg": [
       {
@@ -1554,11 +1554,11 @@
   {
     "productName": "Gigabyte Aorus Men Tshirt",
     "productDesc": "The Gigabyte Aorus Men Tshirt is a cool and casual shirt for gaming enthusiasts. With the Aorus logo and sleek design, it's perfect for expressing your gaming style.",
-    "productPrice": 2099,
+    "productPrice": 499,
     "category": "Men's Fashion",
     "brand": "Gigabyte",
     "rating": 3.2,
-    "discountPercentage": 1,
+    "discountPercentage": 50,
     "stock": 90,
     "productImg": [
       {
@@ -1582,11 +1582,11 @@
   {
     "productName": "Man Plaid Shirt",
     "productDesc": "The Man Plaid Shirt is a timeless and versatile men's shirt with a classic plaid pattern. Its comfortable fit and casual style make it a wardrobe essential for various occasions.",
-    "productPrice": 2999,
+    "productPrice": 699,
     "category": "Men's Fashion",
     "brand": "Classic Wear",
     "rating": 3.5,
-    "discountPercentage": 20,
+    "discountPercentage": 55,
     "stock": 82,
     "productImg": [
       {
@@ -1610,11 +1610,11 @@
   {
     "productName": "Man Short Sleeve Shirt",
     "productDesc": "The Man Short Sleeve Shirt is a breezy and stylish option for warm days. With a comfortable fit and short sleeves, it's perfect for a laid-back yet polished look.",
-    "productPrice": 1699,
+    "productPrice": 449,
     "category": "Men's Fashion",
     "brand": "Casual Comfort",
     "rating": 2.9,
-    "discountPercentage": 7,
+    "discountPercentage": 55,
     "stock": 2,
     "productImg": [
       {
@@ -1638,11 +1638,11 @@
   {
     "productName": "Men Check Shirt",
     "productDesc": "The Men Check Shirt is a classic and versatile shirt featuring a stylish check pattern. Suitable for various occasions, it adds a smart and polished touch to your wardrobe.",
-    "productPrice": 2399,
+    "productPrice": 649,
     "category": "Men's Fashion",
     "brand": "Urban Chic",
     "rating": 2.7,
-    "discountPercentage": 11,
+    "discountPercentage": 60,
     "stock": 95,
     "productImg": [
       {
@@ -1666,11 +1666,11 @@
   {
     "productName": "Nike Air Jordan 1 Red And Black",
     "productDesc": "The Nike Air Jordan 1 in Red and Black is an iconic basketball sneaker known for its stylish design and high-performance features, making it a favorite among sneaker enthusiasts and athletes.",
-    "productPrice": 12699,
+    "productPrice": 11499,
     "category": "Footwear",
     "brand": "Nike",
     "rating": 4.8,
-    "discountPercentage": 4,
+    "discountPercentage": 8,
     "stock": 7,
     "productImg": [
       {
@@ -1694,11 +1694,11 @@
   {
     "productName": "Nike Baseball Cleats",
     "productDesc": "Nike Baseball Cleats are designed for maximum traction and performance on the baseball field. They provide stability and support for players during games and practices.",
-    "productPrice": 6799,
+    "productPrice": 4999,
     "category": "Footwear",
     "brand": "Nike",
     "rating": 3.9,
-    "discountPercentage": 18,
+    "discountPercentage": 20,
     "stock": 12,
     "productImg": [
       {
@@ -1722,11 +1722,11 @@
   {
     "productName": "Puma Future Rider Trainers",
     "productDesc": "The Puma Future Rider Trainers offer a blend of retro style and modern comfort. Perfect for casual wear, these trainers provide a fashionable and comfortable option for everyday use.",
-    "productPrice": 7599,
+    "productPrice": 3999,
     "category": "Footwear",
     "brand": "Puma",
     "rating": 4.9,
-    "discountPercentage": 4,
+    "discountPercentage": 50,
     "stock": 90,
     "productImg": [
       {
@@ -1806,11 +1806,11 @@
   {
     "productName": "Brown Leather Belt Watch",
     "productDesc": "The Brown Leather Belt Watch is a stylish timepiece with a classic design. Featuring a genuine leather strap and a sleek dial, it adds a touch of sophistication to your look.",
-    "productPrice": 7599,
+    "productPrice": 1299,
     "category": "Watches",
     "brand": "Fashion Timepieces",
     "rating": 4.2,
-    "discountPercentage": 6,
+    "discountPercentage": 50,
     "stock": 32,
     "productImg": [
       {
@@ -1950,11 +1950,11 @@
   {
     "productName": "Amazon Echo Plus",
     "productDesc": "The Amazon Echo Plus is a smart speaker with built-in Alexa voice control. It features premium sound quality and serves as a hub for controlling smart home devices.",
-    "productPrice": 8499,
+    "productPrice": 5499,
     "category": "Audio",
     "brand": "Amazon",
     "rating": 5,
-    "discountPercentage": 12,
+    "discountPercentage": 45,
     "stock": 61,
     "productImg": [
       {
@@ -1970,11 +1970,11 @@
   {
     "productName": "Apple Airpods",
     "productDesc": "The Apple Airpods offer a seamless wireless audio experience. With easy pairing, high-quality sound, and Siri integration, they are perfect for on-the-go listening.",
-    "productPrice": 10999,
+    "productPrice": 11499,
     "category": "Audio",
     "brand": "Apple",
     "rating": 4.2,
-    "discountPercentage": 16,
+    "discountPercentage": 11,
     "stock": 67,
     "productImg": [
       {
@@ -1994,11 +1994,11 @@
   {
     "productName": "Apple AirPods Max Silver",
     "productDesc": "The Apple AirPods Max in Silver are premium over-ear headphones with high-fidelity audio, adaptive EQ, and active noise cancellation. Experience immersive sound in style.",
-    "productPrice": 46699,
+    "productPrice": 49999,
     "category": "Audio",
     "brand": "Apple",
     "rating": 3.5,
-    "discountPercentage": 14,
+    "discountPercentage": 16,
     "stock": 59,
     "productImg": [
       {
@@ -2010,11 +2010,11 @@
   {
     "productName": "Apple Airpower Wireless Charger",
     "productDesc": "The Apple AirPower Wireless Charger provides a convenient way to charge your compatible Apple devices wirelessly. Simply place your devices on the charging mat for effortless charging.",
-    "productPrice": 6799,
+    "productPrice": 3999,
     "category": "Mobile Accessories",
     "brand": "Apple",
     "rating": 3.7,
-    "discountPercentage": 4,
+    "discountPercentage": 11,
     "stock": 1,
     "productImg": [
       {
@@ -2026,11 +2026,11 @@
   {
     "productName": "Apple HomePod Mini Cosmic Grey",
     "productDesc": "The Apple HomePod Mini in Cosmic Grey is a compact smart speaker that delivers impressive audio and integrates seamlessly with the Apple ecosystem for a smart home experience.",
-    "productPrice": 8499,
+    "productPrice": 9999,
     "category": "Audio",
     "brand": "Apple",
     "rating": 4.6,
-    "discountPercentage": 18,
+    "discountPercentage": 8,
     "stock": 27,
     "productImg": [
       {
@@ -2042,11 +2042,11 @@
   {
     "productName": "Apple iPhone Charger",
     "productDesc": "The Apple iPhone Charger is a high-quality charger designed for fast and efficient charging of your iPhone. Ensure your device stays powered up and ready to go.",
-    "productPrice": 1699,
+    "productPrice": 1599,
     "category": "Mobile Accessories",
     "brand": "Apple",
     "rating": 4.2,
-    "discountPercentage": 19,
+    "discountPercentage": 16,
     "stock": 31,
     "productImg": [
       {
@@ -2062,7 +2062,7 @@
   {
     "productName": "Apple MagSafe Battery Pack",
     "productDesc": "The Apple MagSafe Battery Pack is a portable and convenient way to add extra battery life to your MagSafe-compatible iPhone. Attach it magnetically for a secure connection.",
-    "productPrice": 8499,
+    "productPrice": 8999,
     "category": "Mobile Accessories",
     "brand": "Apple",
     "rating": 3.6,
@@ -2082,11 +2082,11 @@
   {
     "productName": "Apple Watch Series 4 Gold",
     "productDesc": "The Apple Watch Series 4 in Gold is a stylish and advanced smartwatch with features like heart rate monitoring, fitness tracking, and a beautiful Retina display.",
-    "productPrice": 29699,
+    "productPrice": 13999,
     "category": "Watches",
     "brand": "Apple",
     "rating": 2.7,
-    "discountPercentage": 12,
+    "discountPercentage": 20,
     "stock": 33,
     "productImg": [
       {
@@ -2106,11 +2106,11 @@
   {
     "productName": "Beats Flex Wireless Earphones",
     "productDesc": "The Beats Flex Wireless Earphones offer a comfortable and versatile audio experience. With magnetic earbuds and up to 12 hours of battery life, they are ideal for everyday use.",
-    "productPrice": 4199,
+    "productPrice": 3499,
     "category": "Audio",
     "brand": "Beats",
     "rating": 4.2,
-    "discountPercentage": 6,
+    "discountPercentage": 30,
     "stock": 50,
     "productImg": [
       {
@@ -2122,11 +2122,11 @@
   {
     "productName": "iPhone 12 Silicone Case with MagSafe Plum",
     "productDesc": "The iPhone 12 Silicone Case with MagSafe in Plum is a stylish and protective case designed for the iPhone 12. It features MagSafe technology for easy attachment of accessories.",
-    "productPrice": 2499,
+    "productPrice": 1999,
     "category": "Mobile Accessories",
     "brand": "Apple",
     "rating": 3.6,
-    "discountPercentage": 14,
+    "discountPercentage": 59,
     "stock": 69,
     "productImg": [
       {
@@ -2150,11 +2150,11 @@
   {
     "productName": "Monopod",
     "productDesc": "The Monopod is a versatile camera accessory for stable and adjustable shooting. Perfect for capturing selfies, group photos, and videos with ease.",
-    "productPrice": 1699,
+    "productPrice": 499,
     "category": "Mobile Accessories",
     "brand": "TechGear",
     "rating": 4.4,
-    "discountPercentage": 9,
+    "discountPercentage": 50,
     "stock": 48,
     "productImg": [
       {
@@ -2170,11 +2170,11 @@
   {
     "productName": "Selfie Lamp with iPhone",
     "productDesc": "The Selfie Lamp with iPhone is a portable and adjustable LED light designed to enhance your selfies and video calls. Attach it to your iPhone for well-lit photos.",
-    "productPrice": 1299,
+    "productPrice": 399,
     "category": "Mobile Accessories",
     "brand": "GadgetMaster",
     "rating": 3.6,
-    "discountPercentage": 19,
+    "discountPercentage": 50,
     "stock": 58,
     "productImg": [
       {
@@ -2186,11 +2186,11 @@
   {
     "productName": "Selfie Stick Monopod",
     "productDesc": "The Selfie Stick Monopod is a extendable and foldable device for capturing the perfect selfie or group photo. Compatible with smartphones and cameras.",
-    "productPrice": 1099,
+    "productPrice": 349,
     "category": "Mobile Accessories",
     "brand": "SnapTech",
     "rating": 3.9,
-    "discountPercentage": 19,
+    "discountPercentage": 50,
     "stock": 11,
     "productImg": [
       {
@@ -2202,11 +2202,11 @@
   {
     "productName": "Attitude Super Leaves Hand Soap",
     "productDesc": "Attitude Super Leaves Hand Soap is a natural and nourishing hand soap enriched with the goodness of super leaves. It cleanses and moisturizes your hands, leaving them feeling fresh and soft.",
-    "productPrice": 759,
+    "productPrice": 499,
     "category": "Beauty",
     "brand": "Attitude",
     "rating": 3.2,
-    "discountPercentage": 18,
+    "discountPercentage": 15,
     "stock": 94,
     "productImg": [
       {
@@ -2226,11 +2226,11 @@
   {
     "productName": "Olay Ultra Moisture Shea Butter Body Wash",
     "productDesc": "Olay Ultra Moisture Shea Butter Body Wash is a luxurious body wash that hydrates and nourishes your skin with the moisturizing power of shea butter. Enjoy a rich lather and silky-smooth skin.",
-    "productPrice": 1099,
+    "productPrice": 549,
     "category": "Beauty",
     "brand": "Olay",
     "rating": 4.5,
-    "discountPercentage": 16,
+    "discountPercentage": 15,
     "stock": 34,
     "productImg": [
       {
@@ -2250,11 +2250,11 @@
   {
     "productName": "Vaseline Men Body and Face Lotion",
     "productDesc": "Vaseline Men Body and Face Lotion is a specially formulated lotion designed to provide long-lasting moisture to men's skin. It absorbs quickly and helps keep the skin hydrated and healthy.",
-    "productPrice": 849,
+    "productPrice": 279,
     "category": "Beauty",
     "brand": "Vaseline",
     "rating": 3.2,
-    "discountPercentage": 13,
+    "discountPercentage": 10,
     "stock": 95,
     "productImg": [
       {
@@ -2274,11 +2274,11 @@
   {
     "productName": "iPhone 5s",
     "productDesc": "The iPhone 5s is a classic smartphone known for its compact design and advanced features during its release. While it's an older model, it still provides a reliable user experience.",
-    "productPrice": 16999,
+    "productPrice": 5999,
     "category": "Mobiles",
     "brand": "Apple",
     "rating": 2.8,
-    "discountPercentage": 13,
+    "discountPercentage": 25,
     "stock": 25,
     "productImg": [
       {
@@ -2298,11 +2298,11 @@
   {
     "productName": "iPhone 6",
     "productDesc": "The iPhone 6 is a stylish and capable smartphone with a larger display and improved performance. It introduced new features and design elements, making it a popular choice in its time.",
-    "productPrice": 25499,
+    "productPrice": 7999,
     "category": "Mobiles",
     "brand": "Apple",
     "rating": 3.4,
-    "discountPercentage": 7,
+    "discountPercentage": 20,
     "stock": 60,
     "productImg": [
       {
@@ -2322,11 +2322,11 @@
   {
     "productName": "iPhone 13 Pro",
     "productDesc": "The iPhone 13 Pro is a cutting-edge smartphone with a powerful camera system, high-performance chip, and stunning display. It offers advanced features for users who demand top-notch technology.",
-    "productPrice": 93499,
+    "productPrice": 49999,
     "category": "Mobiles",
     "brand": "Apple",
     "rating": 4.1,
-    "discountPercentage": 9,
+    "discountPercentage": 15,
     "stock": 56,
     "productImg": [
       {
@@ -2346,7 +2346,7 @@
   {
     "productName": "iPhone X",
     "productDesc": "The iPhone X is a flagship smartphone featuring a bezel-less OLED display, facial recognition technology (Face ID), and impressive performance. It represents a milestone in iPhone design and innovation.",
-    "productPrice": 76499,
+    "productPrice": 17999,
     "category": "Mobiles",
     "brand": "Apple",
     "rating": 2.5,
@@ -2370,11 +2370,11 @@
   {
     "productName": "Oppo A57",
     "productDesc": "The Oppo A57 is a mid-range smartphone known for its sleek design and capable features. It offers a balance of performance and affordability, making it a popular choice.",
-    "productPrice": 21199,
+    "productPrice": 10999,
     "category": "Mobiles",
     "brand": "Oppo",
     "rating": 3.9,
-    "discountPercentage": 2,
+    "discountPercentage": 21,
     "stock": 19,
     "productImg": [
       {
@@ -2394,11 +2394,11 @@
   {
     "productName": "Oppo F19 Pro Plus",
     "productDesc": "The Oppo F19 Pro Plus is a feature-rich smartphone with a focus on camera capabilities. It boasts advanced photography features and a powerful performance for a premium user experience.",
-    "productPrice": 33999,
+    "productPrice": 19999,
     "category": "Mobiles",
     "brand": "Oppo",
     "rating": 3.5,
-    "discountPercentage": 19,
+    "discountPercentage": 23,
     "stock": 78,
     "productImg": [
       {
@@ -2418,11 +2418,11 @@
   {
     "productName": "Oppo K1",
     "productDesc": "The Oppo K1 series offers a range of smartphones with various features and specifications. Known for their stylish design and reliable performance, the Oppo K1 series caters to diverse user preferences.",
-    "productPrice": 25499,
+    "productPrice": 9999,
     "category": "Mobiles",
     "brand": "Oppo",
     "rating": 4.3,
-    "discountPercentage": 18,
+    "discountPercentage": 30,
     "stock": 55,
     "productImg": [
       {
@@ -2446,11 +2446,11 @@
   {
     "productName": "Realme C35",
     "productDesc": "The Realme C35 is a budget-friendly smartphone with a focus on providing essential features for everyday use. It offers a reliable performance and user-friendly experience.",
-    "productPrice": 12699,
+    "productPrice": 8999,
     "category": "Mobiles",
     "brand": "Realme",
     "rating": 4.2,
-    "discountPercentage": 15,
+    "discountPercentage": 25,
     "stock": 48,
     "productImg": [
       {
@@ -2470,11 +2470,11 @@
   {
     "productName": "Realme X",
     "productDesc": "The Realme X is a mid-range smartphone known for its sleek design and impressive display. It offers a good balance of performance and camera capabilities for users seeking a quality device.",
-    "productPrice": 25499,
+    "productPrice": 11999,
     "category": "Mobiles",
     "brand": "Realme",
     "rating": 3.7,
-    "discountPercentage": 7,
+    "discountPercentage": 25,
     "stock": 12,
     "productImg": [
       {
@@ -2494,11 +2494,11 @@
   {
     "productName": "Realme XT",
     "productDesc": "The Realme XT is a feature-rich smartphone with a focus on camera technology. It comes equipped with advanced camera sensors, delivering high-quality photos and videos for photography enthusiasts.",
-    "productPrice": 29699,
+    "productPrice": 12999,
     "category": "Mobiles",
     "brand": "Realme",
     "rating": 4.6,
-    "discountPercentage": 12,
+    "discountPercentage": 20,
     "stock": 80,
     "productImg": [
       {
@@ -2518,11 +2518,11 @@
   {
     "productName": "Samsung Galaxy S7",
     "productDesc": "The Samsung Galaxy S7 is a flagship smartphone known for its sleek design and advanced features. It features a high-resolution display, powerful camera, and robust performance.",
-    "productPrice": 25499,
+    "productPrice": 8999,
     "category": "Mobiles",
     "brand": "Samsung",
     "rating": 3.3,
-    "discountPercentage": 20,
+    "discountPercentage": 30,
     "stock": 67,
     "productImg": [
       {
@@ -2542,11 +2542,11 @@
   {
     "productName": "Samsung Galaxy S8",
     "productDesc": "The Samsung Galaxy S8 is a premium smartphone with an Infinity Display, offering a stunning visual experience. It boasts advanced camera capabilities and cutting-edge technology.",
-    "productPrice": 42499,
+    "productPrice": 11999,
     "category": "Mobiles",
     "brand": "Samsung",
     "rating": 4.4,
-    "discountPercentage": 19,
+    "discountPercentage": 30,
     "stock": 0,
     "productImg": [
       {
@@ -2566,11 +2566,11 @@
   {
     "productName": "Samsung Galaxy S10",
     "productDesc": "The Samsung Galaxy S10 is a flagship device featuring a dynamic AMOLED display, versatile camera system, and powerful performance. It represents innovation and excellence in smartphone technology.",
-    "productPrice": 59499,
+    "productPrice": 17999,
     "category": "Mobiles",
     "brand": "Samsung",
     "rating": 3.1,
-    "discountPercentage": 6,
+    "discountPercentage": 30,
     "stock": 19,
     "productImg": [
       {
@@ -2590,11 +2590,11 @@
   {
     "productName": "Vivo S1",
     "productDesc": "The Vivo S1 is a stylish and mid-range smartphone offering a blend of design and performance. It features a vibrant display, capable camera system, and reliable functionality.",
-    "productPrice": 21199,
+    "productPrice": 11499,
     "category": "Mobiles",
     "brand": "Vivo",
     "rating": 3.5,
-    "discountPercentage": 10,
+    "discountPercentage": 25,
     "stock": 50,
     "productImg": [
       {
@@ -2614,11 +2614,11 @@
   {
     "productName": "Vivo V9",
     "productDesc": "The Vivo V9 is a smartphone known for its sleek design and emphasis on capturing high-quality selfies. It features a notch display, dual-camera setup, and a modern design.",
-    "productPrice": 25499,
+    "productPrice": 9999,
     "category": "Mobiles",
     "brand": "Vivo",
     "rating": 3.6,
-    "discountPercentage": 18,
+    "discountPercentage": 30,
     "stock": 82,
     "productImg": [
       {
@@ -2638,11 +2638,11 @@
   {
     "productName": "Vivo X21",
     "productDesc": "The Vivo X21 is a premium smartphone with a focus on cutting-edge technology. It features an in-display fingerprint sensor, a high-resolution display, and advanced camera capabilities.",
-    "productPrice": 42499,
+    "productPrice": 14999,
     "category": "Mobiles",
     "brand": "Vivo",
     "rating": 4.3,
-    "discountPercentage": 17,
+    "discountPercentage": 25,
     "stock": 7,
     "productImg": [
       {
@@ -2662,11 +2662,11 @@
   {
     "productName": "American Football",
     "productDesc": "The American Football is a classic ball used in American football games. It is designed for throwing and catching, making it an essential piece of equipment for the sport.",
-    "productPrice": 1699,
+    "productPrice": 799,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.9,
-    "discountPercentage": 5,
+    "discountPercentage": 30,
     "stock": 53,
     "productImg": [
       {
@@ -2678,11 +2678,11 @@
   {
     "productName": "Baseball Ball",
     "productDesc": "The Baseball Ball is a standard baseball used in baseball games. It features a durable leather cover and is designed for pitching, hitting, and fielding in the game of baseball.",
-    "productPrice": 759,
+    "productPrice": 299,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 2.6,
-    "discountPercentage": 2,
+    "discountPercentage": 25,
     "stock": 100,
     "productImg": [
       {
@@ -2694,11 +2694,11 @@
   {
     "productName": "Baseball Glove",
     "productDesc": "The Baseball Glove is a protective glove worn by baseball players. It is designed to catch and field the baseball, providing players with comfort and control during the game.",
-    "productPrice": 2099,
+    "productPrice": 899,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4,
-    "discountPercentage": 3,
+    "discountPercentage": 30,
     "stock": 22,
     "productImg": [
       {
@@ -2718,11 +2718,11 @@
   {
     "productName": "Basketball",
     "productDesc": "The Basketball is a standard ball used in basketball games. It is designed for dribbling, shooting, and passing in the game of basketball, suitable for both indoor and outdoor play.",
-    "productPrice": 1299,
+    "productPrice": 699,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 7,
+    "discountPercentage": 30,
     "stock": 75,
     "productImg": [
       {
@@ -2734,11 +2734,11 @@
   {
     "productName": "Basketball Rim",
     "productDesc": "The Basketball Rim is a sturdy hoop and net assembly mounted on a basketball backboard. It provides a target for shooting and scoring in the game of basketball.",
-    "productPrice": 3399,
+    "productPrice": 1199,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.6,
-    "discountPercentage": 8,
+    "discountPercentage": 30,
     "stock": 43,
     "productImg": [
       {
@@ -2750,11 +2750,11 @@
   {
     "productName": "Cricket Ball",
     "productDesc": "The Cricket Ball is a hard leather ball used in the sport of cricket. It is bowled and batted in the game, and its hardness and seam contribute to the dynamics of cricket play.",
-    "productPrice": 1099,
+    "productPrice": 349,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 3.5,
-    "discountPercentage": 9,
+    "discountPercentage": 20,
     "stock": 30,
     "productImg": [
       {
@@ -2766,11 +2766,11 @@
   {
     "productName": "Cricket Bat",
     "productDesc": "The Cricket Bat is an essential piece of cricket equipment used by batsmen to hit the cricket ball. It is made of wood and comes in various sizes and designs.",
-    "productPrice": 2499,
+    "productPrice": 1499,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 3.2,
-    "discountPercentage": 3,
+    "discountPercentage": 35,
     "stock": 98,
     "productImg": [
       {
@@ -2782,11 +2782,11 @@
   {
     "productName": "Cricket Helmet",
     "productDesc": "The Cricket Helmet is a protective headgear worn by cricket players, especially batsmen and wicketkeepers. It provides protection against fast bowling and bouncers.",
-    "productPrice": 3799,
+    "productPrice": 1299,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 10,
+    "discountPercentage": 30,
     "stock": 10,
     "productImg": [
       {
@@ -2810,11 +2810,11 @@
   {
     "productName": "Cricket Wicket",
     "productDesc": "The Cricket Wicket is a set of three stumps and two bails, forming a wicket used in the sport of cricket. Batsmen aim to protect the wicket while scoring runs.",
-    "productPrice": 2499,
+    "productPrice": 799,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 17,
+    "discountPercentage": 25,
     "stock": 25,
     "productImg": [
       {
@@ -2826,11 +2826,11 @@
   {
     "productName": "Feather Shuttlecock",
     "productDesc": "The Feather Shuttlecock is used in the sport of badminton. It features natural feathers and is designed for high-speed play, providing stability and accuracy during matches.",
-    "productPrice": 509,
+    "productPrice": 999,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 2.9,
-    "discountPercentage": 3,
+    "discountPercentage": 15,
     "stock": 95,
     "productImg": [
       {
@@ -2842,11 +2842,11 @@
   {
     "productName": "Football",
     "productDesc": "The Football, also known as a soccer ball, is the standard ball used in the sport of football (soccer). It is designed for kicking and passing in the game.",
-    "productPrice": 1499,
+    "productPrice": 599,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 3.3,
-    "discountPercentage": 5,
+    "discountPercentage": 30,
     "stock": 96,
     "productImg": [
       {
@@ -2858,11 +2858,11 @@
   {
     "productName": "Golf Ball",
     "productDesc": "The Golf Ball is a small ball used in the sport of golf. It features dimples on its surface, providing aerodynamic lift and distance when struck by a golf club.",
-    "productPrice": 849,
+    "productPrice": 599,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.3,
-    "discountPercentage": 17,
+    "discountPercentage": 20,
     "stock": 84,
     "productImg": [
       {
@@ -2874,11 +2874,11 @@
   {
     "productName": "Iron Golf",
     "productDesc": "The Iron Golf is a type of golf club designed for various golf shots. It features a solid metal head and is used for approach shots, chipping, and other golfing techniques.",
-    "productPrice": 4199,
+    "productPrice": 4999,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.4,
-    "discountPercentage": 7,
+    "discountPercentage": 20,
     "stock": 90,
     "productImg": [
       {
@@ -2890,11 +2890,11 @@
   {
     "productName": "Metal Baseball Bat",
     "productDesc": "The Metal Baseball Bat is a durable and lightweight baseball bat made from metal alloys. It is commonly used in baseball games for hitting and batting practice.",
-    "productPrice": 2499,
+    "productPrice": 1299,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.7,
-    "discountPercentage": 20,
+    "discountPercentage": 30,
     "stock": 16,
     "productImg": [
       {
@@ -2906,11 +2906,11 @@
   {
     "productName": "Tennis Ball",
     "productDesc": "The Tennis Ball is a standard ball used in the sport of tennis. It is designed for bouncing and hitting with tennis rackets during matches or practice sessions.",
-    "productPrice": 589,
+    "productPrice": 299,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4.1,
-    "discountPercentage": 12,
+    "discountPercentage": 15,
     "stock": 28,
     "productImg": [
       {
@@ -2922,11 +2922,11 @@
   {
     "productName": "Tennis Racket",
     "productDesc": "The Tennis Racket is an essential piece of equipment used in the sport of tennis. It features a frame with strings and a grip, allowing players to hit the tennis ball.",
-    "productPrice": 4199,
+    "productPrice": 2499,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 4,
-    "discountPercentage": 20,
+    "discountPercentage": 35,
     "stock": 6,
     "productImg": [
       {
@@ -2938,11 +2938,11 @@
   {
     "productName": "Volleyball",
     "productDesc": "The Volleyball is a standard ball used in the sport of volleyball. It is designed for passing, setting, and spiking over the net during volleyball matches.",
-    "productPrice": 999,
+    "productPrice": 499,
     "category": "Sports",
     "brand": "Ekart Basics",
     "rating": 3.8,
-    "discountPercentage": 12,
+    "discountPercentage": 30,
     "stock": 0,
     "productImg": [
       {
@@ -2954,11 +2954,11 @@
   {
     "productName": "Black Sun Glasses",
     "productDesc": "The Black Sun Glasses are a classic and stylish choice, featuring a sleek black frame and tinted lenses. They provide both UV protection and a fashionable look.",
-    "productPrice": 2499,
+    "productPrice": 699,
     "category": "Bags & Accessories",
     "brand": "Fashion Shades",
     "rating": 4.4,
-    "discountPercentage": 5,
+    "discountPercentage": 60,
     "stock": 60,
     "productImg": [
       {
@@ -2978,11 +2978,11 @@
   {
     "productName": "Classic Sun Glasses",
     "productDesc": "The Classic Sun Glasses offer a timeless design with a neutral frame and UV-protected lenses. These sunglasses are versatile and suitable for various occasions.",
-    "productPrice": 2099,
+    "productPrice": 599,
     "category": "Bags & Accessories",
     "brand": "Fashion Shades",
     "rating": 3.9,
-    "discountPercentage": 5,
+    "discountPercentage": 60,
     "stock": 1,
     "productImg": [
       {
@@ -3002,11 +3002,11 @@
   {
     "productName": "Green and Black Glasses",
     "productDesc": "The Green and Black Glasses feature a bold combination of green and black colors, adding a touch of vibrancy to your eyewear collection. They are both stylish and eye-catching.",
-    "productPrice": 2999,
+    "productPrice": 799,
     "category": "Bags & Accessories",
     "brand": "Fashion Shades",
     "rating": 4.6,
-    "discountPercentage": 1,
+    "discountPercentage": 55,
     "stock": 24,
     "productImg": [
       {
@@ -3026,11 +3026,11 @@
   {
     "productName": "Party Glasses",
     "productDesc": "The Party Glasses are designed to add flair to your party outfit. With unique shapes or colorful frames, they're perfect for adding a playful touch to your look during celebrations.",
-    "productPrice": 1699,
+    "productPrice": 299,
     "category": "Bags & Accessories",
     "brand": "Fashion Fun",
     "rating": 2.8,
-    "discountPercentage": 11,
+    "discountPercentage": 50,
     "stock": 86,
     "productImg": [
       {
@@ -3050,11 +3050,11 @@
   {
     "productName": "Sunglasses",
     "productDesc": "The Sunglasses offer a classic and simple design with a focus on functionality. These sunglasses provide essential UV protection while maintaining a timeless look.",
-    "productPrice": 1999,
+    "productPrice": 649,
     "category": "Bags & Accessories",
     "brand": "Fashion Shades",
     "rating": 3,
-    "discountPercentage": 2,
+    "discountPercentage": 60,
     "stock": 27,
     "productImg": [
       {
@@ -3074,11 +3074,11 @@
   {
     "productName": "iPad Mini 2021 Starlight",
     "productDesc": "The iPad Mini 2021 in Starlight is a compact and powerful tablet from Apple. Featuring a stunning Retina display, powerful A-series chip, and a sleek design, it offers a premium tablet experience.",
-    "productPrice": 42499,
+    "productPrice": 39999,
     "category": "Tablets",
     "brand": "Apple",
     "rating": 3.2,
-    "discountPercentage": 4,
+    "discountPercentage": 20,
     "stock": 47,
     "productImg": [
       {
@@ -3102,11 +3102,11 @@
   {
     "productName": "Samsung Galaxy Tab S8 Plus Grey",
     "productDesc": "The Samsung Galaxy Tab S8 Plus in Grey is a high-performance Android tablet by Samsung. With a large AMOLED display, powerful processor, and S Pen support, it's ideal for productivity and entertainment.",
-    "productPrice": 50999,
+    "productPrice": 49999,
     "category": "Tablets",
     "brand": "Samsung",
     "rating": 4.7,
-    "discountPercentage": 13,
+    "discountPercentage": 33,
     "stock": 62,
     "productImg": [
       {
@@ -3130,11 +3130,11 @@
   {
     "productName": "Samsung Galaxy Tab White",
     "productDesc": "The Samsung Galaxy Tab in White is a sleek and versatile Android tablet. With a vibrant display, long-lasting battery, and a range of features, it offers a great user experience for various tasks.",
-    "productPrice": 29699,
+    "productPrice": 16999,
     "category": "Tablets",
     "brand": "Samsung",
     "rating": 3.7,
-    "discountPercentage": 18,
+    "discountPercentage": 25,
     "stock": 92,
     "productImg": [
       {
@@ -3158,11 +3158,11 @@
   {
     "productName": "Blue Frock",
     "productDesc": "The Blue Frock is a charming and stylish dress for various occasions. With a vibrant blue color and a comfortable design, it adds a touch of elegance to your wardrobe.",
-    "productPrice": 2499,
+    "productPrice": 699,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.2,
-    "discountPercentage": 12,
+    "discountPercentage": 55,
     "stock": 52,
     "productImg": [
       {
@@ -3186,11 +3186,11 @@
   {
     "productName": "Girl Summer Dress",
     "productDesc": "The Girl Summer Dress is a cute and breezy dress designed for warm weather. With playful patterns and lightweight fabric, it's perfect for keeping cool and stylish during the summer.",
-    "productPrice": 1699,
+    "productPrice": 599,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.8,
-    "discountPercentage": 19,
+    "discountPercentage": 55,
     "stock": 43,
     "productImg": [
       {
@@ -3214,11 +3214,11 @@
   {
     "productName": "Gray Dress",
     "productDesc": "The Gray Dress is a versatile and chic option for various occasions. With a neutral gray color, it can be dressed up or down, making it a wardrobe staple for any fashion-forward individual.",
-    "productPrice": 2999,
+    "productPrice": 899,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 2.7,
-    "discountPercentage": 14,
+    "discountPercentage": 55,
     "stock": 55,
     "productImg": [
       {
@@ -3242,11 +3242,11 @@
   {
     "productName": "Short Frock",
     "productDesc": "The Short Frock is a playful and trendy dress with a shorter length. Ideal for casual outings or special occasions, it combines style and comfort for a fashionable look.",
-    "productPrice": 2099,
+    "productPrice": 649,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 3.2,
-    "discountPercentage": 13,
+    "discountPercentage": 55,
     "stock": 22,
     "productImg": [
       {
@@ -3270,11 +3270,11 @@
   {
     "productName": "Tartan Dress",
     "productDesc": "The Tartan Dress features a classic tartan pattern, bringing a timeless and sophisticated touch to your wardrobe. Perfect for fall and winter, it adds a hint of traditional charm.",
-    "productPrice": 3399,
+    "productPrice": 999,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.1,
-    "discountPercentage": 13,
+    "discountPercentage": 50,
     "stock": 73,
     "productImg": [
       {
@@ -3298,11 +3298,11 @@
   {
     "productName": "Blue Women's Handbag",
     "productDesc": "The Blue Women's Handbag is a stylish and spacious accessory for everyday use. With a vibrant blue color and multiple compartments, it combines fashion and functionality.",
-    "productPrice": 4199,
+    "productPrice": 999,
     "category": "Bags & Accessories",
     "brand": "Fashionista",
     "rating": 2.9,
-    "discountPercentage": 18,
+    "discountPercentage": 55,
     "stock": 76,
     "productImg": [
       {
@@ -3322,11 +3322,11 @@
   {
     "productName": "Heshe Women's Leather Bag",
     "productDesc": "The Heshe Women's Leather Bag is a luxurious and high-quality leather bag for the sophisticated woman. With a timeless design and durable craftsmanship, it's a versatile accessory.",
-    "productPrice": 10999,
+    "productPrice": 4499,
     "category": "Bags & Accessories",
     "brand": "Heshe",
     "rating": 4.9,
-    "discountPercentage": 4,
+    "discountPercentage": 40,
     "stock": 99,
     "productImg": [
       {
@@ -3370,11 +3370,11 @@
   {
     "productName": "White Faux Leather Backpack",
     "productDesc": "The White Faux Leather Backpack is a trendy and practical backpack for the modern woman. With a sleek white design and ample storage space, it's perfect for both casual and on-the-go styles.",
-    "productPrice": 3399,
+    "productPrice": 1199,
     "category": "Bags & Accessories",
     "brand": "Urban Chic",
     "rating": 3.4,
-    "discountPercentage": 15,
+    "discountPercentage": 50,
     "stock": 39,
     "productImg": [
       {
@@ -3394,11 +3394,11 @@
   {
     "productName": "Women Handbag Black",
     "productDesc": "The Women Handbag in Black is a classic and versatile accessory that complements various outfits. With a timeless black color and functional design, it's a must-have in every woman's wardrobe.",
-    "productPrice": 5099,
+    "productPrice": 1299,
     "category": "Bags & Accessories",
     "brand": "Elegance Collection",
     "rating": 2.9,
-    "discountPercentage": 12,
+    "discountPercentage": 55,
     "stock": 11,
     "productImg": [
       {
@@ -3418,11 +3418,11 @@
   {
     "productName": "Black Women's Gown",
     "productDesc": "The Black Women's Gown is an elegant and timeless evening gown. With a sleek black design, it's perfect for formal events and special occasions, exuding sophistication and style.",
-    "productPrice": 10999,
+    "productPrice": 1999,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 3.6,
-    "discountPercentage": 10,
+    "discountPercentage": 55,
     "stock": 25,
     "productImg": [
       {
@@ -3446,11 +3446,11 @@
   {
     "productName": "Corset Leather With Skirt",
     "productDesc": "The Corset Leather With Skirt is a bold and edgy ensemble that combines a stylish corset with a matching skirt. Ideal for fashion-forward individuals, it makes a statement at any event.",
-    "productPrice": 7599,
+    "productPrice": 1799,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 3.1,
-    "discountPercentage": 16,
+    "discountPercentage": 50,
     "stock": 30,
     "productImg": [
       {
@@ -3474,11 +3474,11 @@
   {
     "productName": "Corset With Black Skirt",
     "productDesc": "The Corset With Black Skirt is a chic and versatile outfit that pairs a fashionable corset with a classic black skirt. It offers a trendy and coordinated look for various occasions.",
-    "productPrice": 6799,
+    "productPrice": 1599,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.5,
-    "discountPercentage": 15,
+    "discountPercentage": 50,
     "stock": 33,
     "productImg": [
       {
@@ -3502,11 +3502,11 @@
   {
     "productName": "Dress Pea",
     "productDesc": "The Dress Pea is a stylish and comfortable dress with a pea pattern. Perfect for casual outings, it adds a playful and fun element to your wardrobe, making it a great choice for day-to-day wear.",
-    "productPrice": 4199,
+    "productPrice": 899,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.9,
-    "discountPercentage": 18,
+    "discountPercentage": 55,
     "stock": 6,
     "productImg": [
       {
@@ -3530,11 +3530,11 @@
   {
     "productName": "Marni Red & Black Suit",
     "productDesc": "The Marni Red & Black Suit is a sophisticated and fashion-forward suit ensemble. With a combination of red and black tones, it showcases a modern design for a bold and confident look.",
-    "productPrice": 15299,
+    "productPrice": 2999,
     "category": "Women's Fashion",
     "brand": "Ekart Basics",
     "rating": 4.5,
-    "discountPercentage": 19,
+    "discountPercentage": 50,
     "stock": 62,
     "productImg": [
       {
@@ -3558,11 +3558,11 @@
   {
     "productName": "Green Crystal Earring",
     "productDesc": "The Green Crystal Earring is a dazzling accessory that features a vibrant green crystal. With a classic design, it adds a touch of elegance to your ensemble, perfect for formal or special occasions.",
-    "productPrice": 2499,
+    "productPrice": 399,
     "category": "Bags & Accessories",
     "brand": "Ekart Basics",
     "rating": 4,
-    "discountPercentage": 15,
+    "discountPercentage": 60,
     "stock": 54,
     "productImg": [
       {
@@ -3582,11 +3582,11 @@
   {
     "productName": "Green Oval Earring",
     "productDesc": "The Green Oval Earring is a stylish and versatile accessory with a unique oval shape. Whether for casual or dressy occasions, its green hue and contemporary design make it a standout piece.",
-    "productPrice": 2099,
+    "productPrice": 349,
     "category": "Bags & Accessories",
     "brand": "Ekart Basics",
     "rating": 3.6,
-    "discountPercentage": 15,
+    "discountPercentage": 60,
     "stock": 73,
     "productImg": [
       {
@@ -3606,11 +3606,11 @@
   {
     "productName": "Tropical Earring",
     "productDesc": "The Tropical Earring is a fun and playful accessory inspired by tropical elements. Featuring vibrant colors and a lively design, it's perfect for adding a touch of summer to your look.",
-    "productPrice": 1699,
+    "productPrice": 299,
     "category": "Bags & Accessories",
     "brand": "Ekart Basics",
     "rating": 4.4,
-    "discountPercentage": 1,
+    "discountPercentage": 55,
     "stock": 1,
     "productImg": [
       {
@@ -3630,11 +3630,11 @@
   {
     "productName": "Black & Brown Slipper",
     "productDesc": "The Black & Brown Slipper is a comfortable and stylish choice for casual wear. Featuring a blend of black and brown colors, it adds a touch of sophistication to your relaxation.",
-    "productPrice": 1699,
+    "productPrice": 399,
     "category": "Footwear",
     "brand": "Comfort Trends",
     "rating": 2.5,
-    "discountPercentage": 3,
+    "discountPercentage": 50,
     "stock": 3,
     "productImg": [
       {
@@ -3658,11 +3658,11 @@
   {
     "productName": "Calvin Klein Heel Shoes",
     "productDesc": "Calvin Klein Heel Shoes are elegant and sophisticated, designed for formal occasions. With a classic design and high-quality materials, they complement your stylish ensemble.",
-    "productPrice": 6799,
+    "productPrice": 4999,
     "category": "Footwear",
     "brand": "Calvin Klein",
     "rating": 4.9,
-    "discountPercentage": 3,
+    "discountPercentage": 30,
     "stock": 93,
     "productImg": [
       {
@@ -3686,11 +3686,11 @@
   {
     "productName": "Golden Shoes Woman",
     "productDesc": "The Golden Shoes for Women are a glamorous choice for special occasions. Featuring a golden hue and stylish design, they add a touch of luxury to your outfit.",
-    "productPrice": 4199,
+    "productPrice": 1199,
     "category": "Footwear",
     "brand": "Fashion Diva",
     "rating": 3.3,
-    "discountPercentage": 14,
+    "discountPercentage": 50,
     "stock": 88,
     "productImg": [
       {
@@ -3714,11 +3714,11 @@
   {
     "productName": "Pampi Shoes",
     "productDesc": "Pampi Shoes offer a blend of comfort and style for everyday use. With a versatile design, they are suitable for various casual occasions, providing a trendy and relaxed look.",
-    "productPrice": 2499,
+    "productPrice": 899,
     "category": "Footwear",
     "brand": "Pampi",
     "rating": 3.1,
-    "discountPercentage": 14,
+    "discountPercentage": 50,
     "stock": 49,
     "productImg": [
       {
@@ -3742,11 +3742,11 @@
   {
     "productName": "Red Shoes",
     "productDesc": "The Red Shoes make a bold statement with their vibrant red color. Whether for a party or a casual outing, these shoes add a pop of color and style to your wardrobe.",
-    "productPrice": 2999,
+    "productPrice": 999,
     "category": "Footwear",
     "brand": "Fashion Express",
     "rating": 3.3,
-    "discountPercentage": 18,
+    "discountPercentage": 50,
     "stock": 7,
     "productImg": [
       {
@@ -3842,11 +3842,11 @@
   {
     "productName": "Watch Gold for Women",
     "productDesc": "The Gold Women's Watch is a stunning accessory that combines luxury and style. Featuring a gold-plated case and a chic design, it adds a touch of glamour to any outfit.",
-    "productPrice": 67999,
+    "productPrice": 1999,
     "category": "Watches",
     "brand": "Fashion Gold",
     "rating": 4.2,
-    "discountPercentage": 18,
+    "discountPercentage": 50,
     "stock": 0,
     "productImg": [
       {
@@ -3866,11 +3866,11 @@
   {
     "productName": "Women's Wrist Watch",
     "productDesc": "The Women's Wrist Watch is a versatile and fashionable timepiece for everyday wear. With a comfortable strap and a simple yet elegant design, it complements various styles.",
-    "productPrice": 10999,
+    "productPrice": 1499,
     "category": "Watches",
     "brand": "Fashion Co.",
     "rating": 3.5,
-    "discountPercentage": 13,
+    "discountPercentage": 50,
     "stock": 12,
     "productImg": [
       {
