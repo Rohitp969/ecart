@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice"
 import productSlice from "./productSlice"
 import {
+  createMigrate,
   persistReducer,
   FLUSH,
   REHYDRATE,
@@ -12,10 +13,21 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
+const migrations = {
+  // v2: addresses moved to the user's account on the server; drop the old browser copy
+  // (it was shared by everyone who logged in on this browser)
+  2: (state) => {
+    // eslint-disable-next-line no-unused-vars
+    const { addresses, selectedAddress, ...product } = state?.product || {}
+    return { ...state, product }
+  },
+}
+
 const persistConfig = {
   key: 'root',
-  version: 1,
+  version: 2,
   storage,
+  migrate: createMigrate(migrations, { debug: false }),
 }
 
 const rootReducer = combineReducers({

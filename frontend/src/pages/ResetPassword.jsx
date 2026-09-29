@@ -1,123 +1,108 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { LockKeyhole } from "lucide-react";
+import { AuthCard, Notice, PasswordField, SubmitButton } from "@/components/auth/AuthUI";
+import { MIN_PASSWORD, authErrorMessage, clearResetState, readResetState } from "../lib/authFlow";
 
+// Step 3 of 3: choose a new password (needs the reset token from a verified code)
 const ResetPassword = () => {
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [formData, setFormData] = useState({
-    newPassword: "",
-    confirmPassword: "",
-  });
-
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const saved = readResetState();
+  const email = location.state?.email || saved.email;
+  const resetToken = location.state?.resetToken || saved.resetToken;
 
-  const email = location.state?.email;
+  const [formData, setFormData] = useState({ newPassword: "", confirmPassword: "" });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [expired, setExpired] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  if (!email || !resetToken) return <Navigate to="/forgot-password" replace />;
 
   const handleChange = (e) => {
-
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
+    setFormError("");
   };
 
   const submitHandler = async (e) => {
-
     e.preventDefault();
+    const found = {};
+    if (formData.newPassword.length < MIN_PASSWORD) found.newPassword = `Use at least ${MIN_PASSWORD} characters`;
+    if (formData.confirmPassword !== formData.newPassword) found.confirmPassword = "Passwords don't match";
+    setErrors(found);
+    if (Object.keys(found).length) return;
 
+    setLoading(true);
     try {
-
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/change-password/${email}`,
-        formData
-      );
-
-      if (res.data.success) {
-
-        toast.success(res.data.message);
-
-        navigate("/login");
-
-      }
-
-    } catch (error) {
-
-      toast.error(
-        error.response?.data?.message
-      );
-
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/change-password/${encodeURIComponent(email)}`, {
+        ...formData,
+        resetToken,
+      });
+      clearResetState();
+      toast.success(res.data.message);
+      navigate("/login", { replace: true, state: { email } });
+    } catch (err) {
+      setFormError(authErrorMessage(err));
+      if (err.response?.status === 403) setExpired(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-100">
-
-      <form
-        onSubmit={submitHandler}
-        className="bg-white p-6 rounded-lg shadow-md w-[350px]"
-      >
-
-        <h1 className="text-2xl font-bold mb-4">
-          Reset Password
-        </h1>
-
-        {/* New Password */}
-
-        <div className="relative mb-4">
-
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter new password"
-            name="newPassword"
-            value={formData.newPassword}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            required
-          />
-
-          {showPassword ? (
-            <EyeOff
-              onClick={() => setShowPassword(false)}
-              className="absolute right-3 top-3 cursor-pointer w-5 h-5"
-            />
-          ) : (
-            <Eye
-              onClick={() => setShowPassword(true)}
-              className="absolute right-3 top-3 cursor-pointer w-5 h-5"
-            />
-          )}
-
-        </div>
-
-        {/* Confirm Password */}
-
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Confirm password"
-          name="confirmPassword"
+    <AuthCard
+      icon={LockKeyhole}
+      title="Set a new password"
+      subtitle={
+        <>
+          Choose a new password for <span className="font-semibold text-gray-900">{email}</span>.
+        </>
+      }
+      footer={
+        <Link to="/login" className="font-semibold text-pink-600 hover:underline">
+          Back to log in
+        </Link>
+      }
+    >
+      <form onSubmit={submitHandler} noValidate className="space-y-4">
+        {formError && (
+          <Notice>
+            {formError}
+            {expired && (
+              <Link to="/forgot-password" state={{ email }} className="mt-1 block font-semibold underline underline-offset-2">
+                Send a new code
+              </Link>
+            )}
+          </Notice>
+        )}
+        <PasswordField
+          label="New password"
+          id="newPassword"
+          autoComplete="new-password"
+          placeholder={`At least ${MIN_PASSWORD} characters`}
+          value={formData.newPassword}
+          onChange={handleChange}
+          error={errors.newPassword}
+          showStrength
+        />
+        <PasswordField
+          label="Confirm new password"
+          id="confirmPassword"
+          autoComplete="new-password"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className="w-full border p-2 rounded mb-4"
-          required
+          error={errors.confirmPassword}
         />
-
-        <button
-          type="submit"
-          className="w-full bg-pink-600 text-white p-2 rounded"
-        >
-          Update Password
-        </button>
-
+        <SubmitButton loading={loading} loadingText="Saving…">
+          Reset password
+        </SubmitButton>
       </form>
-
-    </div>
+    </AuthCard>
   );
 };
 

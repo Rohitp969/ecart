@@ -6,10 +6,11 @@ export const isAuthenticated = async (req, res, next)=>{
     try {
         const authHeader = req.headers.authorization
 
-        if(!authHeader || !authHeader.startsWith('Bearer')){
-             return res.status(500).json({
+        // 401 on every auth failure so the frontend can log the user out and send them to login
+        if(!authHeader || !authHeader.startsWith('Bearer ')){
+             return res.status(401).json({
              success:false,
-            message: "Authorization token is missing or invalid"
+            message: "Please login first"
               })
     }
      const token = authHeader.split(" ")[1]
@@ -18,22 +19,22 @@ export const isAuthenticated = async (req, res, next)=>{
         decoded = jwt.verify(token, process.env.SECRET_KEY)
      } catch (error) {
         if(error.name === "TokenExpiredError"){
-          return res.status(400).json({
+          return res.status(401).json({
              success:false,
-            message: "The registration token has expired"
-              })  
+            message: "Session expired, please login again"
+              })
     }
-    return res.status(400).json({
+    return res.status(401).json({
              success:false,
-            message: "Access token is missing or invalid"
+            message: "Invalid session, please login again"
 
               })
-     } 
+     }
        const user = await User.findById(decoded.id)
        if(!user){
-        return res.status(400).json({
+        return res.status(401).json({
              success:false,
-            message: "User not found"
+            message: "User not found, please login again"
 
               })
        }
@@ -55,7 +56,7 @@ export const isAuthenticated = async (req, res, next)=>{
      next()
    }else{
      return res.status(403).json({
-       massege: "Access denied: admin only"
+       message: "Access denied: admin only"
      })
    }
  

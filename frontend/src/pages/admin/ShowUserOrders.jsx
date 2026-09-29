@@ -1,36 +1,10 @@
-import axios from "axios";
-import OrderCart from "@/components/OrderCart";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { Navigate, useParams } from "react-router-dom";
 
+// A user's orders now live on their user page
 const ShowUserOrders = () => {
-  const params = useParams();
+  const { userId } = useParams();
+  return <Navigate to={`/dashboard/users/${userId}`} replace />;
+};
 
-  const [userOrder, setUserOrder] = useState([]);
-
-  const getUserOrders = async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/user-order/${params.userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      if(res.data.success){
-        setUserOrder(res.data.orders)
-  }
-}
-
- useEffect(()=>{
-    getUserOrders()
-   }, [])
-
-  return (
-  <div className="w-full p-4 md:p-6 lg:p-8">
-    <OrderCart userOrder={userOrder} />
-  </div>
-)
-}
-
-export default ShowUserOrders
-
+export default ShowUserOrders;

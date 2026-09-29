@@ -1,196 +1,138 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
+import { LogIn, Mail } from "lucide-react";
+import { AuthCard, AuthField, Notice, PasswordField, SubmitButton } from "@/components/auth/AuthUI";
 import { setUser } from "../redux/userSlice";
+import { redirectAfterLogin } from "../lib/auth";
+import { EMAIL_RE, authErrorMessage } from "../lib/authFlow";
+
+const API = `${import.meta.env.VITE_API_URL}/api/v1/user`;
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
+  // page that sent the user here (protected page, add-to-cart, "Sign In" button)
+  const from = location.state?.from;
+
+  const [formData, setFormData] = useState({ email: location.state?.email || "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [unverifiedEmail, setUnverifiedEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
+    setFormError("");
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const found = {};
+    if (!EMAIL_RE.test(formData.email.trim())) found.email = "Enter a valid email address";
+    if (!formData.password) found.password = "Enter your password";
+    setErrors(found);
+    if (Object.keys(found).length) return;
 
+    setLoading(true);
+    setFormError("");
+    setUnverifiedEmail("");
     try {
-      setLoading(true);
-
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/login`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (res.data.success) {
-        dispatch(setUser(res.data.user));
-
-        localStorage.setItem(
-          "accessToken",
-          res.data.accessToken
-        );
-
-        toast.success(res.data.message);
-
-        navigate("/");
-      }
+      const res = await axios.post(`${API}/login`, { email: formData.email.trim(), password: formData.password });
+      // token first, so the page we land on can use it immediately
+      localStorage.setItem("accessToken", res.data.accessToken);
+      dispatch(setUser(res.data.user));
+      toast.success(res.data.message);
+      // admins land in the admin panel, customers go back to where they were
+      navigate(redirectAfterLogin(res.data.user, from), { replace: true });
     } catch (error) {
-      console.log(error);
-
-      if (error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error(
-          "Backend server not running or not reachable"
-        );
-      }
+      if (error.response?.data?.needsVerification) setUnverifiedEmail(error.response.data.email);
+      else setFormError(authErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
+  const resendVerification = async () => {
+    setResending(true);
+    try {
+      await axios.post(`${API}/reVerify`, { email: unverifiedEmail });
+      navigate("/verify", { state: { email: unverifiedEmail, from, justSent: true } });
+    } catch (error) {
+      toast.error(authErrorMessage(error));
+    } finally {
+      setResending(false);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-100">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
-
-          <CardDescription>
-            Enter your details below
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          <form
-            onSubmit={submitHandler}
-            className="flex flex-col gap-4"
-          >
-            {/* Email */}
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            {/* Password */}
-            <div className="grid gap-2">
-              <Label htmlFor="password">
-                Password
-              </Label>
-
-              <div className="relative">
-                <Input
-                  id="password"
-                  name="password"
-                  type={
-                    showPassword
-                      ? "text"
-                      : "password"
-                  }
-                  placeholder="Enter password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-
-                {showPassword ? (
-                  <EyeOff
-                    onClick={() =>
-                      setShowPassword(false)
-                    }
-                    className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  />
-                ) : (
-                  <Eye
-                    onClick={() =>
-                      setShowPassword(true)
-                    }
-                    className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  />
-                )}
-              </div>
-
-              <div className="flex justify-end">
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-pink-600 hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
-
-            {/* Login Button */}
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-pink-600 hover:bg-pink-500 cursor-pointer"
+    <AuthCard
+      icon={LogIn}
+      title="Welcome back"
+      subtitle="Log in to track your orders, use saved addresses and check out faster."
+      footer={
+        <>
+          New to Ekart?{" "}
+          <Link to="/signup" state={{ from }} className="font-semibold text-pink-600 hover:underline">
+            Create an account
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={submitHandler} noValidate className="space-y-4">
+        {formError && <Notice>{formError}</Notice>}
+        {unverifiedEmail && (
+          <Notice tone="warning">
+            <p>Please verify your email first. We sent a link to {unverifiedEmail}.</p>
+            <button
+              type="button"
+              onClick={resendVerification}
+              disabled={resending}
+              className="mt-1 cursor-pointer font-semibold underline underline-offset-2 disabled:opacity-60"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Please wait
-                </>
-              ) : (
-                "Login"
-              )}
-            </Button>
+              {resending ? "Sending…" : "Resend verification email"}
+            </button>
+          </Notice>
+        )}
 
-            {/* Signup */}
-            <p className="text-gray-700 text-sm text-center">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-pink-800 hover:underline"
-              >
-                Signup
-              </Link>
-            </p>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+        <AuthField
+          label="Email"
+          id="email"
+          type="email"
+          icon={Mail}
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+        />
+        <PasswordField
+          label="Password"
+          id="password"
+          autoComplete="current-password"
+          placeholder="Enter your password"
+          value={formData.password}
+          onChange={handleChange}
+          error={errors.password}
+          labelAction={
+            <Link to="/forgot-password" state={{ email: formData.email.trim() }} className="text-sm font-semibold text-pink-600 hover:underline">
+              Forgot password?
+            </Link>
+          }
+        />
+
+        <SubmitButton loading={loading} loadingText="Logging in…">
+          Log in
+        </SubmitButton>
+      </form>
+    </AuthCard>
   );
 };
 
 export default Login;
-

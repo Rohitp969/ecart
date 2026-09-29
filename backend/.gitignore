@@ -1,0 +1,14 @@
+node_modules/
+
+# secrets: keep real values out of git, commit .env.example instead
+.env
+.env.*
+!.env.example
+
+# logs
+logs/
+*.log
+
+# old upload leftovers
+temp_*
+uploads/

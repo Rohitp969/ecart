@@ -1,230 +1,116 @@
-import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "sonner";
-import axios from "axios";
-import userLogo from '../assets/user_logo.jpg'
-import { setUser } from "../redux/userSlice";
-import MyOrder from "./MyOrder";
+import React from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { CircleHelp, LogOut, MapPin, Package, PackageSearch, Settings as SettingsIcon, User } from "lucide-react";
+import MyOrders from "@/components/account/MyOrders";
+import ProfileForm from "@/components/account/ProfileForm";
+import SavedAddresses from "@/components/account/SavedAddresses";
+import Settings from "@/components/account/Settings";
+import useLogout from "@/hooks/useLogout";
+import { initials } from "@/lib/admin";
+
+// ?tab= picks the section, so footer / navbar / order-success links can open one directly
+const SECTIONS = [
+  { key: "orders", label: "My Orders", icon: Package, component: MyOrders },
+  { key: "profile", label: "Profile Information", icon: User, component: ProfileForm },
+  { key: "addresses", label: "Saved Addresses", icon: MapPin, component: SavedAddresses },
+  { key: "settings", label: "Settings", icon: SettingsIcon, component: Settings },
+];
+// older links
+const TAB_ALIASES = { security: "settings" };
+
+const QUICK_LINKS = [
+  { to: "/track-order", label: "Track an order", icon: PackageSearch },
+  { to: "/faqs", label: "Help Center", icon: CircleHelp },
+];
 
 const Profile = () => {
   const { user } = useSelector((store) => store.user);
-  const params = useParams();
-  const userId = params.userId;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const logout = useLogout();
 
-  const [updateUser, setUpdateUser] = useState({
-    firstName: user?.firstName,
-    lastName: user?.lastName,
-    email: user?.email,
-    address: user?.address,
-    city: user?.city,
-    phoneNo: user?.phoneNo,
-    zipCode: user?.zipCode,
-    profilePic: user?.profilePic,
-    role: user?.role,
-  });
+  const tab = searchParams.get("tab");
+  const active = SECTIONS.find((s) => s.key === (TAB_ALIASES[tab] || tab)) || SECTIONS[1];
+  const ActiveSection = active.component;
+  const openSection = (key) => setSearchParams(key === "profile" ? {} : { tab: key }, { replace: true });
 
-  const [file, setFile] = useState(null);
-  const dispatch = useDispatch();
+  const memberSince = user?.createdAt
+    ? new Date(user.createdAt).toLocaleDateString("en-IN", { month: "long", year: "numeric" })
+    : null;
 
-  const handleChange = (e) => {
-    setUpdateUser({ ...updateUser, [e.target.name]: e.target.value });
-  };
-
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    setUpdateUser({
-      ...updateUser,
-      profilePic: URL.createObjectURL(selectedFile),
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const accessToken = localStorage.getItem("accessToken");
-
-    try {
-      const formData = new FormData();
-      formData.append("firstName", updateUser.firstName);
-      formData.append("lastName", updateUser.lastName);
-      formData.append("email", updateUser.email);
-      formData.append("phoneNo", updateUser.phoneNo);
-      formData.append("address", updateUser.address);
-      formData.append("city", updateUser.city);
-      formData.append("zipCode", updateUser.zipCode);
-      formData.append("role", updateUser.role);
-
-      if (file) {
-        formData.append("file", file);
-      }
-
-      const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/user/update/${userId}`,
-        formData,
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-
-      if (res.data.success) {
-        toast.success(res.data.message);
-        dispatch(setUser(res.data.user));
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to Update profile");
-    }
-  };
+  const navClass = (isActive) =>
+    `flex shrink-0 cursor-pointer items-center gap-3 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-semibold transition lg:w-full lg:rounded-xl lg:border-0 lg:px-3 lg:py-2.5 ${
+      isActive
+        ? "border-pink-200 bg-pink-50 text-pink-700"
+        : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 lg:bg-transparent"
+    }`;
 
   return (
-    <div className="pt-20 min-h-screen bg-gray-100">
-      <Tabs defaultValue="profile" className="max-w-7xl mx-auto items-center">
-        <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="orders">Orders</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile">
-          <div className="flex flex-col items-center bg-gray-100">
-            <h1 className="font-bold mb-7 text-2xl text-gray-800">
-              Update Profile
-            </h1>
-
-            <div className="w-full max-w-3xl flex gap-10 items-start px-7">
-              <div className="flex flex-col items-center">
-                <img
-                  src={updateUser.profilePic || userLogo}
-                  alt="profile"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-pink-800"
-                />
-
-                <Label className="mt-4 cursor-pointer bg-pink-600 text-white px-4 py-2 rounded-2xl hover:bg-pink-700">
-                  Change Picture
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </Label>
-              </div>
-
-              <form
-                onSubmit={handleSubmit}
-                className="flex-1 space-y-4 shadow-lg p-6 rounded-lg bg-white"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label>First Name</Label>
-                    <Input
-                      type="text"
-                      name="firstName"
-                      value={updateUser.firstName || ""}
-                      onChange={handleChange}
-                      className="w-full border rounded-lg px-3 py-2 mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Last Name</Label>
-                    <Input
-                      type="text"
-                      name="lastName"
-                      value={updateUser.lastName || ""}
-                      onChange={handleChange}
-                      className="w-full border rounded-lg px-3 py-2 mt-1"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Label>Email</Label>
-                  <Input
-                    type="text"
-                    name="email"
-                    value={updateUser.email || ""}
-                    readOnly
-                    className="w-full border rounded-lg px-3 py-2 mt-1 bg-gray-100"
-                  />
-                </div>
-
-                <div>
-                  <Label>Phone Number</Label>
-                  <Input
-                    type="text"
-                    name="phoneNo"
-                    value={updateUser.phoneNo || ""}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label>Address</Label>
-                  <Input
-                    type="text"
-                    name="address"
-                    value={updateUser.address || ""}
-                    onChange={handleChange}
-                    className="w-full border rounded-lg px-3 py-2 mt-1"
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label>City</Label>
-                    <Input
-                      type="text"
-                      name="city"
-                      value={updateUser.city || ""}
-                      onChange={handleChange}
-                      className="w-full border rounded-lg px-3 py-2 mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Zip Code</Label>
-                    <Input
-                      type="text"
-                      name="zipCode"
-                      value={updateUser.zipCode || ""}
-                      onChange={handleChange}
-                      className="w-full border rounded-lg px-3 py-2 mt-1"
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full mt-4 bg-pink-600 hover:bg-pink-700 text-white"
-                >
-                  Update Profile
-                </Button>
-              </form>
+    <main className="min-h-screen bg-gray-50 pt-20 pb-12 md:pt-24">
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 lg:grid-cols-[270px_minmax(0,1fr)]">
+        {/* min-w-0: below lg the tab row must scroll inside itself, not widen the grid column */}
+        <aside className="min-w-0 space-y-4 lg:sticky lg:top-28 lg:self-start">
+          <div className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+            {user?.profilePic ? (
+              <img src={user.profilePic} alt="" className="h-14 w-14 rounded-full object-cover" />
+            ) : (
+              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-purple-500 text-lg font-bold text-white">
+                {initials(user)}
+              </span>
+            )}
+            <div className="min-w-0">
+              <p className="text-xs text-gray-500">Hello,</p>
+              <p className="truncate font-bold text-gray-900">
+                {user?.firstName} {user?.lastName}
+              </p>
+              {memberSince && <p className="text-xs text-gray-400">Member since {memberSince}</p>}
             </div>
           </div>
-        </TabsContent>
 
-        <TabsContent value="orders">
-         <MyOrder/>
-        </TabsContent>
-      </Tabs>
-    </div>
+          <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:rounded-2xl lg:border lg:border-gray-100 lg:bg-white lg:p-2 lg:shadow-sm">
+            {SECTIONS.map((section) => (
+              <button
+                key={section.key}
+                type="button"
+                onClick={() => openSection(section.key)}
+                aria-current={active.key === section.key ? "page" : undefined}
+                className={navClass(active.key === section.key)}
+              >
+                <section.icon className="h-4 w-4 lg:h-5 lg:w-5" />
+                {section.label}
+              </button>
+            ))}
+            {QUICK_LINKS.map((link) => (
+              <Link key={link.to} to={link.to} className={`${navClass(false)} lg:hidden`}>
+                <link.icon className="h-4 w-4" />
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden rounded-2xl border border-gray-100 bg-white p-2 shadow-sm lg:block">
+            {QUICK_LINKS.map((link) => (
+              <Link key={link.to} to={link.to} className={navClass(false)}>
+                <link.icon className="h-5 w-5" />
+                {link.label}
+              </Link>
+            ))}
+            <button
+              type="button"
+              onClick={() => logout()}
+              className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+            >
+              <LogOut className="h-5 w-5" />
+              Logout
+            </button>
+          </div>
+        </aside>
+
+        <section className="min-w-0">
+          <ActiveSection />
+        </section>
+      </div>
+    </main>
   );
 };
 

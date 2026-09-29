@@ -6,18 +6,27 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-.next
 
-/node_modules
+# Dependencies & build output
+node_modules/
 dist
 dist-ssr
 *.local
+
+# Environment: real values stay local / on Vercel; commit .env.example instead
+.env
+.env.*
+!.env.example
+
+# Deploy tooling
+.vercel
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj

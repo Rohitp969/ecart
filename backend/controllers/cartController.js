@@ -9,6 +9,12 @@ export const getCart = async (req, res) => {
     if (!cart) {
       return res.json({ success: true, cart: [] });
     }
+    // drop items whose product was deleted by the admin
+    if (cart.items.some((item) => !item.productId)) {
+      cart.items = cart.items.filter((item) => item.productId);
+      cart.totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      await cart.save();
+    }
     res.status(200).json({ success: true, cart });
   } catch (error) {
     return res.status(500).json({
@@ -31,9 +37,20 @@ export const addToCart = async (req, res) => {
         message: "Product not found",
       });
     }
+    if (product.stock === 0) {
+      return res.status(400).json({ success: false, message: "This product is out of stock" });
+    }
 
     //find the user's cart (if exists)
     let cart = await Cart.findOne({ userId })
+
+    const inCart = cart?.items.find((item) => item.productId.toString() === productId)?.quantity || 0;
+    if (typeof product.stock === "number" && inCart + 1 > product.stock) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${product.stock} in stock, and they're all in your cart`,
+      });
+    }
 
     //if cart doesn't exists, create a new one
     if (!cart) {
@@ -100,6 +117,13 @@ export const updateQuantity = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Item not found" });
        if (type === "increase") {
+        const product = await Product.findById(productId).select("stock");
+        if (typeof product?.stock === "number" && item.quantity + 1 > product.stock) {
+          return res.status(400).json({
+            success: false,
+            message: product.stock > 0 ? `Only ${product.stock} in stock` : "This product is out of stock",
+          });
+        }
         item.quantity += 1;
        }
 

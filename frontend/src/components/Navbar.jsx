@@ -8,49 +8,42 @@ import {
   Package,
   LayoutDashboard,
   ChevronDown,
+  Search,
+  ShoppingBag,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
-import axios from "axios";
-import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/userSlice";
+import { useSelector } from "react-redux";
+import useLogout from "../hooks/useLogout";
+import { isAdmin } from "../lib/auth";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);
   const { cart } = useSelector((store) => store.product);
-  const accessToken = localStorage.getItem("accessToken");
-  const admin = user?.role === "admin";
-  const dispatch = useDispatch();
+  const admin = isAdmin(user);
   const navigate = useNavigate();
   const location = useLocation();
+  const logout = useLogout();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [lastPath, setLastPath] = useState(location.pathname);
 
-  const LogoutHandler = async () => {
-    try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/logout`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        },
-      );
-      if (res.data.success) {
-        dispatch(setUser(null));
-        toast.success(res.data.message);
-        navigate("/");
-        setIsMobileMenuOpen(false);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Logout failed");
-    }
+  // Close menus on route change (state adjusted during render, no effect needed)
+  if (location.pathname !== lastPath) {
+    setLastPath(location.pathname);
+    setIsMobileMenuOpen(false);
+    setIsUserMenuOpen(false);
+  }
+
+  const LogoutHandler = () => {
+    setIsMobileMenuOpen(false);
+    logout();
   };
+
+  // remember the current page so login can bring the shopper back here
+  const goToLogin = () => navigate("/login", { state: { from: location.pathname + location.search } });
 
   // Handle scroll effect
   useEffect(() => {
@@ -60,12 +53,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsUserMenuOpen(false);
-  }, [location]);
 
   // Close user menu when clicking outside
   useEffect(() => {
@@ -78,11 +65,45 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isUserMenuOpen]);
 
+  // Uncontrolled input keyed by the URL query, so it follows /products?q=... (and clears with it)
+  const urlQuery = new URLSearchParams(location.search).get("q") || "";
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const q = new FormData(e.currentTarget).get("q").trim();
+    navigate(q ? `/products?q=${encodeURIComponent(q)}` : "/products");
+    setIsMobileMenuOpen(false);
+  };
+  // called as a function (not a component) so re-renders don't remount the input mid-typing
+  const searchForm = (className, inputId) => (
+    <form onSubmit={submitSearch} className={`relative ${className}`} role="search">
+      <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <input
+        key={urlQuery}
+        id={inputId}
+        name="q"
+        defaultValue={urlQuery}
+        aria-label="Search products"
+        placeholder="Search for products, brands and more"
+        className="w-full rounded-full border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm outline-none transition focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-100"
+      />
+    </form>
+  );
+
+  // phones: open the menu with its search box focused (in the same tap, so the keyboard opens)
+  const openMobileSearch = () => {
+    setIsMobileMenuOpen(true);
+    document.getElementById("mobile-search")?.focus({ preventScroll: true });
+  };
+
+  // a link stays active across its whole section (/products/123, /dashboard/orders…)
+  const isActiveLink = (to) =>
+    to === "/" ? location.pathname === "/" : location.pathname.startsWith(`/${to.split("/")[1]}`);
+
   const navLinks = [
     { to: "/", label: "Home", icon: Home },
     { to: "/products", label: "Products", icon: Package },
     ...(admin
-      ? [{ to: "/dashboard/sales", label: "Dashboard", icon: LayoutDashboard }]
+      ? [{ to: "/dashboard", label: "Admin Panel", icon: LayoutDashboard }]
       : []),
   ];
 
@@ -106,30 +127,35 @@ const Navbar = () => {
                 <img
                   src="/Ekart-logo.png"
                   alt="Ekart Logo"
-                  className="w-[100px] md:w-[120px] transition-transform duration-300 group-hover:scale-105"
+                  className="w-25 md:w-30 transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
+            {/* Search - tablets & up (phones get it in the menu) */}
+            {searchForm("mx-4 hidden min-w-0 max-w-xl flex-1 md:block lg:mx-6")}
+
+            {/* Desktop Navigation - icons only on tablets to leave room for search */}
             <nav className="hidden md:flex items-center space-x-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
+                  aria-label={link.label}
+                  title={link.label}
                   className={`
-                    relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
-                    flex items-center gap-2 group
+                    relative px-3 lg:px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300
+                    flex items-center gap-2 group whitespace-nowrap
                     ${
-                      location.pathname === link.to
+                      isActiveLink(link.to)
                         ? "text-gray-900 bg-gray-100"
                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                     }
                   `}
                 >
                   <link.icon className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" />
-                  <span>{link.label}</span>
-                  {location.pathname === link.to && (
+                  <span className="hidden lg:inline">{link.label}</span>
+                  {isActiveLink(link.to) && (
                     <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-6 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
                   )}
                 </Link>
@@ -138,13 +164,23 @@ const Navbar = () => {
 
             {/* Right Section */}
             <div className="flex items-center space-x-3 md:space-x-4">
+              {/* Search Button - Mobile */}
+              <button
+                type="button"
+                onClick={openMobileSearch}
+                aria-label="Search"
+                className="md:hidden p-2 rounded-xl bg-gray-50 hover:bg-gray-100 transition-all duration-300"
+              >
+                <Search className="w-5 h-5 text-gray-700" />
+              </button>
+
               {/* Cart Button */}
               <Link to="/cart" className="relative group">
                 <div className="p-2 rounded-xl bg-gray-50 group-hover:bg-gray-100 transition-all duration-300">
                   <ShoppingCart className="w-5 h-5 text-gray-700 group-hover:scale-110 transition-transform duration-300" />
                 </div>
                 {cart?.items?.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 shadow-lg animate-pulse">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs font-bold rounded-full min-w-5 h-5 flex items-center justify-center px-1 shadow-lg animate-pulse">
                     {cart?.items?.length}
                   </span>
                 )}
@@ -163,7 +199,7 @@ const Navbar = () => {
                         {user.lastName?.charAt(0).toUpperCase()}
                       </div>
                       <div className="text-left hidden lg:block">
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="max-w-28 truncate text-sm font-medium text-gray-700">
                           {user.firstName}
                         </p>
                         <p className="text-xs text-gray-500">
@@ -179,10 +215,10 @@ const Navbar = () => {
                     {isUserMenuOpen && (
                       <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-slideDown">
                         <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-                          <p className="font-semibold text-gray-900">
+                          <p className="truncate font-semibold text-gray-900">
                             {user.firstName} {user.lastName}
                           </p>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="truncate text-sm text-gray-500 mt-1" title={user.email}>
                             {user.email}
                           </p>
                         </div>
@@ -196,6 +232,26 @@ const Navbar = () => {
                               My Profile
                             </span>
                           </Link>
+                          <Link
+                            to={`/profile/${user._id}?tab=orders`}
+                            className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50 transition-all duration-300"
+                          >
+                            <ShoppingBag className="w-4 h-4 text-gray-500" />
+                            <span className="text-sm text-gray-700">
+                              My Orders
+                            </span>
+                          </Link>
+                          {admin && (
+                            <Link
+                              to="/dashboard"
+                              className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50 transition-all duration-300"
+                            >
+                              <LayoutDashboard className="w-4 h-4 text-gray-500" />
+                              <span className="text-sm text-gray-700">
+                                Admin Panel
+                              </span>
+                            </Link>
+                          )}
                           <button
                             onClick={LogoutHandler}
                             className="w-full flex items-center space-x-3 p-2 rounded-xl hover:bg-red-50 transition-all duration-300 group"
@@ -211,7 +267,7 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <Button
-                    onClick={() => navigate("/login")}
+                    onClick={goToLogin}
                     className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer "
                   >
                     Sign In
@@ -222,6 +278,8 @@ const Navbar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMobileMenuOpen}
                 className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-all duration-300"
               >
                 {isMobileMenuOpen ? (
@@ -234,14 +292,19 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - scrolls inside itself when taller than the screen (e.g. landscape phones) */}
         <div
           className={`
-          md:hidden fixed inset-x-0 top-16 bg-white shadow-xl transition-all duration-300 overflow-hidden z-40
-          ${isMobileMenuOpen ? "max-h-screen border-t border-gray-100" : "max-h-0"}
+          md:hidden fixed inset-x-0 top-16 bg-white shadow-xl transition-all duration-300 z-40
+          ${
+            isMobileMenuOpen
+              ? "max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-gray-100"
+              : "max-h-0 overflow-hidden"
+          }
         `}
         >
           <div className="px-4 py-4 space-y-3">
+            {searchForm("block", "mobile-search")}
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -249,7 +312,7 @@ const Navbar = () => {
                 className={`
                   flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300
                   ${
-                    location.pathname === link.to
+                    isActiveLink(link.to)
                       ? "bg-gradient-to-r from-blue-50 to-purple-50 text-gray-900"
                       : "text-gray-600 hover:bg-gray-50"
                   }
@@ -270,6 +333,13 @@ const Navbar = () => {
                   <User className="w-5 h-5" />
                   <span className="font-medium">My Profile</span>
                 </Link>
+                <Link
+                  to={`/profile/${user._id}?tab=orders`}
+                  className="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-all duration-300"
+                >
+                  <ShoppingBag className="w-5 h-5" />
+                  <span className="font-medium">My Orders</span>
+                </Link>
               </>
             )}
 
@@ -283,7 +353,7 @@ const Navbar = () => {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => navigate("/login")}
+                  onClick={goToLogin}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md"
                 >
                   Sign In
@@ -295,7 +365,7 @@ const Navbar = () => {
       </header>
 
       {/* Add this to your global CSS file */}
-      <style jsx>{`
+      <style>{`
         @keyframes slideDown {
           from {
             opacity: 0;

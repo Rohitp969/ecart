@@ -1,27 +1,16 @@
-import express from "express";
-import nodemailer from "nodemailer";
-import "dotenv/config";
+import { emailLayout, sendMail } from "../utils/sendMail.js";
 
-export const sendOTPMail =async (otp, email) => {
-    try{
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
-
-  const mailConfigurations = {
-   from: process.env.MAIL_USER,
+// 6-digit OTP for "forgot password"
+export const sendOTPMail = (otp, email) =>
+  sendMail({
     to: email,
-    subject: "Password Reset OTP",
-    html: `<p>Your OTP for password reset is <b>${otp}</b></p>`
-  }
-
-    await transporter.sendMail(mailConfigurations);
-    console.log("✅ OTP sent successfully");
-  } catch (error) {
-    console.error("❌ Failed to send OTP:", error.message);
-  }
-};
+    subject: `${otp} is your Ekart password reset code`,
+    html: emailLayout({
+      title: "Reset your password",
+      intro: `Use this code to reset your Ekart password:
+        <p style="margin:20px 0;font-size:32px;font-weight:800;letter-spacing:8px;color:#111827">${otp}</p>
+        It expires in 10 minutes.`,
+      outro: "Didn't ask to reset your password? You can ignore this email — your password stays the same.",
+    }),
+    devNote: `Password reset OTP for ${email}: ${otp}`,
+  });

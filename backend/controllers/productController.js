@@ -2,9 +2,14 @@ import { Product } from "../models/productModel.js";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/dataUri.js";
 
+// discount: 0-90 %, stock: whole number >= 0, or "" to leave stock untracked
+const parseDiscount = (value) => Math.min(90, Math.max(0, Math.round(Number(value) || 0)));
+const parseStock = (value) =>
+  value === undefined || value === null || value === "" ? undefined : Math.max(0, Math.floor(Number(value) || 0));
+
 export const addProduct = async (req, res) => {
   try {
-    const { productName, productDesc, productPrice, category, brand } = req.body;
+    const { productName, productDesc, productPrice, category, brand, discountPercentage, stock } = req.body;
     const userId = req.id;
 
     if (!productName || !productDesc || !productPrice || !category || !brand) {
@@ -41,6 +46,8 @@ export const addProduct = async (req, res) => {
       category,
       brand,
       productImg,
+      discountPercentage: parseDiscount(discountPercentage),
+      stock: parseStock(stock),
     });
 
     return res.status(200).json({
@@ -114,7 +121,7 @@ export const deleteProduct = async(req, res)=>{
 export const updateProduct = async(req, res)=>{
     try {
         const { productId } = req.params;
-        const {productName, productDesc, productPrice, category, brand, existingImages} = req.body 
+        const {productName, productDesc, productPrice, category, brand, existingImages, discountPercentage, stock} = req.body
 
         const product = await Product.findById(productId)
         if(!product) {
@@ -160,6 +167,8 @@ export const updateProduct = async(req, res)=>{
         product.category = category || product.category;
         product.brand = brand|| product.brand;
         product.productImg = updatedImages
+        if (discountPercentage !== undefined) product.discountPercentage = parseDiscount(discountPercentage)
+        if (stock !== undefined) product.stock = parseStock(stock)
 
         await product.save()
 

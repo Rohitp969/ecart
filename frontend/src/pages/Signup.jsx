@@ -1,171 +1,168 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader, Loader2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { Mail, UserPlus } from "lucide-react";
+import { AuthCard, AuthField, Notice, PasswordField, SubmitButton } from "@/components/auth/AuthUI";
+import { EMAIL_RE, MIN_PASSWORD, authErrorMessage } from "../lib/authFlow";
+
+const EMPTY = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" };
+
+const validate = (form, agreed) => {
+  const errors = {};
+  if (!form.firstName.trim()) errors.firstName = "Enter your first name";
+  if (!form.lastName.trim()) errors.lastName = "Enter your last name";
+  if (!EMAIL_RE.test(form.email.trim())) errors.email = "Enter a valid email address";
+  if (form.password.length < MIN_PASSWORD) errors.password = `Use at least ${MIN_PASSWORD} characters`;
+  if (form.confirmPassword !== form.password) errors.confirmPassword = "Passwords don't match";
+  if (!agreed) errors.terms = "Please accept the terms to continue";
+  return errors;
+};
 
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from;
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState(EMPTY);
+  const [agreed, setAgreed] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
+    setFormError("");
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const found = validate(formData, agreed);
+    setErrors(found);
+    if (Object.keys(found).length) {
+      document.getElementById(Object.keys(found)[0])?.focus();
+      return;
+    }
+
+    setLoading(true);
+    setFormError("");
     try {
-      setLoading(true)
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/register`, formData, {
-        headers:{
-          "Content-Type":"application/json"
-        }
-      })
-      if(res.data.success){
-        navigate('/login')
-        toast.success(res.data.message)
-      }
-     }catch (error) {
-     console.log(error);
-  
-     if (error.response) {
-     toast.error(error.response.data.message);
-    } else {
-    toast.error("Backend server not running or not reachable");
-     }
-  }finally{
-    setLoading(false)
-  }
-}
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/user/register`, {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+      toast.success("Account created! Check your email to verify it.");
+      // keep the page the shopper came from, so logging in later returns them there
+      navigate("/verify", { state: { email: res.data.email, from, justSent: true } });
+    } catch (error) {
+      setFormError(authErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-100">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle>Create your account</CardTitle>
-          <CardDescription>
-            Enter your given details below to your account
-          </CardDescription>
-        </CardHeader>
+    <AuthCard
+      icon={UserPlus}
+      title="Create your account"
+      subtitle="Join Ekart to save addresses, track orders and get exclusive deals."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link to="/login" state={{ from }} className="font-semibold text-pink-600 hover:underline">
+            Log in
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={submitHandler} noValidate className="space-y-4">
+        {formError && <Notice>{formError}</Notice>}
 
-        <CardContent>
-          <form onSubmit={submitHandler}>
-            <div className="flex flex-col gap-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    placeholder="John"
-                    required
-                    value={formData.firstName}
-                    onChange={handleChange}
-                  />
-                </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <AuthField
+            label="First name"
+            id="firstName"
+            autoComplete="given-name"
+            value={formData.firstName}
+            onChange={handleChange}
+            error={errors.firstName}
+          />
+          <AuthField
+            label="Last name"
+            id="lastName"
+            autoComplete="family-name"
+            value={formData.lastName}
+            onChange={handleChange}
+            error={errors.lastName}
+          />
+        </div>
+        <AuthField
+          label="Email"
+          id="email"
+          type="email"
+          icon={Mail}
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+          hint="We'll send a link to verify this address."
+        />
+        <PasswordField
+          label="Password"
+          id="password"
+          autoComplete="new-password"
+          placeholder={`At least ${MIN_PASSWORD} characters`}
+          value={formData.password}
+          onChange={handleChange}
+          error={errors.password}
+          showStrength
+        />
+        <PasswordField
+          label="Confirm password"
+          id="confirmPassword"
+          autoComplete="new-password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          error={errors.confirmPassword}
+        />
 
-                <div className="grid gap-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    placeholder="Doe"
-                    required
-                    value={formData.lastName}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
+        <div>
+          <label className="flex cursor-pointer items-start gap-2.5 text-sm text-gray-600">
+            <input
+              id="terms"
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => {
+                setAgreed(e.target.checked);
+                if (errors.terms) setErrors((prev) => ({ ...prev, terms: undefined }));
+              }}
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-pink-600"
+            />
+            <span>
+              I agree to Ekart's{" "}
+              <Link to="/terms" target="_blank" className="font-semibold text-pink-600 hover:underline">
+                Terms of Use
+              </Link>{" "}
+              and{" "}
+              <Link to="/privacy-policy" target="_blank" className="font-semibold text-pink-600 hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+          {errors.terms && <p className="mt-1 text-xs text-red-600">{errors.terms}</p>}
+        </div>
 
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-
-                <div className="relative">
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange} />
-
-                  {showPassword ? 
-                    <EyeOff
-                      onClick={() => setShowPassword(false)}
-                      className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"/>: 
-                    <Eye
-                      onClick={() => setShowPassword(true)}
-                      className="w-5 h-5 text-gray-700 absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                    />
-                  }
-                </div>
-              </div>
-            </div>
-          </form>
-        </CardContent>
-
-        <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            onClick={submitHandler}
-            className="w-full cursor-pointer bg-pink-600 hover:bg-pink-500" 
-            disabled={loading}
-          >
-           {loading? <><Loader2 className="h-4 w-4 animate-apin mr-2"/>Please wait</>:'Signup'}
-          </Button>
-
-          <p className="text-gray-700 text-sm">
-            Already have an account?{" "}
-            <Link
-              to={"/login"}
-              className="hover:underline cursor-pointer text-pink-800"
-            >
-              Login
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+        <SubmitButton loading={loading} loadingText="Creating account…">
+          Create account
+        </SubmitButton>
+      </form>
+    </AuthCard>
   );
 };
 

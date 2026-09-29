@@ -17,7 +17,10 @@ const productSchema = new mongoose.Schema(
         ],
         productPrice:{type:Number},
         category:{type:String},
-        brand:{type:String}
+        brand:{type:String},
+        rating:{type:Number, default:0},              // 0-5, 0 = not rated yet
+        discountPercentage:{type:Number, default:0},  // MRP = price / (1 - discount/100)
+        stock:{type:Number}                           // unset = unknown (treated as in stock)
     },
     {timestamps: true
 
