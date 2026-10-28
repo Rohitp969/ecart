@@ -1,13 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { BadgeCheck, Search, ShieldCheck, UserPlus, Users } from "lucide-react";
+import { Ban, BadgeCheck, Search, ShieldCheck, UserPlus, Users } from "lucide-react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import StatCard from "@/components/admin/StatCard";
 import UserAvatar from "@/components/admin/UserAvatar";
 import Pagination from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { API_URL, authConfig, formatDate, fullName } from "@/lib/admin";
+import ErrorState from "@/components/admin/ErrorState";
+import { API_URL, authConfig, formatDate, fullName, loadErrorMessage } from "@/lib/admin";
 import { formatPrice } from "@/lib/catalog";
 
 const PAGE_SIZE = 15;
@@ -27,12 +28,23 @@ const RoleBadge = ({ role }) =>
     <span className="whitespace-nowrap rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">Customer</span>
   );
 
+const BlockedBadge = () => (
+  <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-600/20">
+    <Ban className="h-3.5 w-3.5" /> Blocked
+  </span>
+);
+
 // "phone · city", or "" when neither is known
 const contactLine = (user) => [user.phoneNo, user.city].filter(Boolean).join(" · ");
 
 const AdminUsers = () => {
   const [users, setUsers] = useState(null);
   const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
+  const retry = () => {
+    setError("");
+    setReloadKey((key) => key + 1);
+  };
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
   const [sort, setSort] = useState("newest");
@@ -43,11 +55,11 @@ const AdminUsers = () => {
     axios
       .get(`${API_URL}/api/v1/user/all-user`, authConfig())
       .then((res) => !ignore && setUsers(res.data.users))
-      .catch((err) => !ignore && setError(err.response?.data?.message || "Could not load users"));
+      .catch((err) => !ignore && setError(loadErrorMessage(err, "users")));
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const summary = useMemo(() => {
     const list = users || [];
@@ -67,7 +79,7 @@ const AdminUsers = () => {
     return (users || [])
       .filter(
         (u) =>
-          (!role || u.role === role) &&
+          (!role || (role === "blocked" ? u.isBlocked : u.role === role)) &&
           (!q || `${fullName(u)} ${u.email} ${u.phoneNo || ""} ${u.city || ""}`.toLowerCase().includes(q)),
       )
       .sort(SORTS[sort]);
@@ -110,6 +122,7 @@ const AdminUsers = () => {
             <option value="">All roles</option>
             <option value="user">Customers</option>
             <option value="admin">Admins</option>
+            <option value="blocked">Blocked</option>
           </select>
           <select value={sort} onChange={(e) => setSort(e.target.value)} className={selectClass} aria-label="Sort">
             <option value="newest">Newest first</option>
@@ -120,7 +133,7 @@ const AdminUsers = () => {
         </div>
 
         {error ? (
-          <p className="p-6 text-sm text-red-600">{error}</p>
+          <ErrorState inline title="Couldn't load users" message={error} onRetry={retry} />
         ) : (
           <>
             {/* phones: stacked cards */}
@@ -134,11 +147,12 @@ const AdminUsers = () => {
                       <UserAvatar user={user} />
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                          <Link to={`/dashboard/users/${user._id}`} className="flex min-w-0 items-center gap-1 font-semibold text-gray-900 hover:text-pink-600">
+                          <Link to={`/admin/customers/${user._id}`} className="flex min-w-0 items-center gap-1 font-semibold text-gray-900 hover:text-pink-600">
                             <span className="truncate">{fullName(user)}</span>
                             {user.isVerified && <BadgeCheck className="h-4 w-4 shrink-0 text-blue-500" aria-label="Verified" />}
                           </Link>
                           <RoleBadge role={user.role} />
+                          {user.isBlocked && <BlockedBadge />}
                         </div>
                         <p className="truncate text-xs text-gray-500">{user.email}</p>
                         {contactLine(user) && <p className="truncate text-xs text-gray-400">{contactLine(user)}</p>}
@@ -150,7 +164,7 @@ const AdminUsers = () => {
                             Joined {formatDate(user.createdAt)}
                           </p>
                           <Link
-                            to={`/dashboard/users/${user._id}`}
+                            to={`/admin/customers/${user._id}`}
                             className="inline-flex shrink-0 items-center rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
                           >
                             Manage
@@ -186,7 +200,7 @@ const AdminUsers = () => {
                             <div className="flex items-center gap-3">
                               <UserAvatar user={user} />
                               <div className="min-w-0">
-                                <Link to={`/dashboard/users/${user._id}`} className="flex items-center gap-1 font-semibold text-gray-900 hover:text-pink-600">
+                                <Link to={`/admin/customers/${user._id}`} className="flex items-center gap-1 font-semibold text-gray-900 hover:text-pink-600">
                                   {fullName(user)}
                                   {user.isVerified && <BadgeCheck className="h-4 w-4 shrink-0 text-blue-500" aria-label="Verified" />}
                                 </Link>
@@ -197,7 +211,12 @@ const AdminUsers = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="px-3 py-3"><RoleBadge role={user.role} /></td>
+                          <td className="px-3 py-3">
+                            <div className="flex flex-wrap gap-1">
+                              <RoleBadge role={user.role} />
+                              {user.isBlocked && <BlockedBadge />}
+                            </div>
+                          </td>
                           <td className="hidden px-3 py-3 text-gray-600 xl:table-cell">
                             <p>{user.phoneNo || "—"}</p>
                             <p className="text-xs text-gray-400">{user.city || ""}</p>
@@ -207,7 +226,7 @@ const AdminUsers = () => {
                           <td className="hidden px-3 py-3 text-gray-500 xl:table-cell">{formatDate(user.createdAt)}</td>
                           <td className="px-4 py-3 text-right">
                             <Link
-                              to={`/dashboard/users/${user._id}`}
+                              to={`/admin/customers/${user._id}`}
                               className="inline-flex items-center rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
                             >
                               Manage

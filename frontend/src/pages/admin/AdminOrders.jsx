@@ -1,14 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
-import { Eye, Search } from 'lucide-react'
+import { Download, Eye, Search } from 'lucide-react'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import OrderDetailsDialog, { FulfilmentSelect } from '@/components/admin/OrderDetailsDialog'
 import { PaymentBadge } from '@/components/admin/StatusBadge'
 import Pagination from '@/components/Pagination'
 import { Skeleton } from '@/components/ui/skeleton'
-import { API_URL, ORDER_STATUSES, PAYMENT_STATUSES, authConfig, formatDate, fullName, saveOrderStatus, shortId } from '@/lib/admin'
+import ErrorState from '@/components/admin/ErrorState'
+import { API_URL, ORDER_STATUSES, authConfig, downloadCsv, loadErrorMessage, formatDate, fullName, saveOrderStatus, shortId } from '@/lib/admin'
 import { formatPrice } from '@/lib/catalog'
+import { isConfirmed } from '@/lib/orders'
+import { useAdminAlerts } from '@/lib/adminAlerts'
 
 const PAGE_SIZE = 15
 const SORTS = {
@@ -18,10 +21,26 @@ const SORTS = {
   amount_asc: (a, b) => a.amount - b.amount,
 }
 
+// tabs above the table; ?view= keeps the choice in the URL (the dashboard links to "to-ship")
+const VIEWS = [
+  { key: '', label: 'All orders' },
+  { key: 'to-ship', label: 'To ship', match: (o) => isConfirmed(o) && (o.orderStatus || 'Processing') === 'Processing' },
+  { key: 'Paid', label: 'Paid', match: (o) => o.status === 'Paid' },
+  { key: 'Pending', label: 'Pending', match: (o) => o.status === 'Pending' },
+  { key: 'Failed', label: 'Failed', match: (o) => o.status === 'Failed' },
+]
+
 const AdminOrders = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { refreshAlerts } = useAdminAlerts()
   const [orders, setOrders] = useState(null)
   const [error, setError] = useState('')
-  const [payment, setPayment] = useState('')
+  const [reloadKey, setReloadKey] = useState(0)
+  const retry = () => {
+    setError('')
+    setReloadKey((key) => key + 1)
+  }
+  const view = VIEWS.find((v) => v.key === searchParams.get('view')) || VIEWS[0]
   const [fulfilment, setFulfilment] = useState('')
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('newest')
@@ -34,24 +53,23 @@ const AdminOrders = () => {
     axios
       .get(`${API_URL}/api/v1/orders/all`, authConfig())
       .then((res) => !ignore && setOrders(res.data.orders))
-      .catch((err) => !ignore && setError(err.response?.data?.message || 'Could not load orders'))
+      .catch((err) => !ignore && setError(loadErrorMessage(err, 'orders')))
     return () => {
       ignore = true
     }
-  }, [])
+  }, [reloadKey])
 
-  const counts = useMemo(() => {
-    const result = { '': orders?.length || 0 }
-    for (const o of orders || []) result[o.status] = (result[o.status] || 0) + 1
-    return result
-  }, [orders])
+  const counts = useMemo(
+    () => Object.fromEntries(VIEWS.map((v) => [v.key, v.match ? (orders || []).filter(v.match).length : orders?.length || 0])),
+    [orders],
+  )
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     return (orders || [])
       .filter(
         (o) =>
-          (!payment || o.status === payment) &&
+          (!view.match || view.match(o)) &&
           (!fulfilment || (o.orderStatus || 'Processing') === fulfilment) &&
           (!q ||
             `${o._id} ${shortId(o._id)} ${fullName(o.user)} ${o.user?.email || ''} ${o.shippingAddress?.fullName || ''}`
@@ -59,7 +77,7 @@ const AdminOrders = () => {
               .includes(q)),
       )
       .sort(SORTS[sort])
-  }, [orders, payment, fulfilment, search, sort])
+  }, [orders, view, fulfilment, search, sort])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const currentPage = Math.min(page, totalPages)
@@ -69,12 +87,45 @@ const AdminOrders = () => {
     setPage(1)
   }
 
+  const setView = (key) => {
+    setSearchParams(key ? { view: key } : {}, { replace: true })
+    setPage(1)
+  }
+
   const changeStatus = async (order, orderStatus) => {
     setUpdatingId(order._id)
     const updated = await saveOrderStatus(order._id, orderStatus)
-    if (updated) setOrders((prev) => prev.map((o) => (o._id === updated._id ? updated : o)))
+    if (updated) {
+      setOrders((prev) => prev.map((o) => (o._id === updated._id ? updated : o)))
+      refreshAlerts()
+    }
     setUpdatingId(null)
   }
+
+  const exportCsv = () =>
+    downloadCsv(`ekart-orders-${new Date().toISOString().slice(0, 10)}.csv`, [
+      ['Order', 'Date', 'Customer', 'Email', 'Phone', 'Items', 'Subtotal', 'Coupon', 'Discount', 'Shipping', 'Tax', 'Total', 'Payment method', 'Payment status', 'Fulfilment', 'City', 'State', 'PIN code'],
+      ...filtered.map((o) => [
+        shortId(o._id),
+        new Date(o.createdAt).toLocaleString('en-IN'),
+        o.shippingAddress?.fullName || fullName(o.user),
+        o.user?.email || o.shippingAddress?.email || '',
+        o.shippingAddress?.phone || o.user?.phoneNo || '',
+        o.products.reduce((sum, p) => sum + p.quantity, 0),
+        o.amount - (o.tax || 0) - (o.shipping || 0) + (o.discount || 0),
+        o.couponCode || '',
+        o.discount || 0,
+        o.shipping || 0,
+        o.tax || 0,
+        o.amount,
+        o.paymentMethod === 'COD' ? 'Cash on Delivery' : 'Online',
+        o.status,
+        o.orderStatus || 'Processing',
+        o.shippingAddress?.city || '',
+        o.shippingAddress?.state || '',
+        o.shippingAddress?.zip || '',
+      ]),
+    ])
 
   const selected = orders?.find((o) => o._id === selectedId)
   // phones: selects fill the row two-up under the search box; from sm they keep their natural width
@@ -82,21 +133,29 @@ const AdminOrders = () => {
 
   return (
     <div>
-      <AdminPageHeader title='Orders' description='Track payments and move orders from processing to delivery' />
+      <AdminPageHeader title='Orders' description='Track payments and move orders from processing to delivery'>
+        <button
+          onClick={exportCsv}
+          disabled={!filtered.length}
+          className='inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50'
+        >
+          <Download className='h-4 w-4' /> Export CSV
+        </button>
+      </AdminPageHeader>
 
-      {/* 2×2 grid on phones so every status stays visible; a single row from sm */}
+      {/* grid on phones so every tab stays visible; a single row from sm */}
       <div className='mb-4 grid grid-cols-2 gap-1 rounded-xl border border-gray-100 bg-white p-1 shadow-sm sm:flex sm:overflow-x-auto sm:[scrollbar-width:none]'>
-        {['', ...PAYMENT_STATUSES].map((status) => (
+        {VIEWS.map((option, index) => (
           <button
-            key={status || 'all'}
-            onClick={() => withReset(setPayment)(status)}
+            key={option.key || 'all'}
+            onClick={() => setView(option.key)}
             className={`flex min-w-0 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition sm:justify-start sm:px-4 ${
-              payment === status ? 'bg-pink-600 text-white' : 'text-gray-600 hover:bg-gray-100'
-            }`}
+              index === 0 ? 'col-span-2 sm:col-span-1' : ''
+            } ${view.key === option.key ? 'bg-pink-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
           >
-            {status || 'All orders'}
-            <span className={`rounded-full px-1.5 text-xs ${payment === status ? 'bg-white/20' : 'bg-gray-100 text-gray-500'}`}>
-              {counts[status] || 0}
+            {option.label}
+            <span className={`rounded-full px-1.5 text-xs ${view.key === option.key ? 'bg-white/20' : 'bg-gray-100 text-gray-500'}`}>
+              {counts[option.key] || 0}
             </span>
           </button>
         ))}
@@ -126,7 +185,7 @@ const AdminOrders = () => {
         </div>
 
         {error ? (
-          <p className='p-6 text-sm text-red-600'>{error}</p>
+          <ErrorState inline title="Couldn't load orders" message={error} onRetry={retry} />
         ) : (
           <>
             {/* phones: stacked cards */}
@@ -158,7 +217,7 @@ const AdminOrders = () => {
                           </div>
                           <div className='min-w-0 flex-1 text-sm'>
                             {order.user?._id ? (
-                              <Link to={`/dashboard/users/${order.user._id}`} className='block truncate font-medium text-gray-900 hover:text-pink-600'>
+                              <Link to={`/admin/customers/${order.user._id}`} className='block truncate font-medium text-gray-900 hover:text-pink-600'>
                                 {fullName(order.user)}
                               </Link>
                             ) : (
@@ -220,7 +279,7 @@ const AdminOrders = () => {
                             </td>
                             <td className='px-3 py-3'>
                               {order.user?._id ? (
-                                <Link to={`/dashboard/users/${order.user._id}`} className='font-medium text-gray-900 hover:text-pink-600'>
+                                <Link to={`/admin/customers/${order.user._id}`} className='font-medium text-gray-900 hover:text-pink-600'>
                                   {fullName(order.user)}
                                 </Link>
                               ) : (

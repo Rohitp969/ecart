@@ -75,7 +75,7 @@ const OrderCard = ({ order, onUpdated, onBuyAgain, buyingAgain }) => {
   const stage = orderStage(order);
   const placed = stage !== "failed" && stage !== "unpaid";
   const address = order.shippingAddress;
-  const subtotal = order.amount - (order.tax || 0) - (order.shipping || 0);
+  const subtotal = order.amount - (order.tax || 0) - (order.shipping || 0) + (order.discount || 0);
   const ref = shortId(order._id);
 
   const cancelOrder = async () => {
@@ -230,12 +230,18 @@ const OrderCard = ({ order, onUpdated, onBuyAgain, buyingAgain }) => {
                 <dt>Items</dt>
                 <dd>{formatMoney(subtotal)}</dd>
               </div>
+              {order.discount > 0 && (
+                <div className="flex justify-between text-gray-600">
+                  <dt>Coupon ({order.couponCode})</dt>
+                  <dd className="text-green-600">−{formatMoney(order.discount)}</dd>
+                </div>
+              )}
               <div className="flex justify-between text-gray-600">
                 <dt>Shipping</dt>
                 <dd>{order.shipping ? formatMoney(order.shipping) : "FREE"}</dd>
               </div>
               <div className="flex justify-between text-gray-600">
-                <dt>Tax (5%)</dt>
+                <dt>Tax</dt>
                 <dd>{formatMoney(order.tax)}</dd>
               </div>
               <div className="flex justify-between border-t border-gray-200 pt-1.5 font-bold text-gray-900">

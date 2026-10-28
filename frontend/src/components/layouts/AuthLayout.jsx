@@ -1,17 +1,19 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { ArrowLeft, Banknote, RotateCcw, ShieldCheck, Truck } from 'lucide-react'
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS } from '../../lib/help'
+import { useStoreSettings } from '../../lib/storeSettings'
 
-const PERKS = [
-  { icon: Truck, text: `Free delivery on orders above ₹${FREE_SHIPPING_ABOVE}` },
+const perks = (settings) => [
+  { icon: Truck, text: `Free delivery on orders above ₹${settings.freeShippingAbove}` },
   { icon: ShieldCheck, text: 'Secure payments with Razorpay' },
-  { icon: Banknote, text: 'Cash on Delivery available' },
-  { icon: RotateCcw, text: `${RETURN_WINDOW_DAYS}-day easy returns` },
+  ...(settings.codEnabled ? [{ icon: Banknote, text: 'Cash on Delivery available' }] : []),
+  { icon: RotateCcw, text: `${settings.returnWindowDays}-day easy returns` },
 ]
 
 // Login, signup, verification and password pages: a brand panel on large screens, just the form on phones
-const AuthLayout = () => (
+const AuthLayout = () => {
+  const PERKS = perks(useStoreSettings())
+  return (
   <div className='min-h-screen bg-gray-50 lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]'>
     <aside className='relative hidden overflow-hidden bg-linear-to-br from-pink-600 via-rose-500 to-orange-400 p-10 text-white lg:flex lg:flex-col lg:justify-between xl:p-14'>
       <div className='absolute -right-24 -top-24 h-80 w-80 rounded-full bg-white/10' />
@@ -53,6 +55,7 @@ const AuthLayout = () => (
       </main>
     </div>
   </div>
-)
+  )
+}
 
 export default AuthLayout

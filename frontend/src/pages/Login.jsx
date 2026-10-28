@@ -7,7 +7,7 @@ import { LogIn, Mail } from "lucide-react";
 import { AuthCard, AuthField, Notice, PasswordField, SubmitButton } from "@/components/auth/AuthUI";
 import { setUser } from "../redux/userSlice";
 import { redirectAfterLogin } from "../lib/auth";
-import { EMAIL_RE, authErrorMessage } from "../lib/authFlow";
+import { EMAIL_RE, authErrorMessage, clearVerifyState, codeTimers, saveVerifyState } from "../lib/authFlow";
 
 const API = `${import.meta.env.VITE_API_URL}/api/v1/user`;
 
@@ -21,9 +21,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: location.state?.email || "", password: "" });
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
-  const [unverifiedEmail, setUnverifiedEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +40,6 @@ const Login = () => {
 
     setLoading(true);
     setFormError("");
-    setUnverifiedEmail("");
     try {
       const res = await axios.post(`${API}/login`, { email: formData.email.trim(), password: formData.password });
       // token first, so the page we land on can use it immediately
@@ -52,22 +49,25 @@ const Login = () => {
       // admins land in the admin panel, customers go back to where they were
       navigate(redirectAfterLogin(res.data.user, from), { replace: true });
     } catch (error) {
-      if (error.response?.data?.needsVerification) setUnverifiedEmail(error.response.data.email);
-      else setFormError(authErrorMessage(error));
+      const data = error.response?.data;
+      if (data?.needsVerification) {
+        // right password, email not verified yet: go enter the 6-digit code
+        clearVerifyState();
+        saveVerifyState({
+          email: data.email,
+          verifyToken: data.verifyToken,
+          from,
+          // no new code when one went out under 30s ago (it's still valid); none at all if the mail failed
+          ...(data.codeSent
+            ? codeTimers(data)
+            : data.resendIn
+              ? { resendAt: Date.now() + data.resendIn * 1000, expiresAt: Date.now() + ((data.expiresIn ?? 300) - 30 + data.resendIn) * 1000 }
+              : { emailFailed: true, resendAt: 0 }),
+        });
+        navigate("/verify", { state: { notice: data.codeSent || data.resendIn ? data.message : undefined } });
+      } else setFormError(authErrorMessage(error));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const resendVerification = async () => {
-    setResending(true);
-    try {
-      await axios.post(`${API}/reVerify`, { email: unverifiedEmail });
-      navigate("/verify", { state: { email: unverifiedEmail, from, justSent: true } });
-    } catch (error) {
-      toast.error(authErrorMessage(error));
-    } finally {
-      setResending(false);
     }
   };
 
@@ -87,19 +87,6 @@ const Login = () => {
     >
       <form onSubmit={submitHandler} noValidate className="space-y-4">
         {formError && <Notice>{formError}</Notice>}
-        {unverifiedEmail && (
-          <Notice tone="warning">
-            <p>Please verify your email first. We sent a link to {unverifiedEmail}.</p>
-            <button
-              type="button"
-              onClick={resendVerification}
-              disabled={resending}
-              className="mt-1 cursor-pointer font-semibold underline underline-offset-2 disabled:opacity-60"
-            >
-              {resending ? "Sending…" : "Resend verification email"}
-            </button>
-          </Notice>
-        )}
 
         <AuthField
           label="Email"

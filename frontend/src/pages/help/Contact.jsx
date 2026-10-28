@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import { CheckCircle2, CircleHelp, Clock, Headset, Loader2, Mail, MapPin, PackageSearch, Phone, Send } from "lucide-react";
 import HelpLayout, { HelpCard } from "@/components/HelpLayout";
 import { API_URL } from "@/lib/admin";
-import { CONTACT_TOPICS, EMAIL_RE, STORE_INFO } from "@/lib/help";
+import { CONTACT_TOPICS, EMAIL_RE } from "@/lib/help";
+import { useStoreInfo } from "@/lib/storeSettings";
 
 const MAX_MESSAGE = 2000;
 
@@ -36,6 +37,7 @@ const inputClass = (error) =>
 
 const Contact = () => {
   const { user } = useSelector((store) => store.user);
+  const STORE_INFO = useStoreInfo();
   const emptyForm = {
     name: user ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "",
     email: user?.email || "",

@@ -13,14 +13,10 @@ import {
   Youtube,
 } from "lucide-react";
 
-// Edit these once and they update the footer, contact page and policies
+// Name and tagline; address, email, phone and hours come from Admin → Store settings (see useStoreInfo)
 export const STORE_INFO = {
   name: "Ekart",
   tagline: "Your one-stop shop for electronics, fashion, home, beauty and more.",
-  address: "123 Electronics St, Style City, NY 10001",
-  email: "support@ekart.com",
-  phone: "(123) 456-7890",
-  hours: "Mon – Sat, 9:00 AM – 9:00 PM",
 };
 
 export const SOCIAL_LINKS = [
@@ -29,11 +25,6 @@ export const SOCIAL_LINKS = [
   { label: "Twitter", href: "https://x.com/", icon: Twitter },
   { label: "YouTube", href: "https://www.youtube.com/", icon: Youtube },
 ];
-
-// Checkout rules (used by AddressForm and the policy pages): free above ₹299, otherwise ₹49; 5% tax
-export const FREE_SHIPPING_ABOVE = 299;
-export const SHIPPING_FEE = 49;
-export const RETURN_WINDOW_DAYS = 30;
 
 export const HELP_PAGES = [
   { to: "/contact", label: "Contact Us", icon: Headset },

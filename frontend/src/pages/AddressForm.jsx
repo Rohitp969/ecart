@@ -16,12 +16,13 @@ import {
   RotateCcw,
   ShieldCheck,
   ShoppingCart,
+  Tag,
   Trash2,
   Truck,
 } from 'lucide-react'
 import { setCart } from '../redux/productSlice'
 import { formatPrice } from '../lib/catalog'
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS } from '../lib/help'
+import { useStoreSettings } from '../lib/storeSettings'
 import { checkoutTotals, formatMoney } from '../lib/orders'
 import { addressFromProfile, addressLine, addressToForm } from '../lib/address'
 import CheckoutSteps from '../components/CheckoutSteps'
@@ -60,11 +61,20 @@ const AddressForm = () => {
   const [editor, setEditor] = useState(null) // null = closed, {} = new address, { id } = editing
   const [deletingId, setDeletingId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState('Online')
+  const [chosenMethod, setPaymentMethod] = useState('Online')
+  const [coupon, setCoupon] = useState(null) // { code, description, discount } once applied
+  const [couponInput, setCouponInput] = useState('')
+  const [couponError, setCouponError] = useState('')
+  const [applyingCoupon, setApplyingCoupon] = useState(false)
 
   // ── Derived state ───────────────────────────────────────────────────────────
+  // shipping charge, tax rate and Cash on Delivery come from Admin → Store settings
+  const settings = useStoreSettings()
+  const { freeShippingAbove: FREE_SHIPPING_ABOVE, returnWindowDays: RETURN_WINDOW_DAYS } = settings
+  const paymentOptions = settings.codEnabled ? PAYMENT_OPTIONS : PAYMENT_OPTIONS.filter((option) => option.value !== 'COD')
+  const paymentMethod = settings.codEnabled ? chosenMethod : 'Online'
   // (same totals the server uses when it creates the order)
-  const { subtotal, shipping, tax, total, itemCount } = checkoutTotals(items)
+  const { subtotal, discount, shipping, tax, total, itemCount } = checkoutTotals(items, settings, coupon?.discount || 0)
   // picked address, else the default one, else the first
   const selected =
     addresses.find((a) => a._id === selectedId) || addresses.find((a) => a.isDefault) || addresses[0] || null
@@ -93,6 +103,29 @@ const AddressForm = () => {
     setEditor({ id })
   }
 
+  // checks the code against this cart; the server checks it again when the order is created
+  const applyCoupon = async (e) => {
+    e.preventDefault()
+    const code = couponInput.trim()
+    if (!code) return
+    setApplyingCoupon(true)
+    setCouponError('')
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/coupons/apply`,
+        { code },
+        { headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` } }
+      )
+      setCoupon(data.coupon)
+      setCouponInput('')
+      toast.success(`${data.coupon.code} applied`)
+    } catch (error) {
+      setCouponError(error.response?.data?.message || 'Could not apply this code. Please try again.')
+    } finally {
+      setApplyingCoupon(false)
+    }
+  }
+
   const handlePayment = async () => {
     if (!selected) {
       toast.error('Please select a delivery address.')
@@ -117,7 +150,7 @@ const AddressForm = () => {
       // the server works out the amount from the cart; we only send the address and payment choice
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/orders/create-order`,
-        { shippingAddress: selected, paymentMethod },
+        { shippingAddress: selected, paymentMethod, couponCode: coupon?.code },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       )
 
@@ -354,7 +387,7 @@ const AddressForm = () => {
                 <div className="mt-8 border-t border-gray-100 pt-6">
                   <h2 className="mb-4 text-lg font-bold text-gray-900">Payment method</h2>
                   <div role="radiogroup" aria-label="Payment method" className="grid gap-3 sm:grid-cols-2">
-                    {PAYMENT_OPTIONS.map((option) => {
+                    {paymentOptions.map((option) => {
                       const isChosen = paymentMethod === option.value
                       return (
                         <label
@@ -444,6 +477,52 @@ const AddressForm = () => {
               })}
             </ul>
 
+            {/* ── Coupon ── */}
+            <div className="mt-4 border-t border-gray-100 pt-4">
+              {coupon ? (
+                <div className="flex items-center justify-between gap-3 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 text-green-800">
+                    <Tag className="h-4 w-4 shrink-0" />
+                    <span className="min-w-0">
+                      <span className="font-bold">{coupon.code}</span> applied · you save {formatMoney(discount)}
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCoupon(null)}
+                    className="shrink-0 cursor-pointer text-xs font-semibold text-green-800 underline underline-offset-2"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={applyCoupon} className="flex gap-2">
+                  <label htmlFor="coupon-code" className="sr-only">
+                    Coupon code
+                  </label>
+                  <input
+                    id="coupon-code"
+                    value={couponInput}
+                    onChange={(e) => {
+                      setCouponInput(e.target.value.toUpperCase())
+                      setCouponError('')
+                    }}
+                    placeholder="Have a coupon code?"
+                    autoComplete="off"
+                    className="h-10 min-w-0 flex-1 rounded-lg border border-gray-200 px-3 text-sm uppercase outline-none placeholder:normal-case focus:border-pink-500 focus:ring-2 focus:ring-pink-100"
+                  />
+                  <button
+                    type="submit"
+                    disabled={applyingCoupon || !couponInput.trim()}
+                    className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-pink-600 px-4 text-sm font-semibold text-pink-600 hover:bg-pink-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {applyingCoupon ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Apply'}
+                  </button>
+                </form>
+              )}
+              {couponError && <p className="mt-1.5 text-xs text-red-600">{couponError}</p>}
+            </div>
+
             <dl className="mt-4 space-y-2.5 border-t border-gray-100 pt-4 text-sm">
               <div className="flex justify-between">
                 <dt className="text-gray-600">
@@ -451,6 +530,12 @@ const AddressForm = () => {
                 </dt>
                 <dd className="text-gray-900">{formatMoney(subtotal)}</dd>
               </div>
+              {discount > 0 && (
+                <div className="flex justify-between">
+                  <dt className="text-gray-600">Coupon ({coupon.code})</dt>
+                  <dd className="font-semibold text-green-600">−{formatMoney(discount)}</dd>
+                </div>
+              )}
               <div className="flex justify-between">
                 <dt className="text-gray-600">Shipping</dt>
                 <dd className={shipping === 0 ? 'font-semibold text-green-600' : 'text-gray-900'}>
@@ -458,14 +543,14 @@ const AddressForm = () => {
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-600">Tax (5%)</dt>
+                <dt className="text-gray-600">Tax ({settings.taxRate}%)</dt>
                 <dd className="text-gray-900">{formatMoney(tax)}</dd>
               </div>
             </dl>
 
             {shipping > 0 && (
               <p className="mt-3 rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-700">
-                Add {formatMoney(FREE_SHIPPING_ABOVE - subtotal + 1)} more to get FREE shipping.
+                Add {formatMoney(FREE_SHIPPING_ABOVE - (subtotal - discount) + 1)} more to get FREE shipping.
               </p>
             )}
 

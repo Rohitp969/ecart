@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { ArrowUp, CheckCircle2, Clock, Loader2, Mail, MapPin, Phone, Send, ShieldCheck } from 'lucide-react'
 import { CATEGORY_GROUPS } from '../lib/catalog'
-import { EMAIL_RE, HELP_PAGES, SOCIAL_LINKS, STORE_INFO } from '../lib/help'
+import { EMAIL_RE, HELP_PAGES, SOCIAL_LINKS } from '../lib/help'
+import { useStoreInfo } from '../lib/storeSettings'
 import { API_URL } from '../lib/admin'
 import { isAdmin } from '../lib/auth'
 
@@ -114,6 +115,7 @@ const Newsletter = () => {
 
 const Footer = () => {
   const { user } = useSelector((store) => store.user)
+  const STORE_INFO = useStoreInfo()
   const helpLinks = HELP_PAGES.filter((page) => !page.legal)
   const legalLinks = HELP_PAGES.filter((page) => page.legal)
 
@@ -200,7 +202,7 @@ const Footer = () => {
                 <FooterLink to={`/profile/${user._id}`}>My Profile</FooterLink>
                 <FooterLink to={`/profile/${user._id}?tab=orders`}>My Orders</FooterLink>
                 <FooterLink to='/cart'>My Cart</FooterLink>
-                {isAdmin(user) && <FooterLink to='/dashboard'>Admin Panel</FooterLink>}
+                {isAdmin(user) && <FooterLink to='/admin'>Admin Panel</FooterLink>}
               </>
             ) : (
               <>

@@ -2,9 +2,9 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, CircleHelp, Headset, Search } from "lucide-react";
 import HelpLayout from "@/components/HelpLayout";
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS, SHIPPING_FEE } from "@/lib/help";
+import { useStoreSettings } from "@/lib/storeSettings";
 
-const FAQ_SECTIONS = [
+const faqSections = ({ freeShippingAbove: FREE_SHIPPING_ABOVE, shippingFee: SHIPPING_FEE, returnWindowDays: RETURN_WINDOW_DAYS, taxRate }) => [
   {
     title: "Orders & Payments",
     items: [
@@ -22,7 +22,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: "Are there any extra charges at checkout?",
-        a: `A 5% tax is added to the order subtotal. Shipping is free on orders above ₹${FREE_SHIPPING_ABOVE}; smaller orders have a flat ₹${SHIPPING_FEE} delivery fee. You'll see the full breakdown before you pay.`,
+        a: `A ${taxRate}% tax is added to the order subtotal. Shipping is free on orders above ₹${FREE_SHIPPING_ABOVE}; smaller orders have a flat ₹${SHIPPING_FEE} delivery fee. You'll see the full breakdown before you pay.`,
       },
       {
         q: "My payment failed but money was deducted. What now?",
@@ -97,15 +97,17 @@ const FAQ_SECTIONS = [
 
 const Faqs = () => {
   const [query, setQuery] = useState("");
+  const settings = useStoreSettings();
 
   const sections = useMemo(() => {
+    const all = faqSections(settings);
     const q = query.trim().toLowerCase();
-    if (!q) return FAQ_SECTIONS;
-    return FAQ_SECTIONS.map((section) => ({
+    if (!q) return all;
+    return all.map((section) => ({
       ...section,
       items: section.items.filter((item) => `${item.q} ${item.a}`.toLowerCase().includes(q)),
     })).filter((section) => section.items.length);
-  }, [query]);
+  }, [query, settings]);
 
   return (
     <HelpLayout title="Frequently Asked Questions" description="Quick answers about orders, payments, delivery, returns and your account." icon={CircleHelp}>

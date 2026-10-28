@@ -44,11 +44,31 @@ const userSchema = new mongoose.Schema({
          enum:["user", "admin"],
        default:"user" 
     },
-    token:{
-         type: String,
-       default: null 
-    },
+    // email verified with the 6-digit code from signup; only verified accounts can log in
      isVerified:{
+         type: Boolean,
+       default: false
+    },
+    // signup verification code: only its hash is kept, valid 5 minutes, 5 wrong tries max
+    emailOtp:{
+         type: String,
+       default: null
+    },
+    emailOtpExpiry:{
+         type: Date,
+       default: null
+    },
+    emailOtpAttempts:{
+         type: Number,
+       default: 0
+    },
+    // when the last code was sent (30s resend cooldown)
+    emailOtpSentAt:{
+         type: Date,
+       default: null
+    },
+    // set by an admin (Admin → Users); a blocked account can't sign in
+    isBlocked:{
          type: Boolean,
        default: false
     },
@@ -69,12 +89,8 @@ const userSchema = new mongoose.Schema({
          type: Number,
        default: 0
     },
-    // when the last OTP / verification mail went out (resend cooldown)
+    // when the last password-reset code went out (resend cooldown)
     otpSentAt:{
-         type: Date,
-       default: null
-    },
-    verificationSentAt:{
          type: Date,
        default: null
     },

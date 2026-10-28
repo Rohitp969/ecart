@@ -12,8 +12,13 @@ import productRoute from "./routes/productRoute.js";
 import cartRoute from "./routes/cartRoute.js";
 import orderRoute from "./routes/orderRoute.js";
 import supportRoute from "./routes/supportRoute.js";
+import settingsRoute from "./routes/settingsRoute.js";
+import bannerRoute from "./routes/bannerRoute.js";
+import couponRoute from "./routes/couponRoute.js";
 
 const app = express();
+// behind Render's proxy: lets the rate limits see each visitor's real IP
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -32,6 +37,9 @@ app.use("/api/v1/product", productRoute);
 app.use("/api/v1/cart", cartRoute);
 app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/support", supportRoute);
+app.use("/api/v1/settings", settingsRoute);
+app.use("/api/v1/banners", bannerRoute);
+app.use("/api/v1/coupons", couponRoute);
 
 // Unknown API route
 app.use("/api", (_req, res) => res.status(404).json({ success: false, message: "API route not found" }));

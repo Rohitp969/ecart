@@ -1,20 +1,21 @@
 // Order helpers shared by checkout, the account page and order tracking
-import { FREE_SHIPPING_ABOVE, SHIPPING_FEE } from "./help";
-
-export const TAX_RATE = 0.05;
+import { DEFAULT_SETTINGS } from "./storeSettings";
 
 const round2 = (n) => Math.round(n * 100) / 100;
 
-// Same maths as the backend's createOrder, from the cart's current product prices
-export const checkoutTotals = (items = []) => {
+// Same maths as the backend (backend/utils/pricing.js), from the cart's current product prices and the
+// store settings. A coupon discount comes off the subtotal before shipping and tax.
+export const checkoutTotals = (items = [], settings = DEFAULT_SETTINGS, discount = 0) => {
   const subtotal = items.reduce((sum, item) => sum + (item.productId?.productPrice || 0) * item.quantity, 0);
-  const shipping = subtotal > FREE_SHIPPING_ABOVE ? 0 : SHIPPING_FEE;
-  const tax = round2(subtotal * TAX_RATE);
+  const afterDiscount = Math.max(0, subtotal - discount);
+  const shipping = afterDiscount > settings.freeShippingAbove ? 0 : settings.shippingFee;
+  const tax = round2(afterDiscount * (settings.taxRate / 100));
   return {
     subtotal,
+    discount: round2(Math.min(discount, subtotal)),
     shipping,
     tax,
-    total: round2(subtotal + shipping + tax),
+    total: round2(afterDiscount + shipping + tax),
     itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
   };
 };

@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FileText, ShieldCheck } from "lucide-react";
 import HelpLayout, { HelpCard } from "@/components/HelpLayout";
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS, STORE_INFO } from "@/lib/help";
+import { STORE_INFO } from "@/lib/help";
+import { useStoreInfo, useStoreSettings } from "@/lib/storeSettings";
 
 const LAST_UPDATED = "September 2026";
 
@@ -48,7 +49,7 @@ const PRIVACY_SECTIONS = [
   },
 ];
 
-const TERMS_SECTIONS = [
+const termsSections = ({ freeShippingAbove: FREE_SHIPPING_ABOVE, returnWindowDays: RETURN_WINDOW_DAYS }) => [
   {
     title: "Using our store",
     points: [
@@ -91,7 +92,9 @@ const TERMS_SECTIONS = [
   },
 ];
 
-const PolicyPage = ({ title, description, icon, sections }) => (
+const PolicyPage = ({ title, description, icon, sections }) => {
+  const { email } = useStoreInfo();
+  return (
   <HelpLayout title={title} description={description} icon={icon}>
     <HelpCard>
       <p className="mb-6 text-sm text-gray-500">Last updated: {LAST_UPDATED}</p>
@@ -119,8 +122,8 @@ const PolicyPage = ({ title, description, icon, sections }) => (
       </div>
       <p className="mt-8 border-t border-gray-100 pt-5 text-sm text-gray-600">
         Questions? Email us at{" "}
-        <a href={`mailto:${STORE_INFO.email}`} className="font-semibold text-pink-600 hover:underline">
-          {STORE_INFO.email}
+        <a href={`mailto:${email}`} className="font-semibold text-pink-600 hover:underline">
+          {email}
         </a>{" "}
         or use the{" "}
         <Link to="/contact" className="font-semibold text-pink-600 hover:underline">
@@ -130,7 +133,8 @@ const PolicyPage = ({ title, description, icon, sections }) => (
       </p>
     </HelpCard>
   </HelpLayout>
-);
+  );
+};
 
 export const PrivacyPolicy = () => (
   <PolicyPage
@@ -146,6 +150,6 @@ export const TermsOfUse = () => (
     title="Terms of Use"
     description={`The rules for shopping on ${STORE_INFO.name}. Please read them before placing an order.`}
     icon={FileText}
-    sections={TERMS_SECTIONS}
+    sections={termsSections(useStoreSettings())}
   />
 );

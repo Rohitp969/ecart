@@ -1,17 +1,20 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowLeft, BadgeCheck, Camera, Eye, Loader2, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Ban, BadgeCheck, Camera, Eye, Loader2, ShieldCheck, Trash2, UserCheck } from "lucide-react";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import OrderDetailsDialog, { FulfilmentSelect } from "@/components/admin/OrderDetailsDialog";
 import { PaymentBadge } from "@/components/admin/StatusBadge";
 import UserAvatar from "@/components/admin/UserAvatar";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import ErrorState from "@/components/admin/ErrorState";
 import { Skeleton } from "@/components/ui/skeleton";
 import { setUser } from "@/redux/userSlice";
-import { API_URL, authConfig, formatDate, fullName, saveOrderStatus, shortId } from "@/lib/admin";
+import { API_URL, authConfig, formatDate, fullName, loadErrorMessage, saveOrderStatus, shortId } from "@/lib/admin";
 import { formatPrice } from "@/lib/catalog";
+import { useAdminAlerts } from "@/lib/adminAlerts";
 
 const EDITABLE = ["firstName", "lastName", "phoneNo", "address", "city", "zipCode"];
 
@@ -28,12 +31,21 @@ const UserInfo = () => {
   const { id: userId } = useParams();
   const dispatch = useDispatch();
   const { user: me } = useSelector((store) => store.user);
+  const { refreshAlerts } = useAdminAlerts();
+  const navigate = useNavigate();
+  const [confirm, setConfirm] = useState(null); // "block" | "delete"
+  const [accountBusy, setAccountBusy] = useState(false);
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({});
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
+  const retry = () => {
+    setError("");
+    setReloadKey((key) => key + 1);
+  };
   const [saving, setSaving] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [updatingId, setUpdatingId] = useState(null);
@@ -51,11 +63,11 @@ const UserInfo = () => {
         setForm({ ...Object.fromEntries(EDITABLE.map((k) => [k, userRes.data.user[k] || ""])), role: userRes.data.user.role });
         setOrders(orderRes.data.orders);
       })
-      .catch((err) => !ignore && setError(err.response?.data?.message || "Could not load this user"));
+      .catch((err) => !ignore && setError(loadErrorMessage(err, "this user")));
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [userId, reloadKey]);
 
   useEffect(() => () => preview && URL.revokeObjectURL(preview), [preview]);
 
@@ -98,12 +110,42 @@ const UserInfo = () => {
   const changeStatus = async (order, orderStatus) => {
     setUpdatingId(order._id);
     const updated = await saveOrderStatus(order._id, orderStatus);
-    if (updated) setOrders((prev) => prev.map((o) => (o._id === updated._id ? updated : o)));
+    if (updated) {
+      setOrders((prev) => prev.map((o) => (o._id === updated._id ? updated : o)));
+      refreshAlerts();
+    }
     setUpdatingId(null);
   };
 
+  // unblock straight away; blocking and deleting ask first
+  const setBlocked = async (blocked) => {
+    setAccountBusy(true);
+    try {
+      const res = await axios.put(`${API_URL}/api/v1/user/${userId}/block`, { blocked }, authConfig());
+      setProfile((prev) => ({ ...prev, isBlocked: res.data.user.isBlocked }));
+      toast.success(res.data.message);
+      setConfirm(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not update this account");
+    } finally {
+      setAccountBusy(false);
+    }
+  };
+
+  const deleteAccount = async () => {
+    setAccountBusy(true);
+    try {
+      const res = await axios.delete(`${API_URL}/api/v1/user/${userId}`, authConfig());
+      toast.success(res.data.message);
+      navigate("/admin/customers", { replace: true });
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not delete this account");
+      setAccountBusy(false);
+    }
+  };
+
   const back = (
-    <Link to="/dashboard/users" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900">
+    <Link to="/admin/customers" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900">
       <ArrowLeft className="h-4 w-4" /> Users
     </Link>
   );
@@ -112,7 +154,7 @@ const UserInfo = () => {
     return (
       <div>
         {back}
-        <p className="rounded-2xl bg-red-50 p-6 text-sm text-red-600">{error}</p>
+        <ErrorState title="Couldn't load this user" message={error} onRetry={retry} />
       </div>
     );
   }
@@ -153,6 +195,11 @@ const UserInfo = () => {
             ) : (
               <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600">Customer</span>
             )}
+            {profile.isBlocked && (
+              <span className="ml-1.5 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-600/20">
+                <Ban className="h-3.5 w-3.5" /> Blocked
+              </span>
+            )}
           </div>
         </div>
         <div className="grid w-full grid-cols-2 gap-3 sm:w-auto sm:grid-cols-3">
@@ -161,6 +208,58 @@ const UserInfo = () => {
           <Stat label="Last order" value={stats.last ? formatDate(stats.last) : "—"} className="col-span-2 sm:col-span-1" />
         </div>
       </div>
+
+      {/* block / delete: customers only, never your own account */}
+      {!isSelf && profile.role !== "admin" && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div>
+            <h2 className="font-bold text-gray-900">Account access</h2>
+            <p className="text-sm text-gray-500">
+              {profile.isBlocked
+                ? "This customer is blocked: they can't sign in or place orders."
+                : "Block this customer to stop them signing in, or delete the account. Their orders stay in your records."}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {profile.isBlocked ? (
+              <button
+                onClick={() => setBlocked(false)}
+                disabled={accountBusy}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+              >
+                {accountBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserCheck className="h-4 w-4" />} Unblock
+              </button>
+            ) : (
+              <button
+                onClick={() => setConfirm("block")}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-amber-700 hover:bg-amber-50"
+              >
+                <Ban className="h-4 w-4" /> Block
+              </button>
+            )}
+            <button
+              onClick={() => setConfirm("delete")}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4" /> Delete account
+            </button>
+          </div>
+        </div>
+      )}
+
+      <ConfirmDialog
+        open={!!confirm}
+        title={confirm === "delete" ? `Delete ${fullName(profile)}'s account?` : `Block ${fullName(profile)}?`}
+        description={
+          confirm === "delete"
+            ? "The account, cart and saved addresses are removed for good. Their orders stay in your records as \"Deleted user\". This can't be undone."
+            : "They'll be signed out and won't be able to sign in or place orders until you unblock them."
+        }
+        confirmLabel={confirm === "delete" ? "Delete account" : "Block"}
+        busy={accountBusy}
+        onConfirm={() => (confirm === "delete" ? deleteAccount() : setBlocked(true))}
+        onCancel={() => setConfirm(null)}
+      />
 
       {/* side by side from xl only; at lg (next to the admin sidebar) the form column would be ~220px */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">

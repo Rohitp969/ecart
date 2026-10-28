@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Ban, Clock, PackageCheck, RotateCcw, Truck, Wallet } from "lucide-react";
 import HelpLayout, { HelpCard } from "@/components/HelpLayout";
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS, SHIPPING_FEE } from "@/lib/help";
+import { useStoreSettings } from "@/lib/storeSettings";
 
-const HIGHLIGHTS = [
-  { icon: Truck, title: "Free shipping", text: `On orders above ₹${FREE_SHIPPING_ABOVE}`, color: "bg-blue-50 text-blue-600" },
+const highlights = ({ freeShippingAbove, returnWindowDays }) => [
+  { icon: Truck, title: "Free shipping", text: `On orders above ₹${freeShippingAbove}`, color: "bg-blue-50 text-blue-600" },
   { icon: Clock, title: "Fast delivery", text: "2–7 business days", color: "bg-purple-50 text-purple-600" },
-  { icon: RotateCcw, title: `${RETURN_WINDOW_DAYS}-day returns`, text: "Free doorstep pickup", color: "bg-amber-50 text-amber-600" },
+  { icon: RotateCcw, title: `${returnWindowDays}-day returns`, text: "Free doorstep pickup", color: "bg-amber-50 text-amber-600" },
   { icon: Wallet, title: "Quick refunds", text: "To your original payment method", color: "bg-green-50 text-green-600" },
 ];
 
@@ -40,7 +40,11 @@ const NON_RETURNABLE = [
 const tableClass = "w-full text-left text-sm";
 const thClass = "bg-gray-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500";
 
-const ShippingReturns = () => (
+const ShippingReturns = () => {
+  const settings = useStoreSettings();
+  const { freeShippingAbove: FREE_SHIPPING_ABOVE, shippingFee: SHIPPING_FEE, returnWindowDays: RETURN_WINDOW_DAYS } = settings;
+  const HIGHLIGHTS = highlights(settings);
+  return (
   <HelpLayout
     title="Shipping & Returns"
     description="Everything about delivery charges, delivery times, returns and refunds."
@@ -191,6 +195,7 @@ const ShippingReturns = () => (
       </div>
     </div>
   </HelpLayout>
-);
+  );
+};
 
 export default ShippingReturns;

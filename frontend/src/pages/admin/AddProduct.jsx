@@ -7,10 +7,12 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import ProductForm from '@/components/admin/ProductForm'
 import { setProducts } from '@/redux/productSlice'
 import { API_URL, authConfig } from '@/lib/admin'
+import { useAdminAlerts } from '@/lib/adminAlerts'
 
 const AddProduct = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { refreshAlerts } = useAdminAlerts()
   const { products } = useSelector((store) => store.product)
 
   const createProduct = async (formData) => {
@@ -19,7 +21,8 @@ const AddProduct = () => {
       if (res.data.success) {
         dispatch(setProducts([res.data.product, ...products]))
         toast.success('Product added to the store')
-        navigate('/dashboard/products')
+        refreshAlerts()
+        navigate('/admin/products')
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Could not add product')

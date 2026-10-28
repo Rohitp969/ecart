@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Product } from "../models/productModel.js";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/dataUri.js";
@@ -91,7 +92,8 @@ export const deleteProduct = async(req, res)=>{
     try {
         const {productId} = req.params;
 
-        const product = await Product.findById(productId)
+        // an id that isn't a valid ObjectId is just "not found", not a server error
+        const product = mongoose.isValidObjectId(productId) ? await Product.findById(productId) : null
         if(!product){
              return res.status(404).json({
             success:false,
@@ -123,7 +125,8 @@ export const updateProduct = async(req, res)=>{
         const { productId } = req.params;
         const {productName, productDesc, productPrice, category, brand, existingImages, discountPercentage, stock} = req.body
 
-        const product = await Product.findById(productId)
+        // an id that isn't a valid ObjectId is just "not found", not a server error
+        const product = mongoose.isValidObjectId(productId) ? await Product.findById(productId) : null
         if(!product) {
                 return res.status(404).json({
             success:false,

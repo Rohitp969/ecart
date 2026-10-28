@@ -5,6 +5,9 @@ import crypto from "crypto";
 import mongoose from "mongoose";
 import { Product } from "../models/productModel.js";
 import { User } from "../models/userModel.js";
+import { getStoreSettings } from "../models/settingsModel.js";
+import { CouponError, evaluateCoupon, orderTotals, recordCouponUse } from "../utils/pricing.js";
+import { ContactMessage } from "../models/contactMessageModel.js";
 
 const ADDRESS_FIELDS = ["fullName", "phone", "email", "address", "city", "state", "zip", "country"];
 
@@ -18,11 +21,6 @@ const cleanAddress = (input) => {
   return Object.keys(address).length ? address : undefined;
 };
 
-// Checkout rules, mirrored by the frontend summary (frontend/src/lib/help.js)
-const FREE_SHIPPING_ABOVE = 299;
-const SHIPPING_FEE = 49;
-const TAX_RATE = 0.05;
-const round2 = (n) => Math.round(n * 100) / 100;
 
 // COD orders are confirmed when placed, online ones once paid
 const isConfirmed = (order) => order.status === "Paid" || order.paymentMethod === "COD";
@@ -42,10 +40,15 @@ const emptyCart = (userId) => Cart.findOneAndUpdate({ userId }, { $set: { items:
 
 export const createOrder = async (req, res) => {
   try {
-    const { shippingAddress, paymentMethod = "Online" } = req.body;
+    const { shippingAddress, paymentMethod = "Online", couponCode } = req.body;
+    // shipping charge, tax rate and COD come from Admin → Store settings
+    const settings = await getStoreSettings();
 
     if (!PAYMENT_METHODS.includes(paymentMethod)) {
       return res.status(400).json({ success: false, message: "Choose a valid payment method" });
+    }
+    if (paymentMethod === "COD" && !settings.codEnabled) {
+      return res.status(400).json({ success: false, message: "Cash on Delivery isn't available right now. Please pay online." });
     }
     const address = cleanAddress(shippingAddress);
     if (!address?.fullName || !address.phone || !address.address || !address.city || !address.zip) {
@@ -79,9 +82,16 @@ export const createOrder = async (req, res) => {
       price: item.productId.productPrice,
     }));
     const subtotal = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shipping = subtotal > FREE_SHIPPING_ABOVE ? 0 : SHIPPING_FEE;
-    const tax = round2(subtotal * TAX_RATE);
-    const amount = round2(subtotal + shipping + tax);
+    let coupon = null;
+    if (couponCode) {
+      try {
+        coupon = await evaluateCoupon(couponCode, subtotal);
+      } catch (error) {
+        if (error instanceof CouponError) return res.status(400).json({ success: false, message: error.message });
+        throw error;
+      }
+    }
+    const { amount, tax, shipping, discount } = orderTotals(subtotal, settings, coupon?.discount || 0);
 
     const orderData = {
       user: req.user._id,
@@ -89,6 +99,8 @@ export const createOrder = async (req, res) => {
       amount,
       tax,
       shipping,
+      discount,
+      couponCode: coupon?.coupon.code,
       currency: "INR",
       paymentMethod,
       status: "Pending",
@@ -98,7 +110,7 @@ export const createOrder = async (req, res) => {
     // Cash on delivery: the order is placed straight away, payment is collected at the door
     if (paymentMethod === "COD") {
       const order = await Order.create(orderData);
-      await Promise.all([adjustStock(products, -1), emptyCart(req.user._id)]);
+      await Promise.all([adjustStock(products, -1), emptyCart(req.user._id), recordCouponUse(order.couponCode)]);
       return res.status(201).json({
         success: true,
         message: "Order placed successfully",
@@ -169,7 +181,7 @@ export const varifyPayment = async (req, res) => {
         },
         { new: true },
       );
-      if (order) await adjustStock(order.products, -1);
+      if (order) await Promise.all([adjustStock(order.products, -1), recordCouponUse(order.couponCode)]);
 
       await emptyCart(userId);
 
@@ -295,6 +307,19 @@ const ORDER_POPULATE = [
   { path: "user", select: "firstName lastName email phoneNo" },
   { path: "products.productId", select: "productName productPrice productImg category brand" },
 ];
+
+// Admin: one order with everything an invoice needs
+export const getOrderAdmin = async (req, res) => {
+  try {
+    const order = mongoose.isValidObjectId(req.params.orderId)
+      ? await Order.findById(req.params.orderId).populate(ORDER_POPULATE)
+      : null;
+    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    res.json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 export const getAllOrdersAdmin = async (req, res) => {
   try {
@@ -543,5 +568,21 @@ export const getSalesData = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+// Admin console badges and the dashboard's "needs attention" queue
+export const getAdminAlerts = async (_req, res) => {
+  try {
+    const [toShip, newMessages, lowStock, outOfStock] = await Promise.all([
+      // confirmed (paid online, or cash on delivery) and not shipped yet; older orders have no orderStatus
+      Order.countDocuments({ $or: [PAID, { paymentMethod: "COD" }], orderStatus: { $in: ["Processing", null] } }),
+      ContactMessage.countDocuments({ status: "New" }),
+      Product.countDocuments({ stock: { $gt: 0, $lte: 10 } }),
+      Product.countDocuments({ stock: 0 }),
+    ]);
+    res.json({ success: true, alerts: { toShip, newMessages, lowStock, outOfStock } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

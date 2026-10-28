@@ -95,7 +95,7 @@ const Navbar = () => {
     document.getElementById("mobile-search")?.focus({ preventScroll: true });
   };
 
-  // a link stays active across its whole section (/products/123, /dashboard/orders…)
+  // a link stays active across its whole section (/products/123, /admin/orders…)
   const isActiveLink = (to) =>
     to === "/" ? location.pathname === "/" : location.pathname.startsWith(`/${to.split("/")[1]}`);
 
@@ -103,7 +103,7 @@ const Navbar = () => {
     { to: "/", label: "Home", icon: Home },
     { to: "/products", label: "Products", icon: Package },
     ...(admin
-      ? [{ to: "/dashboard", label: "Admin Panel", icon: LayoutDashboard }]
+      ? [{ to: "/admin", label: "Admin Panel", icon: LayoutDashboard }]
       : []),
   ];
 
@@ -243,7 +243,7 @@ const Navbar = () => {
                           </Link>
                           {admin && (
                             <Link
-                              to="/dashboard"
+                              to="/admin"
                               className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50 transition-all duration-300"
                             >
                               <LayoutDashboard className="w-4 h-4 text-gray-500" />

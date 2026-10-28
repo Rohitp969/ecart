@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { passwordStrength } from "@/lib/authFlow";
+import { cn } from "@/lib/utils";
 
 // Building blocks shared by the login / signup / verification / reset screens
 
@@ -109,12 +110,16 @@ export const PasswordField = ({ label, id, error, labelAction, showStrength, val
   );
 };
 
-export const SubmitButton = ({ loading, children, loadingText = "Please wait…", className = "", ...props }) => (
+// disabled while loading, and whenever the caller also disables it
+export const SubmitButton = ({ loading, disabled, children, loadingText = "Please wait…", className = "", ...props }) => (
   <button
     type="submit"
-    disabled={loading}
-    className={`inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 text-sm font-semibold text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:opacity-70 ${className}`}
     {...props}
+    disabled={loading || disabled}
+    className={cn(
+      "inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-pink-600 px-5 text-sm font-semibold text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:opacity-70",
+      className,
+    )}
   >
     {loading && <Loader2 className="h-4 w-4 animate-spin" />}
     {loading ? loadingText : children}

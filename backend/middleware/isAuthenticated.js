@@ -38,6 +38,13 @@ export const isAuthenticated = async (req, res, next)=>{
 
               })
        }
+       // blocked by an admin: end the session (the frontend logs out on 401)
+       if(user.isBlocked){
+        return res.status(401).json({
+             success:false,
+            message: "Your account has been blocked. Please contact support."
+              })
+       }
        req.user = user
        req.id = user._id
        next()

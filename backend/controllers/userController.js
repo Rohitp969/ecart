@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 import { Order } from "../models/orderModel.js";
 import cloudinary from "../utils/cloudinary.js";
 import { publicUser } from "./authController.js";
+import mongoose from "mongoose";
+import { Cart } from "../models/cartModel.js";
+import { Session } from "../models/sessionModel.js";
+import { Subscriber } from "../models/subscriberModel.js";
 
 // Signup, login, email verification and password reset live in authController.js
 
@@ -51,7 +55,8 @@ export const updatePassword = async(req, res)=>{
 }
 
 
-const PRIVATE_FIELDS = "-password -otp -otpExpiry -otpAttempts -otpSentAt -token -verificationSentAt -passwordResetToken -passwordResetExpiry"
+// token / verificationSentAt only exist on accounts from the old verification-link flow
+const PRIVATE_FIELDS = "-password -otp -otpExpiry -otpAttempts -otpSentAt -emailOtp -emailOtpExpiry -emailOtpAttempts -emailOtpSentAt -token -verificationSentAt -passwordResetToken -passwordResetExpiry"
 
 export const allUser = async(__, res)=>{
   try {
@@ -133,12 +138,24 @@ export const updateUser = async (req, res) => {
         }) 
     }
 
-    let user = await User.findById(userIdToUpdate);
+    let user = mongoose.isValidObjectId(userIdToUpdate) ? await User.findById(userIdToUpdate) : null;
     if(!user){
-        return res.status(500).json({
+        return res.status(404).json({
              success:false,
             message: "User not found"
-        }) 
+        })
+    }
+
+    // Role changes (admins only, checked before any photo upload). Admins can't change their own
+    // role, so the admin making a change always remains: the store can't end up with no admin.
+    const changingRole = isLoggedInUser.role === 'admin' && role && role !== user.role
+    if (changingRole) {
+      if (!['user', 'admin'].includes(role)) {
+        return res.status(400).json({ success: false, message: "Choose a valid role" })
+      }
+      if (String(user._id) === String(isLoggedInUser._id)) {
+        return res.status(400).json({ success: false, message: "You can't change your own role" })
+      }
     }
 
     let profilePicUrl = user.profilePic;
@@ -170,9 +187,10 @@ export const updateUser = async (req, res) => {
     user.city = city || user.city;
     user.zipCode = zipCode || user.zipCode;
     user.phoneNo = phoneNo || user.phoneNo;
-    // only an admin may change roles; otherwise keep the existing one
-    if (isLoggedInUser.role === 'admin' && role) {
+    if (changingRole) {
       user.role = role;
+      // admins can't be blocked, so a promoted account is unblocked too
+      if (role === 'admin') user.isBlocked = false;
     }
     user.profilePic = profilePicUrl;
     user.profilePicPublicId = profilePicPublicId
@@ -191,5 +209,58 @@ export const updateUser = async (req, res) => {
              success:false,
             message: error.message
         }) 
+  }
+}
+
+// Admin: block or unblock a customer. Blocked accounts can't sign in and are signed out on their next request.
+export const setUserBlocked = async (req, res) => {
+  try {
+    const user = mongoose.isValidObjectId(req.params.id) ? await User.findById(req.params.id) : null
+    if (!user) return res.status(404).json({ success: false, message: "User not found" })
+    if (String(user._id) === String(req.user._id)) {
+      return res.status(400).json({ success: false, message: "You can't block your own account" })
+    }
+    if (user.role === "admin") {
+      return res.status(400).json({ success: false, message: "Admins can't be blocked. Change their role to customer first." })
+    }
+    user.isBlocked = Boolean(req.body.blocked)
+    if (user.isBlocked) {
+      user.isLoggedIn = false
+      await Session.deleteMany({ userId: user._id })
+    }
+    await user.save()
+    return res.status(200).json({
+      success: true,
+      message: user.isBlocked ? `${user.firstName} has been blocked` : `${user.firstName} has been unblocked`,
+      user: publicUser(user),
+    })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message })
+  }
+}
+
+// Admin: delete a customer account. Their orders stay for the store's records (shown as "Deleted user").
+export const deleteUserByAdmin = async (req, res) => {
+  try {
+    const user = mongoose.isValidObjectId(req.params.id) ? await User.findById(req.params.id) : null
+    if (!user) return res.status(404).json({ success: false, message: "User not found" })
+    if (String(user._id) === String(req.user._id)) {
+      return res.status(400).json({ success: false, message: "You can't delete your own account here" })
+    }
+    if (user.role === "admin") {
+      return res.status(400).json({ success: false, message: "Admins can't be deleted. Change their role to customer first." })
+    }
+    if (user.profilePicPublicId) {
+      await cloudinary.uploader.destroy(user.profilePicPublicId).catch(() => {})
+    }
+    await Promise.all([
+      Cart.deleteOne({ userId: user._id }),
+      Session.deleteMany({ userId: user._id }),
+      Subscriber.deleteOne({ email: user.email.toLowerCase() }),
+    ])
+    await user.deleteOne()
+    return res.status(200).json({ success: true, message: `${user.firstName} ${user.lastName}'s account has been deleted` })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message })
   }
 }

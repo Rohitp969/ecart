@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, Mail, MapPin, Phone, User } from "lucide-react";
+import { Loader2, Mail, MapPin, Phone, Printer, User } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FulfilmentBadge, PaymentBadge } from "./StatusBadge";
 import { ORDER_STATUSES, formatDate, fullName, shortId } from "@/lib/admin";
@@ -41,7 +41,7 @@ const OrderDetailsDialog = ({ order, onClose, onStatusChange }) => {
   if (!order) return null;
 
   const address = order.shippingAddress;
-  const subtotal = order.amount - (order.tax || 0) - (order.shipping || 0);
+  const subtotal = order.amount - (order.tax || 0) - (order.shipping || 0) + (order.discount || 0);
   const changeStatus = async (o, status) => {
     setUpdating(true);
     try {
@@ -61,7 +61,16 @@ const OrderDetailsDialog = ({ order, onClose, onStatusChange }) => {
             <PaymentBadge status={order.status} method={order.paymentMethod} />
             <FulfilmentBadge status={order.orderStatus} />
           </DialogTitle>
-          <DialogDescription>Placed on {formatDate(order.createdAt, true)}</DialogDescription>
+          <DialogDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            Placed on {formatDate(order.createdAt, true)}
+            <Link
+              to={`/admin/invoice/${order._id}`}
+              target="_blank"
+              className="inline-flex items-center gap-1 font-semibold text-pink-600 hover:underline"
+            >
+              <Printer className="h-3.5 w-3.5" /> Print invoice
+            </Link>
+          </DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -70,7 +79,7 @@ const OrderDetailsDialog = ({ order, onClose, onStatusChange }) => {
             <p className="flex items-center gap-2 font-semibold text-gray-900">
               <User className="h-4 w-4 shrink-0 text-gray-400" />
               {order.user?._id ? (
-                <Link to={`/dashboard/users/${order.user._id}`} className="min-w-0 wrap-break-word hover:text-pink-600" onClick={onClose}>
+                <Link to={`/admin/customers/${order.user._id}`} className="min-w-0 wrap-break-word hover:text-pink-600" onClick={onClose}>
                   {fullName(order.user)}
                 </Link>
               ) : (
@@ -138,6 +147,7 @@ const OrderDetailsDialog = ({ order, onClose, onStatusChange }) => {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2 rounded-xl bg-gray-50 p-4">
             <Row label="Subtotal" value={formatMoney(subtotal)} />
+            {order.discount > 0 && <Row label={`Coupon (${order.couponCode})`} value={`−${formatMoney(order.discount)}`} />}
             <Row label="Tax" value={formatMoney(order.tax)} />
             <Row label="Shipping" value={order.shipping ? formatMoney(order.shipping) : "Free"} />
             <Row label="Total" value={formatMoney(order.amount)} strong />

@@ -21,7 +21,7 @@ import {
 import CheckoutSteps from "../components/CheckoutSteps";
 import { setCart } from "../redux/productSlice";
 import { formatPrice, getCategory, getMrp } from "../lib/catalog";
-import { FREE_SHIPPING_ABOVE, RETURN_WINDOW_DAYS } from "../lib/help";
+import { useStoreSettings } from "../lib/storeSettings";
 import { checkoutTotals, formatMoney } from "../lib/orders";
 
 const API = `${import.meta.env.VITE_API_URL}/api/v1/cart`;
@@ -60,8 +60,10 @@ const Cart = () => {
   const [busyId, setBusyId] = useState(null); // product being updated or removed
 
   const items = cart?.items || [];
-  // same totals as checkout and the server (free shipping above ₹299, else ₹49; 5% tax)
-  const { subtotal, shipping, tax, total, itemCount } = checkoutTotals(items);
+  // same totals as checkout and the server (shipping charge and tax from the store settings)
+  const settings = useStoreSettings();
+  const { freeShippingAbove: FREE_SHIPPING_ABOVE, returnWindowDays: RETURN_WINDOW_DAYS } = settings;
+  const { subtotal, shipping, tax, total, itemCount } = checkoutTotals(items, settings);
   const savings = items.reduce((sum, item) => {
     const mrp = item.productId ? getMrp(item.productId) : null;
     return mrp ? sum + (mrp - item.productId.productPrice) * item.quantity : sum;
@@ -282,7 +284,7 @@ const Cart = () => {
                 </dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-600">Tax (5%)</dt>
+                <dt className="text-gray-600">Tax ({settings.taxRate}%)</dt>
                 <dd className="text-gray-900">{formatMoney(tax)}</dd>
               </div>
             </dl>

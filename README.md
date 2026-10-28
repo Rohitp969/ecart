@@ -10,12 +10,20 @@ A full-stack online store: product catalog with filters and search, cart, checko
 - Browse by category, search, filter (brand, price, rating, discount, stock), sort and paginate
 - Cart with stock checks and free-delivery progress; checkout with saved addresses, online payment (UPI, cards, net banking, wallets) or Cash on Delivery
 - My Account: orders (track, cancel before shipping, buy again), profile & photo, saved addresses with a default, newsletter setting, change password, delete account
-- Signup with email verification, forgot password with a 6-digit emailed code
+- Signup with a 6-digit email code (valid 5 minutes, resend after 30 seconds, change email on the same screen); the right code verifies the email and signs the user in. Only verified accounts can log in; logging in unverified sends a fresh code.
+- Forgot password with a 6-digit emailed code
+- Codes are stored hashed with 5 tries each, and the sign-in endpoints are rate limited per IP
 - Public order tracking by order ID + email, contact form, FAQs, shipping & returns, size guide, privacy policy and terms
 
-**Admins** (`/dashboard`)
-- Sales dashboard (revenue, orders, top products, categories, low stock)
-- Products (create/edit with up to 5 images), orders (fulfilment status; COD orders become paid on delivery), customers, contact messages and newsletter subscribers (CSV export)
+**Admins** (`/admin`; admins sign in on the normal login page and land here. Old `/dashboard/...` links redirect.)
+- Own header and sidebar, and their own profile page (`/admin/account`)
+- Dashboard: "needs attention" (orders to ship, new messages, out-of-stock and low-stock products), then sales (revenue, orders, top products, categories, low stock)
+- Products (create/edit with up to 5 images), orders (fulfilment status; COD orders become paid on delivery; CSV export; printable invoice), contact messages and newsletter subscribers (CSV export)
+- Users: edit, change role, block / unblock (blocked accounts can't sign in) and delete customer accounts
+- Coupons: percent or flat discount codes with minimum order, maximum discount, usage limit and expiry; customers apply them at checkout and the server re-checks them
+- Banners: the home page hero slides and promo cards (image, text, link, colour, order, show/hide); the built-in ones show until you add your own
+- Store settings: shipping charge, free delivery limit, tax %, return window, Cash on Delivery on/off and the contact details shown in the store
+- Notification bell and sidebar badges for waiting work; Ctrl/⌘ K to jump to any admin page
 
 **Security**
 - Order totals are always calculated on the server from current prices
@@ -70,6 +78,7 @@ Frontend: http://localhost:5173 · API: http://localhost:8000 (or your `PORT`)
 | `MONGO_URI` | MongoDB connection string |
 | `SECRET_KEY` | JWT signing secret (long random string) |
 | `MAIL_USER`, `MAIL_PASS` | Gmail address + [App password](https://myaccount.google.com/apppasswords) that sends verification, OTP and support emails |
+| `BREVO_API_KEY`, `MAIL_FROM` | Send email through Brevo's HTTPS API instead of Gmail SMTP (needed on Render's free plan, which blocks SMTP). `MAIL_FROM` (else `MAIL_USER`) must be a verified sender in Brevo |
 | `CLIENT_URL` | Frontend URL used in email links (optional; defaults to the site the request came from) |
 | `CLOUD_NAME`, `API_KEY`, `API_SECRET` | Cloudinary |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_SECRET` | Razorpay |
@@ -79,7 +88,9 @@ Frontend: http://localhost:5173 · API: http://localhost:8000 (or your `PORT`)
 | `VITE_API_URL` | Backend base URL, e.g. `http://localhost:8000` |
 | `VITE_RAZORPAY_KEY_ID` | Razorpay key id (same as the backend's) |
 
-Without `MAIL_USER`/`MAIL_PASS` the API still runs in development: verification links and OTP codes are printed in the backend console instead of being emailed.
+Without mail settings the API still runs in development: verification and password-reset codes are printed in the backend console instead of being emailed. If a mail can't be sent, signup, "resend" and "forgot password" say so instead of pretending it went out.
+
+Testing tip: mail sent from the store's Gmail account to that same address (or a +alias of it) usually shows up only under Sent, not the inbox, so test signup with a different email address.
 
 ### Making an admin
 
@@ -87,7 +98,7 @@ Sign up normally, then set that user's `role` to `"admin"` in MongoDB. After tha
 
 ## Deployment
 
-- **Frontend (Vercel):** set the project root to `frontend`, add the two `VITE_*` variables. `frontend/vercel.json` rewrites all routes to `index.html` so deep links such as email verification links work.
-- **Backend (Render/Railway/etc.):** root `backend`, start command `npm start`, add every variable from `backend/.env.example`, and set `CLIENT_URL` to the live frontend URL. Add the live frontend URL to `ALLOWED_ORIGINS` in `backend/config/clientUrl.js`.
+- **Frontend (Vercel):** set the project root to `frontend`, add the two `VITE_*` variables. `frontend/vercel.json` rewrites all routes to `index.html` so deep links (product pages, the account page) work on refresh.
+- **Backend (Render/Railway/etc.):** root `backend`, start command `npm start`, add every variable from `backend/.env.example` (on the free plan use `BREVO_API_KEY` for email, since SMTP is blocked). Add the live frontend URL to `ALLOWED_ORIGINS` in `backend/config/clientUrl.js`.
 
 Never commit `.env` files — only the `.env.example` templates are tracked.

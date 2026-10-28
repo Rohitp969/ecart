@@ -181,7 +181,7 @@ const ProductForm = ({ product, submitLabel, onSubmit }) => {
         </div>
         <div className="flex gap-3">
           <Link
-            to="/dashboard/products"
+            to="/admin/products"
             className="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
           >
             Cancel

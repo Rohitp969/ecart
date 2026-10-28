@@ -2,7 +2,7 @@
 
 export const isAdmin = (user) => user?.role === "admin";
 
-const ADMIN_AREA = "/dashboard";
+const ADMIN_AREA = "/admin";
 
 // After login: go back to the page that asked for it when this user may open it,
 // otherwise to their home. Admins always land inside the admin panel.

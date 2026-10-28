@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Mail, UserPlus } from "lucide-react";
 import { AuthCard, AuthField, Notice, PasswordField, SubmitButton } from "@/components/auth/AuthUI";
-import { EMAIL_RE, MIN_PASSWORD, authErrorMessage } from "../lib/authFlow";
+import { EMAIL_RE, MIN_PASSWORD, authErrorMessage, clearVerifyState, codeTimers, saveVerifyState } from "../lib/authFlow";
 
 const EMPTY = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" };
 
@@ -55,10 +55,21 @@ const Signup = () => {
         email: formData.email.trim(),
         password: formData.password,
       });
-      toast.success("Account created! Check your email to verify it.");
-      // keep the page the shopper came from, so logging in later returns them there
-      navigate("/verify", { state: { email: res.data.email, from, justSent: true } });
+      // the code screen needs the email + verify token; keep the page the shopper came from for afterwards
+      clearVerifyState();
+      saveVerifyState({ email: res.data.email, verifyToken: res.data.verifyToken, from, ...codeTimers(res.data) });
+      toast.success(res.data.message);
+      navigate("/verify");
     } catch (error) {
+      const data = error.response?.data;
+      if (data?.emailFailed && data.email) {
+        // account created, code not sent: the code screen offers "Resend code" straight away
+        clearVerifyState();
+        saveVerifyState({ email: data.email, verifyToken: data.verifyToken, from, emailFailed: true, resendAt: 0 });
+        toast.error(data.message);
+        navigate("/verify");
+        return;
+      }
       setFormError(authErrorMessage(error));
     } finally {
       setLoading(false);

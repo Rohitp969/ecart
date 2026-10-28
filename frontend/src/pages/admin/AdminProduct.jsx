@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { toast } from "sonner";
@@ -18,10 +18,14 @@ import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import Pagination from "@/components/Pagination";
 import RatingBadge from "@/components/RatingBadge";
 import { Skeleton } from "@/components/ui/skeleton";
+import ErrorState from "@/components/admin/ErrorState";
 import useProducts from "@/hooks/useProducts";
 import { setProducts } from "@/redux/productSlice";
 import { API_URL, authConfig, stockLevel } from "@/lib/admin";
 import { CATEGORY_GROUPS, formatPrice, getCategory, getMrp, productImage, productInCategory } from "@/lib/catalog";
+import { useAdminAlerts } from "@/lib/adminAlerts";
+
+const STOCK_FILTERS = ["ok", "low", "out"];
 
 const PAGE_SIZE = 15;
 const SORTS = {
@@ -63,7 +67,7 @@ const ProductActions = ({ product, onDelete, className = "" }) => (
       className="rounded-lg p-2.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900 md:p-2">
       <ExternalLink className="h-4 w-4" />
     </Link>
-    <Link to={`/dashboard/products/${product._id}/edit`} title="Edit" aria-label="Edit"
+    <Link to={`/admin/products/${product._id}/edit`} title="Edit" aria-label="Edit"
       className="rounded-lg p-2.5 text-gray-500 hover:bg-blue-50 hover:text-blue-600 md:p-2">
       <Pencil className="h-4 w-4" />
     </Link>
@@ -95,11 +99,15 @@ const SummaryTile = ({ icon, label, value, tone, active, onClick }) => {
 };
 
 const AdminProduct = () => {
-  const { products, loading } = useProducts();
+  const { products, loading, error } = useProducts();
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [stock, setStock] = useState("");
+  const { refreshAlerts } = useAdminAlerts();
+  // ?stock= in the URL, so the dashboard and the notifications can link straight to low / out of stock
+  const [searchParams, setSearchParams] = useSearchParams();
+  const stock = STOCK_FILTERS.includes(searchParams.get("stock")) ? searchParams.get("stock") : "";
+  const setStock = (value) => setSearchParams(value ? { stock: value } : {}, { replace: true });
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
   const [toDelete, setToDelete] = useState(null);
@@ -145,6 +153,7 @@ const AdminProduct = () => {
         dispatch(setProducts(products.filter((p) => p._id !== toDelete._id)));
         toast.success("Product deleted");
         setToDelete(null);
+        refreshAlerts();
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Could not delete product");
@@ -161,7 +170,7 @@ const AdminProduct = () => {
     <div>
       <AdminPageHeader title="Products" description="Manage your catalog, prices and stock">
         <Link
-          to="/dashboard/add-product"
+          to="/admin/products/new"
           className="flex items-center gap-2 rounded-lg bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700"
         >
           <PackagePlus className="h-4 w-4" /> Add Product
@@ -221,6 +230,10 @@ const AdminProduct = () => {
           </select>
         </div>
 
+        {error && !products.length && (
+          <ErrorState inline title="Couldn't load products" message={error} onRetry={() => window.location.reload()} />
+        )}
+
         {/* phones: stacked cards */}
         <ul className="divide-y divide-gray-100 md:hidden">
           {loading
@@ -236,7 +249,7 @@ const AdminProduct = () => {
                     <ProductThumb product={product} className="h-16 w-16" />
                     <div className="min-w-0 flex-1">
                       <Link
-                        to={`/dashboard/products/${product._id}/edit`}
+                        to={`/admin/products/${product._id}/edit`}
                         className="line-clamp-2 text-sm font-semibold text-gray-900 hover:text-pink-600"
                       >
                         {product.productName}
@@ -295,7 +308,7 @@ const AdminProduct = () => {
                             <ProductThumb product={product} className="h-12 w-12" />
                             <div className="min-w-0">
                               <Link
-                                to={`/dashboard/products/${product._id}/edit`}
+                                to={`/admin/products/${product._id}/edit`}
                                 className="line-clamp-1 max-w-xs font-semibold text-gray-900 hover:text-pink-600"
                               >
                                 {product.productName}
@@ -334,7 +347,7 @@ const AdminProduct = () => {
             </tbody>
           </table>
         </div>
-        {!loading && rows.length === 0 && (
+        {!loading && !(error && !products.length) && rows.length === 0 && (
           <p className="px-4 py-12 text-center text-sm text-gray-500">No products match these filters.</p>
         )}
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { CheckCircle2, Download, Inbox, Loader2, Mail, MailOpen, Phone, Reply, RotateCcw, Search, Trash2, Users } from "lucide-react";
@@ -6,6 +7,7 @@ import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import StatCard from "@/components/admin/StatCard";
 import Pagination from "@/components/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import ErrorState from "@/components/admin/ErrorState";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +18,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { API_URL, authConfig, formatDate } from "@/lib/admin";
+import { API_URL, authConfig, downloadCsv, formatDate, loadErrorMessage } from "@/lib/admin";
 import { CONTACT_TOPICS } from "@/lib/help";
+import { useAdminAlerts } from "@/lib/adminAlerts";
 
 const PAGE_SIZE = 10;
 const SUPPORT_API = `${API_URL}/api/v1/support`;
@@ -37,24 +40,28 @@ const StatusPill = ({ status }) =>
     </span>
   );
 
-const downloadCsv = (subscribers) => {
-  const rows = [["Email", "Subscribed on"], ...subscribers.map((s) => [s.email, new Date(s.createdAt).toISOString()])];
-  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `ekart-subscribers-${new Date().toISOString().slice(0, 10)}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
-};
+const exportSubscribers = (subscribers) =>
+  downloadCsv(`ekart-subscribers-${new Date().toISOString().slice(0, 10)}.csv`, [
+    ["Email", "Subscribed on"],
+    ...subscribers.map((s) => [s.email, new Date(s.createdAt).toISOString()]),
+  ]);
 
 const AdminMessages = () => {
   const [view, setView] = useState("inbox");
   const [messages, setMessages] = useState(null);
   const [subscribers, setSubscribers] = useState(null);
   const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
+  const retry = () => {
+    setError("");
+    setReloadKey((key) => key + 1);
+  };
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+  const { refreshAlerts } = useAdminAlerts();
+  // ?status= in the URL, so the dashboard and the notifications can open the new messages directly
+  const [searchParams, setSearchParams] = useSearchParams();
+  const status = ["New", "Resolved"].includes(searchParams.get("status")) ? searchParams.get("status") : "";
+  const setStatus = (value) => setSearchParams(value ? { status: value } : {}, { replace: true });
   const [topic, setTopic] = useState("");
   const [page, setPage] = useState(1);
   const [savingId, setSavingId] = useState(null);
@@ -69,11 +76,11 @@ const AdminMessages = () => {
         setMessages(messagesRes.data.messages);
         setSubscribers(subscribersRes.data.subscribers);
       })
-      .catch((err) => !ignore && setError(err.response?.data?.message || "Could not load messages"));
+      .catch((err) => !ignore && setError(loadErrorMessage(err, "messages")));
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const summary = useMemo(
     () => ({
@@ -116,6 +123,7 @@ const AdminMessages = () => {
       const res = await axios.put(`${SUPPORT_API}/messages/${message._id}`, { status: nextStatus }, authConfig());
       setMessages((prev) => prev.map((m) => (m._id === message._id ? res.data.contactMessage : m)));
       toast.success(res.data.message);
+      refreshAlerts();
     } catch (err) {
       toast.error(err.response?.data?.message || "Could not update message");
     } finally {
@@ -132,6 +140,7 @@ const AdminMessages = () => {
       else setSubscribers((prev) => prev.filter((s) => s._id !== item._id));
       toast.success(res.data.message);
       setToDelete(null);
+      if (kind === "message") refreshAlerts();
     } catch (err) {
       toast.error(err.response?.data?.message || "Could not delete");
     } finally {
@@ -149,7 +158,7 @@ const AdminMessages = () => {
       <AdminPageHeader title="Messages" description="Contact form messages and newsletter subscribers from the store">
         {view === "subscribers" && subscribers?.length > 0 && (
           <button
-            onClick={() => downloadCsv(filteredSubscribers)}
+            onClick={() => exportSubscribers(filteredSubscribers)}
             className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
           >
             <Download className="h-4 w-4" /> Export CSV
@@ -201,7 +210,7 @@ const AdminMessages = () => {
         </div>
 
         {error ? (
-          <p className="p-6 text-sm text-red-600">{error}</p>
+          <ErrorState inline title="Couldn't load messages" message={error} onRetry={retry} />
         ) : !loaded ? (
           <div className="space-y-3 p-4">
             {Array.from({ length: 4 }, (_, i) => (

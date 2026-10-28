@@ -19,6 +19,8 @@ const orderSchema = new mongoose.Schema({
     amount:{type:Number, required:true},
     tax:{type:Number, required:true},
     shipping:{type:Number, required:true},
+    discount:{type:Number, default:0},   // coupon discount taken off the subtotal
+    couponCode:{type:String},
     currency:{type:String, default:"INR"},
     // Online = Razorpay; COD = cash on delivery, stays "Pending" until the admin marks it delivered
     paymentMethod:{type:String, enum:PAYMENT_METHODS, default:"Online"},

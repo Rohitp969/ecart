@@ -10,8 +10,18 @@ export const authConfig = (config = {}) => ({
   headers: { ...config.headers, Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
 });
 
+// Why a page couldn't load its data, in words an admin can act on
+export const loadErrorMessage = (error, what) => {
+  if (!error?.response) {
+    return "Can't reach the server. Check your internet connection (or that the backend is running) and try again.";
+  }
+  if (error.response.status === 404 && error.response.data?.message === "API route not found") {
+    return `The server doesn't support ${what} yet. Deploy the latest backend, then try again.`;
+  }
+  return error.response.data?.message || `Could not load ${what}. Please try again.`;
+};
+
 export const ORDER_STATUSES = ["Processing", "Shipped", "Delivered", "Cancelled"];
-export const PAYMENT_STATUSES = ["Paid", "Pending", "Failed"];
 
 // PUT the new fulfilment status; resolves to the updated order, or null (after a toast) on failure
 export const saveOrderStatus = async (orderId, orderStatus) => {
@@ -26,6 +36,18 @@ export const saveOrderStatus = async (orderId, orderStatus) => {
 };
 
 export const shortId = (id = "") => `#${String(id).slice(-6).toUpperCase()}`;
+
+// download rows (first row = headings) as a CSV file that opens in Excel / Google Sheets
+export const downloadCsv = (filename, rows) => {
+  const csv = rows.map((row) => row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+  // BOM so Excel reads ₹ and other non-English characters correctly
+  const url = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+};
 
 export const formatDate = (date, withTime = false) =>
   date

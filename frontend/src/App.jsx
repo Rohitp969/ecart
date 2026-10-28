@@ -1,8 +1,9 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy } from 'react'
 import {
   createBrowserRouter,
   Navigate,
-  RouterProvider
+  RouterProvider,
+  useParams
 } from "react-router-dom";
 import StoreLayout from './components/layouts/StoreLayout';
 import AuthLayout from './components/layouts/AuthLayout';
@@ -28,12 +29,10 @@ import { PrivacyPolicy, TermsOfUse } from './pages/help/Legal';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Verify from './pages/Verify';
-import VerifyEmail from './pages/VerifyEmail';
 import ForgotPassword from './pages/ForgotPassword';
 import VerifyOtp from './pages/VerifyOtp';
 import ResetPassword from './pages/ResetPassword';
 // admin: loaded on demand, so shoppers never download the admin panel (and its charts)
-import PageLoader from './components/PageLoader';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const AdminSales = lazy(() => import('./pages/admin/AdminSales'));
 const AdminProduct = lazy(() => import('./pages/admin/AdminProduct'));
@@ -42,8 +41,24 @@ const EditProduct = lazy(() => import('./pages/admin/EditProduct'));
 const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 const UserInfo = lazy(() => import('./pages/admin/UserInfo'));
-const ShowUserOrders = lazy(() => import('./pages/admin/ShowUserOrders'));
 const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'));
+const AdminAccount = lazy(() => import('./pages/admin/AdminAccount'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const AdminBanners = lazy(() => import('./pages/admin/AdminBanners'));
+const AdminCoupons = lazy(() => import('./pages/admin/AdminCoupons'));
+const OrderInvoice = lazy(() => import('./pages/admin/OrderInvoice'));
+import PageLoader from './components/PageLoader';
+
+// old /dashboard links (bookmarks, emails) open the matching admin page
+const LEGACY_ADMIN_PATHS = { sales: '', 'add-product': 'products/new', users: 'customers' }
+const LegacyAdminRedirect = () => {
+  const { '*': rest = '' } = useParams()
+  const [section, ...more] = rest.split('/')
+  let target = section in LEGACY_ADMIN_PATHS ? LEGACY_ADMIN_PATHS[section] : rest
+  if (section === 'users' && more[0] === 'orders') target = `customers/${more[1] || ''}`
+  else if (section === 'users' && more[0]) target = `customers/${more[0]}`
+  return <Navigate to={`/admin/${target}`.replace(/\/+$/, '')} replace />
+}
 
 const router = createBrowserRouter([
   // Store: navbar + footer
@@ -89,38 +104,55 @@ const router = createBrowserRouter([
         ],
       },
       { path: '/verify', element: <Verify /> },
-      { path: '/verify/:token', element: <VerifyEmail /> },
+      // old verification links from before the 6-digit code: open the code screen instead
+      { path: '/verify/:token', element: <Navigate to='/verify' replace /> },
       { path: '/forgot-password', element: <ForgotPassword /> },
       { path: '/verify-otp', element: <VerifyOtp /> },
       { path: '/reset-password', element: <ResetPassword /> },
     ],
   },
 
-  // Admin panel: own header + sidebar, admins only
+  // Admin panel: own header + sidebar, admins only (they sign in on the same /login page)
+  { path: '/admin/login', element: <Navigate to='/login' replace /> },
+  // printable invoice: no admin header / sidebar
   {
-    path: '/dashboard',
+    path: '/admin/invoice/:orderId',
+    errorElement: <RouteError />,
     element: (
       <ProtectedRoute adminOnly>
-        <Suspense fallback={<PageLoader className='min-h-screen' />}>
-          <Dashboard />
-        </Suspense>
+        <React.Suspense fallback={<PageLoader className='min-h-screen' />}>
+          <OrderInvoice />
+        </React.Suspense>
       </ProtectedRoute>
     ),
+  },
+  {
+    path: '/admin',
     errorElement: <RouteError />,
+    element: (
+      <ProtectedRoute adminOnly>
+        <React.Suspense fallback={<PageLoader className='min-h-screen' />}>
+          <Dashboard />
+        </React.Suspense>
+      </ProtectedRoute>
+    ),
     children: [
-      { index: true, element: <Navigate to='sales' replace /> },
-      { path: 'sales', element: <AdminSales /> },
-      { path: 'products', element: <AdminProduct /> },
-      { path: 'add-product', element: <AddProduct /> },
-      { path: 'products/:id/edit', element: <EditProduct /> },
+      { index: true, element: <AdminSales /> },
       { path: 'orders', element: <AdminOrders /> },
-      { path: 'users', element: <AdminUsers /> },
-      { path: 'users/:id', element: <UserInfo /> },
-      { path: 'users/orders/:userId', element: <ShowUserOrders /> },
+      { path: 'products', element: <AdminProduct /> },
+      { path: 'products/new', element: <AddProduct /> },
+      { path: 'products/:id/edit', element: <EditProduct /> },
+      { path: 'customers', element: <AdminUsers /> },
+      { path: 'customers/:id', element: <UserInfo /> },
       { path: 'messages', element: <AdminMessages /> },
-      { path: '*', element: <Navigate to='/dashboard/sales' replace /> },
+      { path: 'coupons', element: <AdminCoupons /> },
+      { path: 'banners', element: <AdminBanners /> },
+      { path: 'settings', element: <AdminSettings /> },
+      { path: 'account', element: <AdminAccount /> },
+      { path: '*', element: <Navigate to='/admin' replace /> },
     ],
   },
+  { path: '/dashboard/*', element: <LegacyAdminRedirect /> },
 ])
 
 const App = () => {

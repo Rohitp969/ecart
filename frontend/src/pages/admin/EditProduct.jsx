@@ -10,12 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 import useProducts from '@/hooks/useProducts'
 import { setProducts } from '@/redux/productSlice'
 import { API_URL, authConfig } from '@/lib/admin'
+import { useAdminAlerts } from '@/lib/adminAlerts'
 
 const EditProduct = () => {
   const { id } = useParams()
   const { products, loading } = useProducts()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { refreshAlerts } = useAdminAlerts()
   const product = products.find((p) => p._id === id)
 
   const updateProduct = async (formData) => {
@@ -24,7 +26,8 @@ const EditProduct = () => {
       if (res.data.success) {
         dispatch(setProducts(products.map((p) => (p._id === id ? res.data.product : p))))
         toast.success('Product updated')
-        navigate('/dashboard/products')
+        refreshAlerts()
+        navigate('/admin/products')
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Could not update product')
@@ -40,7 +43,7 @@ const EditProduct = () => {
     ) : (
       <div className='rounded-2xl bg-white p-10 text-center shadow-sm'>
         <p className='font-semibold text-gray-900'>Product not found</p>
-        <Link to='/dashboard/products' className='mt-3 inline-block text-sm font-semibold text-pink-600 hover:underline'>
+        <Link to='/admin/products' className='mt-3 inline-block text-sm font-semibold text-pink-600 hover:underline'>
           Back to products
         </Link>
       </div>
@@ -49,7 +52,7 @@ const EditProduct = () => {
 
   return (
     <div>
-      <Link to='/dashboard/products' className='mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900'>
+      <Link to='/admin/products' className='mb-3 inline-flex items-center gap-1 text-sm font-semibold text-gray-500 hover:text-gray-900'>
         <ArrowLeft className='h-4 w-4' /> Products
       </Link>
       <AdminPageHeader title='Edit Product' description={product.productName}>

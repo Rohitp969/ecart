@@ -8,10 +8,12 @@ import {
   BarChart3,
   CheckCircle2,
   Clock,
+  Inbox,
   IndianRupee,
   PackageX,
   ShoppingBag,
   Table2,
+  Truck,
   UserPlus,
   Wallet,
   XCircle,
@@ -21,7 +23,9 @@ import AdminPageHeader from "@/components/admin/AdminPageHeader";
 import StatCard from "@/components/admin/StatCard";
 import { FulfilmentBadge, PaymentBadge } from "@/components/admin/StatusBadge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { API_URL, ORDER_STATUSES, authConfig, compactINR, formatDate, percentChange, shortId } from "@/lib/admin";
+import ErrorState from "@/components/admin/ErrorState";
+import { alertItems, useAdminAlerts } from "@/lib/adminAlerts";
+import { API_URL, ORDER_STATUSES, authConfig, loadErrorMessage, compactINR, formatDate, percentChange, shortId } from "@/lib/admin";
 import { formatPrice, getCategory } from "@/lib/catalog";
 
 const RANGES = [
@@ -58,6 +62,45 @@ const dateLabel = (key, granularity) => {
   return granularity === "day"
     ? date.toLocaleDateString("en-IN", { day: "numeric", month: "short" })
     : date.toLocaleDateString("en-IN", { month: "short", year: "2-digit" });
+};
+
+const ATTENTION_STYLES = {
+  toShip: { icon: Truck, tone: "bg-blue-50 text-blue-600" },
+  newMessages: { icon: Inbox, tone: "bg-pink-50 text-pink-600" },
+  outOfStock: { icon: PackageX, tone: "bg-red-50 text-red-600" },
+  lowStock: { icon: AlertTriangle, tone: "bg-amber-50 text-amber-600" },
+};
+
+// Work waiting for the admin; each tile opens the matching filtered list
+const NeedsAttention = () => {
+  const { alerts } = useAdminAlerts();
+  if (!alerts) return null;
+  return (
+    <section className="mb-6">
+      <h2 className="mb-3 font-bold text-gray-900">Needs attention</h2>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {alertItems(alerts).map((item) => {
+          const { icon: Icon, tone } = ATTENTION_STYLES[item.key];
+          const waiting = item.count > 0;
+          return (
+            <Link
+              key={item.key}
+              to={item.to}
+              className="flex min-w-0 items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition hover:shadow-md sm:p-4"
+            >
+              <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${waiting ? tone : "bg-gray-100 text-gray-400"}`}>
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="min-w-0">
+                <span className={`block text-xl font-bold ${waiting ? "text-gray-900" : "text-gray-400"}`}>{item.count}</span>
+                <span className="block text-xs text-gray-500">{item.label(item.count)}</span>
+              </span>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
 };
 
 const Card = ({ title, subtitle, action, children, className = "" }) => (
@@ -305,7 +348,7 @@ const TopProducts = ({ products }) => {
                 {product.image && <img src={product.image} alt="" className="h-full w-full object-contain p-1 mix-blend-multiply" />}
               </div>
               <div className="min-w-0 flex-1">
-                <Link to={`/products/${product.id}`} className="block truncate text-sm font-medium text-gray-800 hover:text-pink-600">
+                <Link to={`/admin/products/${product.id}/edit`} className="block truncate text-sm font-medium text-gray-800 hover:text-pink-600">
                   {product.name}
                 </Link>
                 <div className="mt-1.5 h-1.5 w-full rounded-full bg-blue-100">
@@ -329,7 +372,7 @@ const RecentOrders = ({ orders }) => (
     title="Recent orders"
     className="lg:col-span-2"
     action={
-      <Link to="/dashboard/orders" className="flex items-center gap-1 text-sm font-semibold text-pink-600 hover:underline">
+      <Link to="/admin/orders" className="flex items-center gap-1 text-sm font-semibold text-pink-600 hover:underline">
         View all <ArrowRight className="h-4 w-4" />
       </Link>
     }
@@ -407,7 +450,7 @@ const LowStock = ({ products }) => (
               {product.image && <img src={product.image} alt="" className="h-full w-full object-contain p-1 mix-blend-multiply" />}
             </div>
             <Link
-              to={`/dashboard/products/${product.id}/edit`}
+              to={`/admin/products/${product.id}/edit`}
               className="min-w-0 flex-1 truncate text-sm font-medium text-gray-800 hover:text-pink-600"
             >
               {product.name}
@@ -445,6 +488,11 @@ const AdminSales = () => {
   const [range, setRange] = useState(365);
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
+  const retry = () => {
+    setError("");
+    setReloadKey((key) => key + 1);
+  };
 
   useEffect(() => {
     let ignore = false;
@@ -457,12 +505,12 @@ const AdminSales = () => {
         }
       })
       .catch((err) => {
-        if (!ignore) setError(err.response?.data?.message || "Could not load dashboard data");
+        if (!ignore) setError(loadErrorMessage(err, "the dashboard"));
       });
     return () => {
       ignore = true;
     };
-  }, [range]);
+  }, [range, reloadKey]);
 
   const selected = RANGES.find((r) => r.days === range);
   // keep the previous numbers on screen (dimmed) while a new range loads
@@ -490,7 +538,9 @@ const AdminSales = () => {
         </div>
       </AdminPageHeader>
 
-      {error && <p className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-600">{error}</p>}
+      <NeedsAttention />
+
+      {error && <ErrorState title="Couldn't load the dashboard" message={error} onRetry={retry} className="mb-6" />}
 
       {!data ? (
         !error && <DashboardSkeleton />
@@ -540,7 +590,7 @@ const AdminSales = () => {
             <span>{formatPrice(data.totals.revenue)} revenue</span>
             <span>{data.totals.orders} orders</span>
             <span>{data.totals.users} customers</span>
-            <Link to="/dashboard/products" className="hover:text-pink-600">{data.totals.products} products</Link>
+            <Link to="/admin/products" className="hover:text-pink-600">{data.totals.products} products</Link>
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
