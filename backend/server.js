@@ -5,7 +5,7 @@ import cors from "cors";
 
 import connectDB from "./database/db.js";
 import { ALLOWED_ORIGINS } from "./config/clientUrl.js";
-import { isMailConfigured } from "./utils/sendMail.js";
+import { checkMailSetup } from "./utils/sendMail.js";
 
 import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
@@ -58,7 +58,6 @@ app.use((error, _req, res, _next) => {
 app.listen(PORT, async () => {
   await connectDB();
   console.log(`Server started at http://localhost:${PORT}`);
-  if (!isMailConfigured()) {
-    console.warn("⚠️  MAIL_USER / MAIL_PASS missing in backend/.env — verification & OTP emails will be printed here instead of sent.");
-  }
+  // logs whether email works on this server (and why not), without sending anything
+  checkMailSetup();
 });

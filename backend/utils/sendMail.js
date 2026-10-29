@@ -13,6 +13,59 @@ const senderEmail = () => process.env.MAIL_FROM || process.env.MAIL_USER;
 export const isMailConfigured = () =>
   useBrevo() ? Boolean(senderEmail()) : Boolean(process.env.MAIL_USER && process.env.MAIL_PASS);
 
+// Codes and links may be printed to the console only while developing, never on a live server
+// (Render sets RENDER=true), so they can't leak through hosting logs
+const isLocalDev = () => process.env.NODE_ENV !== "production" && !process.env.RENDER;
+
+// "ro***70@gmail.com": enough to recognise the address in logs without printing it in full
+const maskEmail = (email = "") => {
+  const [name, domain] = String(email).split("@");
+  if (!domain) return email ? "(not an email)" : "(empty)";
+  return `${name.slice(0, 2)}***${name.length > 4 ? name.slice(-2) : ""}@${domain}`;
+};
+
+// What the server will send with, for the logs; secrets only as "set (N characters)"
+const describeSetup = () =>
+  useBrevo()
+    ? `Brevo API · sender ${maskEmail(senderEmail())} · BREVO_API_KEY set (${process.env.BREVO_API_KEY.length} characters)`
+    : `Gmail SMTP · MAIL_USER ${maskEmail(process.env.MAIL_USER)} · MAIL_PASS ${
+        process.env.MAIL_PASS ? `set (${process.env.MAIL_PASS.replace(/\s/g, "").length} characters, a Gmail app password has 16)` : "missing"
+      }`;
+
+// Plain-language reason + fix for the errors seen in practice
+const explain = (error) => {
+  const text = `${error.code || ""} ${error.responseCode || ""} ${error.message || ""}`;
+  if (/ETIMEDOUT|ESOCKET|ECONNECTION|ECONNREFUSED|ECONNRESET|EHOSTUNREACH|ENETUNREACH|Greeting never received|Connection timeout/i.test(text) && !useBrevo()) {
+    return "Can't reach Gmail's mail server. Render's free plan blocks SMTP ports 25/465/587, so Gmail can't be used there. Set BREVO_API_KEY (free at brevo.com) to send over HTTPS instead.";
+  }
+  if (/EAUTH|535|534|Invalid login|Username and Password not accepted|Application-specific password/i.test(text)) {
+    return "Gmail rejected the login. MAIL_PASS must be a 16-character Google App Password for MAIL_USER (Google Account → Security → 2-Step Verification → App passwords), not the normal Gmail password. Remove spaces.";
+  }
+  if (/Brevo 401|Key not found|unauthorized/i.test(text)) return "Brevo rejected the API key. Check BREVO_API_KEY (Brevo → SMTP & API → API keys).";
+  if (/Brevo 400.*sender|sender.*not.*valid|not.*verified/i.test(text)) {
+    return `Brevo won't send from ${maskEmail(senderEmail())} yet. Add and verify it under Brevo → Senders, or set MAIL_FROM to a verified sender.`;
+  }
+  if (/Brevo 403/i.test(text)) return "Brevo refused the request (account not activated, or the server's IP isn't allowed). Check Brevo → Security → Authorised IPs.";
+  if (/ENOTFOUND|EAI_AGAIN/i.test(text)) return "DNS lookup failed: the server couldn't find the mail service. Usually a temporary network problem.";
+  if (/TimeoutError|aborted/i.test(text)) return "The mail service didn't answer within 15 seconds. Usually temporary; try again.";
+  return "Unexpected mail error: see the details above.";
+};
+
+// Full picture of a failed send, for the server logs (Render → your service → Logs)
+const logFailure = (subject, to, error) => {
+  console.error(`❌ MAIL FAILED: "${subject}" → ${maskEmail(to)}`);
+  console.error(`   using:    ${describeSetup()}`);
+  console.error(`   error:    ${error.message}`);
+  const details = [
+    error.code && `code=${error.code}`,
+    error.command && `command=${error.command}`,
+    error.responseCode && `responseCode=${error.responseCode}`,
+  ].filter(Boolean);
+  if (details.length) console.error(`   details:  ${details.join(" · ")}`);
+  if (error.response) console.error(`   server said: ${String(error.response).slice(0, 300)}`);
+  console.error(`   fix:      ${explain(error)}`);
+};
+
 // Gmail SMTP; short timeouts so a blocked port fails in seconds instead of hanging the request
 let gmail;
 const gmailTransport = () =>
@@ -63,7 +116,10 @@ const sendWithBrevo = async ({ to, subject, html, text, replyTo }) => {
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(`Brevo ${res.status}: ${body.message || res.statusText}`);
+    const error = new Error(`Brevo ${res.status}: ${body.message || res.statusText}`);
+    error.code = body.code;
+    error.responseCode = res.status;
+    throw error;
   }
 };
 
@@ -90,24 +146,57 @@ export const emailLayout = ({ title, intro, button, outro = "" }) => `
 // Without mail settings (e.g. local development) the mail is printed to the server console instead.
 export const sendMail = async ({ to, subject, html, replyTo, devNote }) => {
   if (!isMailConfigured()) {
-    console.warn(`📧 Mail not sent (no BREVO_API_KEY or MAIL_USER / MAIL_PASS in backend/.env): "${subject}" → ${to}`);
-    if (devNote && process.env.NODE_ENV !== "production") console.warn(`   ↳ ${devNote}`);
+    console.warn(`📧 Mail not sent (no BREVO_API_KEY, or MAIL_USER / MAIL_PASS missing): "${subject}" → ${maskEmail(to)}`);
+    if (devNote && isLocalDev()) console.warn(`   ↳ ${devNote}`);
     return false;
   }
+  const started = Date.now();
   try {
     const text = htmlToText(html);
     if (useBrevo()) {
       await sendWithBrevo({ to, subject, html, text, replyTo });
-      console.log(`✅ Mail sent (Brevo): ${subject} → ${to}`);
+      console.log(`✅ Mail sent (Brevo, ${Date.now() - started} ms): "${subject}" → ${maskEmail(to)}`);
     } else {
       const info = await gmailTransport().sendMail({ from: `"Ekart" <${senderEmail()}>`, to, subject, html, text, replyTo });
       // Gmail's reply ("250 2.0.0 OK …") means it accepted the mail; if it then doesn't show up, look in Spam
-      console.log(`✅ Mail sent (Gmail): ${subject} → ${to} · ${info.response}`);
+      console.log(`✅ Mail sent (Gmail, ${Date.now() - started} ms): "${subject}" → ${maskEmail(to)} · ${info.response}`);
     }
     return true;
   } catch (error) {
-    console.error(`❌ Failed to send mail (${subject}):`, error.message);
-    if (devNote && process.env.NODE_ENV !== "production") console.warn(`   ↳ ${devNote}`);
+    logFailure(subject, to, error);
+    console.error(`   took:     ${Date.now() - started} ms`);
+    if (devNote && isLocalDev()) console.warn(`   ↳ ${devNote}`);
     return false;
+  }
+};
+
+// Run once when the server starts: says in the logs whether email will work, and why not.
+// Doesn't send anything; Gmail is checked with an SMTP login, Brevo by reading the account.
+export const checkMailSetup = async () => {
+  if (!isMailConfigured()) {
+    console.warn("📧 Mail check: not configured (set BREVO_API_KEY, or MAIL_USER + MAIL_PASS). Codes and links are printed here instead of emailed.");
+    return;
+  }
+  console.log(`📧 Mail check: ${describeSetup()}`);
+  const started = Date.now();
+  try {
+    if (useBrevo()) {
+      const res = await fetch("https://api.brevo.com/v3/account", {
+        headers: { "api-key": process.env.BREVO_API_KEY, accept: "application/json" },
+        signal: AbortSignal.timeout(15000),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        const error = new Error(`Brevo ${res.status}: ${body.message || res.statusText}`);
+        error.responseCode = res.status;
+        throw error;
+      }
+    } else {
+      await gmailTransport().verify();
+    }
+    console.log(`📧 Mail check: OK (${Date.now() - started} ms). Signup codes and password resets can be emailed.`);
+  } catch (error) {
+    logFailure("startup mail check", senderEmail(), error);
+    console.error(`   took:     ${Date.now() - started} ms`);
   }
 };

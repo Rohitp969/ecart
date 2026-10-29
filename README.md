@@ -90,6 +90,8 @@ Frontend: http://localhost:5173 · API: http://localhost:8000 (or your `PORT`)
 
 Without mail settings the API still runs in development: verification and password-reset codes are printed in the backend console instead of being emailed. If a mail can't be sent, signup, "resend" and "forgot password" say so instead of pretending it went out.
 
+The backend log shows whether email works: at startup a `📧 Mail check` line (OK, or why not), and for every failed mail a `❌ MAIL FAILED` block with the error, Gmail's or Brevo's reply and the fix. Passwords and keys are never logged, and codes are printed only in local development. On Render: your service → **Logs**.
+
 Testing tip: mail sent from the store's Gmail account to that same address (or a +alias of it) usually shows up only under Sent, not the inbox, so test signup with a different email address.
 
 ### Making an admin
