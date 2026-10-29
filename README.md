@@ -78,7 +78,8 @@ Frontend: http://localhost:5173 · API: http://localhost:8000 (or your `PORT`)
 | `MONGO_URI` | MongoDB connection string |
 | `SECRET_KEY` | JWT signing secret (long random string) |
 | `MAIL_USER`, `MAIL_PASS` | Gmail address + [App password](https://myaccount.google.com/apppasswords) that sends verification, OTP and support emails |
-| `BREVO_API_KEY`, `MAIL_FROM` | Send email through Brevo's HTTPS API instead of Gmail SMTP (needed on Render's free plan, which blocks SMTP). `MAIL_FROM` (else `MAIL_USER`) must be a verified sender in Brevo |
+| `BREVO_API_KEY`, `BREVO_SMTP_LOGIN` | Send through Brevo instead of Gmail (needed on Render's free plan, which blocks Gmail's SMTP ports): the Brevo SMTP key (`xsmtpsib-…`) + its login, sent via Brevo's relay on port 2525. A Brevo API key (`xkeysib-…`) works too (HTTPS, no login needed) |
+| `MAIL_FROM` | Sender address (default `MAIL_USER`); must be a verified sender in Brevo |
 | `CLIENT_URL` | Frontend URL used in email links (optional; defaults to the site the request came from) |
 | `CLOUD_NAME`, `API_KEY`, `API_SECRET` | Cloudinary |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_SECRET` | Razorpay |
