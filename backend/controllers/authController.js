@@ -6,7 +6,6 @@ import { Session } from "../models/sessionModel.js";
 import { sendSignupOtpMail } from "../emaiVerify/verifyEmail.js";
 import { sendOTPMail } from "../emailVerify/sendOtpMail.js";
 import { isMailConfigured } from "../utils/sendMail.js";
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const MIN_PASSWORD = 6;
 // forgot-password code

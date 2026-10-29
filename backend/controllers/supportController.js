@@ -3,7 +3,7 @@ import { Subscriber } from "../models/subscriberModel.js";
 import { ContactMessage, CONTACT_TOPICS, MESSAGE_STATUSES } from "../models/contactMessageModel.js";
 import { Order } from "../models/orderModel.js";
 import { User } from "../models/userModel.js";
-import { emailLayout, escapeHtml, sendMail } from "../utils/sendMail.js";
+import { emailLayout, sendMail } from "../utils/sendMail.js";
 import { clientUrl } from "../config/clientUrl.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -103,16 +103,6 @@ export const submitContact = async (req, res) => {
 
     await ContactMessage.create({ name, email, phone, topic, orderId, message });
 
-    sendMail({
-      to: process.env.MAIL_USER,
-      replyTo: email,
-      subject: `[Ekart support] ${topic} – ${name}`,
-      html: `<p><b>From:</b> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>
-        ${phone ? `<p><b>Phone:</b> ${escapeHtml(phone)}</p>` : ""}
-        ${orderId ? `<p><b>Order:</b> ${escapeHtml(orderId)}</p>` : ""}
-        <p><b>Topic:</b> ${escapeHtml(topic)}</p>
-        <p style="white-space:pre-wrap">${escapeHtml(message)}</p>`,
-    });
 
     return res.status(201).json({
       success: true,
