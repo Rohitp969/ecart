@@ -225,3 +225,12 @@
     @apply bg-background text-foreground;
   }
 }
+/* iPhone Safari zooms the whole page into a focused field whose text is under 16px, so on
+   phone widths every text field uses 16px (the OTP boxes are bigger already) */
+@media (max-width: 767.98px) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [data-otp]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

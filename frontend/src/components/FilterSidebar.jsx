@@ -88,7 +88,8 @@ const CustomPrice = ({ min, max, onApply }) => {
   );
 };
 
-const FilterSidebar = ({ filters, update, categoryCounts, totalCount, brandFacets, extraCategories, onClearAll }) => {
+// inSheet: inside the phone filter drawer, which has its own title bar and Clear all
+const FilterSidebar = ({ filters, update, categoryCounts, totalCount, brandFacets, extraCategories, onClearAll, inSheet = false }) => {
   const [brandQuery, setBrandQuery] = useState("");
   const [showAllBrands, setShowAllBrands] = useState(false);
 
@@ -108,13 +109,15 @@ const FilterSidebar = ({ filters, update, categoryCounts, totalCount, brandFacet
   const hiddenChecked = filters.brands.filter((b) => !visibleBrands.some(([brand]) => brand === b));
 
   return (
-    <div className="rounded-2xl bg-white px-4 shadow-sm">
-      <div className="flex items-center justify-between border-b border-gray-100 py-4">
-        <h2 className="text-lg font-bold text-gray-900">Filters</h2>
-        <button onClick={onClearAll} className="cursor-pointer text-sm font-semibold text-pink-600 hover:underline">
-          Clear all
-        </button>
-      </div>
+    <div className={inSheet ? "px-4" : "rounded-2xl bg-white px-4 shadow-sm"}>
+      {!inSheet && (
+        <div className="flex items-center justify-between border-b border-gray-100 py-4">
+          <h2 className="text-lg font-bold text-gray-900">Filters</h2>
+          <button onClick={onClearAll} className="cursor-pointer text-sm font-semibold text-pink-600 hover:underline">
+            Clear all
+          </button>
+        </div>
+      )}
 
       <Section title="Categories">
         <CategoryButton active={!filters.category} onClick={() => update({ category: "" })} count={totalCount}>

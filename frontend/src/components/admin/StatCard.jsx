@@ -31,18 +31,18 @@ const Delta = ({ change, previousLabel }) => {
 
 const StatCard = ({ label, value, icon, tone = "blue", change, previousLabel, hint }) => {
   const Icon = icon;
-  // @container: the value's size follows the card's own width (cards sit in 1-4 column grids)
+  // @container: sizes follow the card's own width (cards sit in 2-4 column grids; two per row on phones)
   return (
-  <div className="@container rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-    <div className="flex items-start justify-between gap-3">
-      <p className="min-w-0 text-sm font-medium text-gray-500">{label}</p>
+  <div className="@container rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
+    <div className="flex items-start justify-between gap-2 @[10rem]:gap-3">
+      <p className="min-w-0 text-xs font-medium text-gray-500 @[10rem]:text-sm">{label}</p>
       {Icon && (
-        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${TONES[tone]}`}>
-          <Icon className="h-5 w-5" />
+        <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl @[10rem]:h-9 @[10rem]:w-9 ${TONES[tone]}`}>
+          <Icon className="h-4 w-4 @[10rem]:h-5 @[10rem]:w-5" />
         </span>
       )}
     </div>
-    <p className="mt-1 text-2xl font-bold wrap-break-word text-gray-900 tabular-nums @2xs:text-3xl">{value}</p>
+    <p className="mt-1 text-xl font-bold wrap-break-word text-gray-900 tabular-nums @[10rem]:text-2xl @2xs:text-3xl">{value}</p>
     {previousLabel ? <Delta change={change} previousLabel={previousLabel} /> : hint && <p className="mt-2 text-xs text-gray-400">{hint}</p>}
   </div>
   );

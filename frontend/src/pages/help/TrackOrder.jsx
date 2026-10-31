@@ -89,7 +89,7 @@ const Tracker = ({ order }) => {
               {done && index < step ? <Check className="h-5 w-5" /> : <Icon className="h-5 w-5" />}
             </span>
             <span className={`mt-2 text-xs font-semibold sm:text-sm ${done ? "text-gray-900" : "text-gray-400"}`}>{label}</span>
-            {date && <span className="text-[11px] text-gray-500 sm:text-xs">{formatDate(date)}</span>}
+            {date && <span className="text-xs text-gray-500">{formatDate(date)}</span>}
           </li>
         );
       })}

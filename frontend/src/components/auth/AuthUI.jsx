@@ -170,6 +170,7 @@ export const OtpInput = ({ digits, onChange, disabled, invalid, onComplete }) =>
           value={digit}
           disabled={disabled}
           inputMode="numeric"
+          data-otp
           autoComplete={index === 0 ? "one-time-code" : "off"}
           maxLength={digits.length}
           aria-label={`Digit ${index + 1}`}

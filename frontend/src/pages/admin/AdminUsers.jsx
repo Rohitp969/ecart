@@ -100,7 +100,7 @@ const AdminUsers = () => {
     <div>
       <AdminPageHeader title="Users" description="Customers and team members with access to your store" />
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <StatCard label="Total users" value={summary.total} icon={Users} tone="blue" hint="All registered accounts" />
         <StatCard label="Admins" value={summary.admins} icon={ShieldCheck} tone="purple" hint="Can open this panel" />
         <StatCard label="Verified" value={summary.verified} icon={BadgeCheck} tone="green" hint="Email verified" />

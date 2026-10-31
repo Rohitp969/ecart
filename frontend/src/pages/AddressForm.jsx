@@ -345,7 +345,7 @@ const AddressForm = () => {
                             {addr.fullName}
                             <span className="text-sm font-normal text-gray-500">{addr.phone}</span>
                             {addr.isDefault && (
-                              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-gray-600">
+                              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-gray-600">
                                 Default
                               </span>
                             )}

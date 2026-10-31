@@ -57,7 +57,7 @@ const ProductCard = ({ product }) => {
 
       <div className="flex flex-1 flex-col gap-1.5 p-3 sm:p-4">
         {brand && (
-          <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-gray-400">{brand}</p>
+          <p className="truncate text-xs font-semibold uppercase tracking-wider text-gray-400">{brand}</p>
         )}
         <Link
           to={`/products/${_id}`}

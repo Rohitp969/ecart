@@ -471,7 +471,7 @@ const LowStock = ({ products }) => (
 
 const DashboardSkeleton = () => (
   <div className="space-y-6">
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
       {Array.from({ length: 4 }, (_, i) => (
         <Skeleton key={i} className="h-32 rounded-2xl" />
       ))}
@@ -546,7 +546,7 @@ const AdminSales = () => {
         !error && <DashboardSkeleton />
       ) : (
         <div className={`space-y-6 transition-opacity ${refreshing ? "opacity-50" : ""}`}>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             <StatCard
               label="Revenue"
               value={formatPrice(data.kpis.revenue)}

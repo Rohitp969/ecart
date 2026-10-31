@@ -112,7 +112,7 @@ const SavedAddresses = () => {
                 <div className="flex items-start justify-between gap-2">
                   <p className="font-semibold text-gray-900">{addr.fullName}</p>
                   {addr.isDefault && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-pink-50 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-pink-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-pink-50 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-pink-700">
                       <Star className="h-3 w-3 fill-current" /> Default
                     </span>
                   )}

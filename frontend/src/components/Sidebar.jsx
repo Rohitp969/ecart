@@ -62,7 +62,7 @@ const Sidebar = ({ open, onClose }) => {
         <nav className='flex-1 space-y-5 overflow-y-auto overscroll-contain px-3 py-4 lg:py-5'>
           {SECTIONS.map((section) => (
             <div key={section.title}>
-              <p className='mb-1.5 px-3 text-[11px] font-bold uppercase tracking-wider text-gray-400'>{section.title}</p>
+              <p className='mb-1.5 px-3 text-xs font-bold uppercase tracking-wider text-gray-400'>{section.title}</p>
               <div className='space-y-0.5'>
                 {section.links.map((link) => {
                   const count = link.badge ? alerts?.[link.badge] : 0

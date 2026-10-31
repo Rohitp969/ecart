@@ -121,7 +121,7 @@ const Signup = () => {
           value={formData.email}
           onChange={handleChange}
           error={errors.email}
-          hint="We'll send a link to verify this address."
+          hint="We'll email you a 6-digit code to verify this address."
         />
         <PasswordField
           label="Password"

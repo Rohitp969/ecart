@@ -258,7 +258,7 @@ const AdminCoupons = () => {
       </AdminPageHeader>
 
       {coupons && (
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="mb-6 grid grid-cols-2 gap-3 *:last:col-span-2 sm:grid-cols-3 sm:gap-4 sm:*:last:col-span-1">
           <StatCard label="Coupons" value={summary.total} icon={TicketPercent} tone="pink" hint="All codes you've created" />
           <StatCard label="Usable now" value={summary.active} icon={TicketPercent} tone="green" hint="Active, not expired or used up" />
           <StatCard label="Times used" value={summary.uses} icon={TicketPercent} tone="purple" hint="On confirmed orders" />

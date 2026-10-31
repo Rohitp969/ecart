@@ -32,7 +32,7 @@ const HelpLayout = ({ title, description, icon: Icon, children }) => (
       <div className="mt-6 grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
         {/* min-w-0: below lg the chip row must scroll inside itself, not widen the grid column */}
         <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
-          <p className="mb-2 hidden px-3 text-[11px] font-bold uppercase tracking-wider text-gray-400 lg:block">Help Center</p>
+          <p className="mb-2 hidden px-3 text-xs font-bold uppercase tracking-wider text-gray-400 lg:block">Help Center</p>
           <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:gap-1 lg:overflow-visible lg:px-0 lg:pb-0">
             {HELP_PAGES.map((page) => (
               <NavLink

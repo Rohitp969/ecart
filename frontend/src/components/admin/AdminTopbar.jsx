@@ -92,7 +92,7 @@ const AdminTopbar = ({ onMenuClick, onSearchClick }) => {
         </button>
         <Link to="/admin" className="flex shrink-0 items-center gap-2">
           <img src="/Ekart-logo.png" alt="Ekart" className="w-24 sm:w-28" />
-          <span className="rounded-md bg-gray-900 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white">Admin</span>
+          <span className="rounded-md bg-gray-900 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-white">Admin</span>
         </Link>
       </div>
 

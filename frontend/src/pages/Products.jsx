@@ -172,8 +172,9 @@ const Products = () => {
   const heading = filters.q ? `Results for "${filters.q}"` : selected?.name || "All Products";
   const chips = describeFilters(filters);
 
-  const sidebar = (
+  const sidebar = (inSheet) => (
     <FilterSidebar
+      inSheet={inSheet}
       filters={filters}
       update={update}
       categoryCounts={categoryCounts}
@@ -189,7 +190,7 @@ const Products = () => {
       <div className="mx-auto flex max-w-7xl gap-6 px-4">
         <aside className="hidden w-64 shrink-0 lg:block">
           <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl [scrollbar-width:thin]">
-            {sidebar}
+            {sidebar(false)}
           </div>
         </aside>
 
@@ -321,18 +322,21 @@ const Products = () => {
       {filtersOpen && (
         <div className="fixed inset-0 z-60 lg:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setFiltersOpen(false)} />
-          <div className="absolute inset-y-0 left-0 flex w-[85%] max-w-sm flex-col bg-gray-50">
-            <div className="flex items-center justify-between bg-white px-4 py-3 shadow-sm">
-              <span className="font-bold text-gray-900">Filters</span>
+          <div className="absolute inset-y-0 left-0 flex w-[85%] max-w-sm flex-col bg-white">
+            <div className="flex items-center gap-2 border-b border-gray-100 px-4 py-2">
+              <span className="flex-1 text-lg font-bold text-gray-900">Filters</span>
+              <button onClick={clearAll} className="cursor-pointer rounded-lg px-2 py-2.5 text-sm font-semibold text-pink-600 hover:bg-pink-50">
+                Clear all
+              </button>
               <button
                 onClick={() => setFiltersOpen(false)}
                 aria-label="Close filters"
-                className="-mr-2 cursor-pointer rounded-lg p-2 hover:bg-gray-100"
+                className="-mr-2 flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg hover:bg-gray-100"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto overscroll-contain p-3">{sidebar}</div>
+            <div className="flex-1 overflow-y-auto overscroll-contain">{sidebar(true)}</div>
             <div className="bg-white p-3 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
               <button
                 onClick={() => setFiltersOpen(false)}

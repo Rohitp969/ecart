@@ -166,7 +166,7 @@ const AdminMessages = () => {
         )}
       </AdminPageHeader>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="mb-6 grid grid-cols-2 gap-3 *:last:col-span-2 sm:grid-cols-3 sm:gap-4 sm:*:last:col-span-1">
         <StatCard label="New messages" value={summary.new} icon={Inbox} tone="amber" hint="Waiting for a reply" />
         <StatCard label="Resolved" value={summary.resolved} icon={CheckCircle2} tone="green" hint="Marked as done" />
         <StatCard label="Subscribers" value={summary.subscribers} icon={Users} tone="pink" hint="Newsletter sign-ups" />
